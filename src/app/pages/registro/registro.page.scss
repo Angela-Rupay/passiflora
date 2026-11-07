@@ -1,0 +1,133 @@
+
+ion-content {
+  --background: #CEBEF6;
+}
+
+.registro-container {
+  min-height: 100%;
+  padding: 25px 22px 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-container {
+  text-align: center;
+  margin: 15px 0 25px;
+
+  img {
+    width: 95px;
+    height: 95px;
+    object-fit: contain;
+    animation: respirar 3s infinite ease-in-out;
+  }
+
+  h1 {
+    color: #434969;
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin: 8px 0;
+  }
+
+  p {
+    color: #434969;
+    font-size: 14px;
+  }
+}
+
+.formulario {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 440px;
+  padding: 25px 20px;
+  border-radius: 24px;
+  box-shadow: 0 5px 20px rgba(67, 73, 105, 0.08);
+
+  h2 {
+    color: #434969;
+    font-size: 23px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .subtitulo {
+    color: #6B6F76;
+    font-size: 13px;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+}
+
+.campo {
+  --background: #F8F7FB;
+  --border-radius: 12px;
+  --border-color: #E2DFEA;
+  --highlight-color-focused: #5C4789;
+  --color: #434969;
+
+  margin-bottom: 12px;
+  border-radius: 12px;
+
+  ion-input {
+    --color: #434969;
+    --placeholder-color: #85858F;
+    --placeholder-opacity: 1;
+    --label-color: #6B6F76;
+  }
+}
+
+.error {
+  font-size: 11px;
+  margin: 2px 5px 10px;
+}
+
+.requisitos {
+  margin: 12px 5px 20px;
+
+  p {
+    font-size: 12px;
+    color: #B56B78;
+    margin: 7px 0;
+  }
+
+  .cumplido {
+    color: #6F9B78;
+  }
+}
+
+.terminos {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 18px 0;
+  color: #434969;
+  font-size: 12px;
+  line-height: 1.5;
+
+  ion-checkbox {
+    --checkbox-background-checked: #5C4789;
+    --border-color-checked: #5C4789;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+}
+
+ion-button {
+  --background: #5C4789;
+  --background-activated: #434969;
+  --border-radius: 16px;
+  --color: #FFFFFF;
+  height: 49px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+ion-button[disabled] {
+  opacity: 0.45;
+}
+
+@keyframes respirar {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}

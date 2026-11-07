@@ -1,0 +1,111 @@
+
+<ion-content [fullscreen]="true">
+
+  <div class="registro-container">
+
+    <div class="logo-container">
+      <img src="assets/img/flor-passiflora.png" alt="Passiflora">
+
+      <h1>PASSIFLORA</h1>
+      <p>Un espacio para cuidar de ti</p>
+    </div>
+
+    <div class="formulario">
+
+      <h2>¡Comencemos!</h2>
+      <p class="subtitulo">Crea tu cuenta y comienza este camino de bienestar.</p>
+
+      <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+
+        <ion-item class="campo">
+          <ion-input
+            label="Nombre"
+            labelPlacement="stacked"
+            placeholder="Ingresa tu nombre"
+            formControlName="nombre">
+          </ion-input>
+        </ion-item>
+
+        <ion-text color="danger"
+          *ngIf="registroForm.get('nombre')?.touched && registroForm.get('nombre')?.invalid">
+          <p class="error">Ingresa un nombre válido, solo letras.</p>
+        </ion-text>
+
+        <ion-item class="campo">
+          <ion-input
+            label="Apellido"
+            labelPlacement="stacked"
+            placeholder="Ingresa tu apellido"
+            formControlName="apellido">
+          </ion-input>
+        </ion-item>
+
+        <ion-text color="danger"
+          *ngIf="registroForm.get('apellido')?.touched && registroForm.get('apellido')?.invalid">
+          <p class="error">Ingresa un apellido válido, solo letras.</p>
+        </ion-text>
+
+        <ion-item class="campo">
+          <ion-input
+            label="Correo electrónico"
+            labelPlacement="stacked"
+            type="email"
+            placeholder="ejemplo@correo.com"
+            formControlName="correo">
+          </ion-input>
+        </ion-item>
+
+        <ion-text color="danger"
+          *ngIf="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid">
+          <p class="error">Ingresa un correo electrónico válido.</p>
+        </ion-text>
+
+        <ion-item class="campo">
+          <ion-input
+            label="Contraseña"
+            labelPlacement="stacked"
+            type="password"
+            placeholder="Crea una contraseña"
+            formControlName="contrasena">
+          </ion-input>
+        </ion-item>
+
+        <div class="requisitos">
+          <p [class.cumplido]="tieneLargo">
+            {{ tieneLargo ? '✓' : '○' }} Mínimo 8 caracteres
+          </p>
+
+          <p [class.cumplido]="tieneMayuscula">
+            {{ tieneMayuscula ? '✓' : '○' }} Al menos una letra mayúscula
+          </p>
+
+          <p [class.cumplido]="tieneNumero">
+            {{ tieneNumero ? '✓' : '○' }} Al menos un número
+          </p>
+        </div>
+
+        <div class="terminos">
+          <ion-checkbox
+            [checked]="registroForm.get('terminos')?.value"
+            (ionChange)="registroForm.get('terminos')?.setValue($event.detail.checked)">
+          </ion-checkbox>
+
+          <span>
+            Acepto los términos y condiciones y la política de tratamiento de datos.
+          </span>
+        </div>
+
+        <ion-button
+          expand="block"
+          type="submit"
+          [disabled]="registroForm.invalid">
+          Crear cuenta
+        </ion-button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</ion-content>

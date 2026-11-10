@@ -16,15 +16,17 @@ export const routes: Routes = [
     redirectTo: 'registro',
     pathMatch: 'full',
   },
+
   {
     path: 'gad7',
     loadComponent: () => import('./pages/gad7/gad7.page').then((m) => m.Gad7Page),
   },
-
   {
-  path: 'gad7',
-  loadComponent: () =>
-    import('./pages/gad7/gad7.page')
-      .then(m => m.Gad7Page)
-},
+    path: 'respiracion',
+    loadComponent: () => import('./pages/respiracion/respiracion.page').then((m) => m.RespiracionPage),
+  },
+  {
+    path: 'anclaje',
+    loadComponent: () => import('./pages/anclaje/anclaje.page').then((m) => m.AnclajePage),
+  },
 ];

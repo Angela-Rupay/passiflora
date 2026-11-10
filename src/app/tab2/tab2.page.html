@@ -1,15 +1,101 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Tab 2 </ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="ejercicios-container">
+
+    <header class="encabezado">
+
+      <div class="icono-encabezado">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+
+      <span class="etiqueta">TU ESPACIO DE BIENESTAR</span>
+
+      <h1>Conecta contigo</h1>
+
+      <p>
+        Elige una actividad para regalarte un momento
+        de calma. No tienes que hacer nada a la perfección.
+      </p>
+
+    </header>
+
+    <section class="seccion-ejercicios">
+
+      <h2>¿Qué necesitas hoy?</h2>
+
+      <!-- Respiración -->
+
+      <button
+        class="tarjeta-ejercicio respiracion"
+        (click)="abrirRespiracion()"
+      >
+
+        <div class="icono-tarjeta">
+          <ion-icon name="leafOutline"></ion-icon>
+        </div>
+
+        <div class="contenido-tarjeta">
+
+          <span class="categoria">RESPIRA Y RELÁJATE</span>
+
+          <h3>Respiración guiada</h3>
+
+          <p>
+            Explora diferentes técnicas de respiración
+            a tu propio ritmo.
+          </p>
+
+          <span class="enlace">
+            Comenzar ejercicio
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </span>
+
+        </div>
+
+      </button>
+
+      <!-- Anclaje -->
+
+      <button
+        class="tarjeta-ejercicio anclaje"
+        (click)="abrirAnclaje()"
+      >
+
+        <div class="icono-tarjeta">
+          <ion-icon name="eye-outline"></ion-icon>
+        </div>
+
+        <div class="contenido-tarjeta">
+
+          <span class="categoria">CONECTA CON EL PRESENTE</span>
+
+          <h3>Técnica 5-4-3-2-1</h3>
+
+          <p>
+            Descubre lo que te rodea utilizando
+            tus cinco sentidos.
+          </p>
+
+          <span class="enlace">
+            Comenzar ejercicio
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </span>
+
+        </div>
+
+      </button>
+
+    </section>
+
+    <div class="mensaje-final">
+      <ion-icon name="heart-outline"></ion-icon>
+      <p>
+        Recuerda: puedes avanzar a tu ritmo
+        y saltarte cualquier actividad.
+      </p>
+    </div>
+
+  </div>
+
 </ion-content>

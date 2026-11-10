@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-
+import { Router } from '@angular/router';
 import {
   IonContent,
   IonButton
@@ -47,11 +47,13 @@ export class Gad7Page {
   nivel = '';
   mensaje = '';
 
-  constructor(private route: ActivatedRoute) {
-    this.nombreUsuario =
-      this.route.snapshot.queryParamMap.get('nombre') || 'Usuario';
-  }
-
+constructor(
+  private route: ActivatedRoute,
+  private router: Router
+) {
+  this.nombreUsuario =
+    this.route.snapshot.queryParamMap.get('nombre') || 'Usuario';
+}
   seleccionarRespuesta(pregunta: number, valor: number) {
     this.respuestas[pregunta] = valor;
   }
@@ -104,4 +106,8 @@ export class Gad7Page {
     this.nivel = '';
     this.mensaje = '';
   }
+
+  irAlInicio() {
+  this.router.navigate(['/tabs/tab1']);
+}
 }

@@ -1,15 +1,71 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Tab 1 </ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <div class="inicio-container">
+
+    <!-- Encabezado -->
+
+    <div class="bienvenida">
+
+      <div class="flor-icono">
+        <ion-icon name="flower-outline"></ion-icon>
+      </div>
+
+      <p class="saludo">
+        Hola<span *ngIf="nombreUsuario">, {{ nombreUsuario }}</span> 💜
+      </p>
+
+      <h1>Qué bueno tenerte aquí.</h1>
+
+      <p class="subtitulo">
+        Este es tu espacio para respirar, conectar contigo
+        y cuidar de tu bienestar.
+      </p>
+
+    </div>
+
+    <!-- Tarjeta de respiración -->
+
+    <ion-card class="respiracion-card" (click)="iniciarRespiracion()">
+
+      <ion-card-content>
+
+        <div class="card-icono">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+
+        <div class="card-texto">
+
+          <span class="etiqueta">
+            UN MOMENTO PARA TI
+          </span>
+
+          <h2>Respira conmigo</h2>
+
+          <p>
+            Regálate unos minutos para encontrar calma
+            y conectar con el presente.
+          </p>
+
+        </div>
+
+        <div class="card-boton">
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </div>
+
+      </ion-card-content>
+
+    </ion-card>
+
+    <!-- Mensaje inferior -->
+
+    <div class="mensaje-final">
+      <p>
+        No tienes que tener todo resuelto.
+        A veces, simplemente respirar es suficiente.
+      </p>
+    </div>
+
+  </div>
+
 </ion-content>

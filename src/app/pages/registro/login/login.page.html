@@ -1,0 +1,90 @@
+<ion-content class="ion-padding fondo-pantalla">
+
+  <!-- Logo Dinámico con Guía de Respiración -->
+  <div class="contenedor-logo">
+    <div class="circulo-respiracion">
+      <img src="assets/icon/favicon.png" alt="Passiflora Logo" class="logo-passiflora" />
+    </div>
+    <h1 class="titulo-app">Passiflora</h1>
+    <p class="subtitulo-app">Inhala... Exhala...</p>
+  </div>
+
+  <!-- Selector de Pestañas: Ingresar / Registrar -->
+  <ion-segment [(ngModel)]="seccionActual" mode="ios" class="segmento-personalizado">
+    <ion-segment-button value="ingreso">
+      <ion-label>Ingresar</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="registro">
+      <ion-label>Registro</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Formulario de Inicio de Sesión -->
+  <div *ngIf="seccionActual === 'ingreso'" class="formulario-animado">
+    <ion-item class="item-entrada" lines="none">
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
+      <ion-input 
+        type="email" 
+        placeholder="Correo electrónico" 
+        [(ngModel)]="correoIngreso">
+      </ion-input>
+    </ion-item>
+
+    <ion-item class="item-entrada ion-margin-top" lines="none">
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-input 
+        type="password" 
+        placeholder="Contraseña" 
+        [(ngModel)]="claveIngreso">
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" shape="round" class="boton-principal ion-margin-top" (click)="alIniciarSesion()">
+      Iniciar Sesión
+    </ion-button>
+  </div>
+
+  <!-- Formulario de Registro -->
+  <div *ngIf="seccionActual === 'registro'" class="formulario-animado">
+    <ion-item class="item-entrada" lines="none">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+      <ion-input 
+        type="text" 
+        placeholder="Nombre completo" 
+        [(ngModel)]="nombreRegistro">
+      </ion-input>
+    </ion-item>
+
+    <ion-item class="item-entrada ion-margin-top" lines="none">
+      <ion-icon name="mail-outline" slot="start"></ion-icon>
+      <ion-input 
+        type="email" 
+        placeholder="Correo electrónico" 
+        [(ngModel)]="correoRegistro">
+      </ion-input>
+    </ion-item>
+
+    <ion-item class="item-entrada ion-margin-top" lines="none">
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-input 
+        type="password" 
+        placeholder="Contraseña" 
+        [(ngModel)]="claveRegistro">
+      </ion-input>
+    </ion-item>
+
+    <ion-item class="item-entrada ion-margin-top" lines="none">
+      <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+      <ion-input 
+        type="password" 
+        placeholder="Confirmar contraseña" 
+        [(ngModel)]="confirmarClaveRegistro">
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" shape="round" class="boton-principal ion-margin-top" (click)="alRegistrar()">
+      Crear Cuenta
+    </ion-button>
+  </div>
+
+</ion-content>

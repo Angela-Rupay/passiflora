@@ -1,0 +1,83 @@
+// Animación de Guía de Respiración (Inhala / Exhala)
+@keyframes respirar {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 35px rgba(var(--ion-color-primary-rgb), 0.7);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
+}
+
+.contenedor-logo {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+
+  .circulo-respiracion {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 1rem auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ion-color-light);
+    border: 3px solid var(--ion-color-primary);
+    // Aplicación del ciclo de respiración suave (4 segundos por ciclo)
+    animation: respirar 4s infinite ease-in-out;
+  }
+
+  .logo-passiflora {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+  }
+
+  .titulo-app {
+    color: var(--ion-color-primary);
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin: 0;
+  }
+
+  .subtitulo-app {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+  }
+}
+
+// Estilos de los inputs y botones
+.segmento-personalizado {
+  margin-bottom: 1.5rem;
+  --background: var(--ion-color-light);
+}
+
+.item-entrada {
+  --background: var(--ion-color-light);
+  --border-radius: 12px;
+  --padding-start: 12px;
+  border: 1px solid var(--ion-color-light-shade);
+}
+
+.boton-principal {
+  --background: var(--ion-color-primary);
+  --color: #ffffff;
+  font-weight: 600;
+  height: 48px;
+}
+
+.formulario-animado {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

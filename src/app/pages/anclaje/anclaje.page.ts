@@ -12,6 +12,7 @@ import {
   restaurantOutline, roseOutline, checkmarkCircleOutline,
   micOutline, trashOutline
 } from 'ionicons/icons';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-anclaje',
@@ -27,11 +28,9 @@ import {
 export class AnclajePage implements OnDestroy {
 
   pasoActual: number = 5;
-
-  // 5 - VISTA: Fotos temporales en memoria
   fotosVista: string[] = [];
 
-  // 4 - TACTO: Cuestionario de 4 objetos
+  // 4 - TACTO
   objetosTacto = [
     { nombre: '', textura: '', temperatura: '' },
     { nombre: '', textura: '', temperatura: '' },
@@ -39,7 +38,7 @@ export class AnclajePage implements OnDestroy {
     { nombre: '', textura: '', temperatura: '' }
   ];
 
-  // 3 - OÍDO: 3 Sonidos de 5 segundos
+  // 3 - OÍDO
   sonidosOido = [
     { nombre: '', audioUrl: '', grabando: false },
     { nombre: '', audioUrl: '', grabando: false },
@@ -50,17 +49,16 @@ export class AnclajePage implements OnDestroy {
   tiempoRestanteGrabacion: number = 5;
   intervaloTimer: any;
 
-  // 2 - GUSTO: 2 Sabores (Dulce, Salado, Amargo, Ácido, Umami)
+  // 2 - GUSTO
   saboresGusto = [
     { objeto: '', sabor: '' },
     { objeto: '', sabor: '' }
   ];
   opcionesSabores = ['Dulce', 'Salado', 'Amargo', 'Ácido', 'Umami'];
 
-  // 1 - OLFATO: 1 Olor
+  // 1 - OLFATO
   descripcionOlor: string = '';
 
-  // Toast Notificación
   mostrarToast: boolean = false;
   mensajeToast: string = '';
 
@@ -76,8 +74,29 @@ export class AnclajePage implements OnDestroy {
     this.limpiarRecursosTemporales();
   }
 
-  // --- PASO 5: VISTA ---
-  capturarFoto(event: any) {
+  // --- CAPTURA DE CÁMARA NATIVA O WEB ---
+  async capturarFotoNativa() {
+    if (this.fotosVista.length >= 5) return;
+
+    try {
+      // Intenta abrir la cámara nativa del dispositivo
+      const image = await Camera.getPhoto({
+        quality: 85,
+        allowEditing: false,
+        resultType: CameraResultType.Uri,
+        source: CameraSource.Camera
+      });
+
+      if (image.webPath) {
+        this.fotosVista.push(image.webPath);
+      }
+    } catch (error) {
+      // Si se cancela o se prueba en web sin plugin nativo disponible, solicita archivo
+      console.log('Cámara nativa no disponible o cancelada por el usuario.', error);
+    }
+  }
+
+  capturarFotoWeb(event: any) {
     const archivo = event.target.files[0];
     if (archivo && this.fotosVista.length < 5) {
       const reader = new FileReader();
@@ -92,7 +111,7 @@ export class AnclajePage implements OnDestroy {
     this.fotosVista.splice(index, 1);
   }
 
-  // --- PASO 3: OÍDO (Grabador 5 seg) ---
+  // --- PASO 3: OÍDO ---
   async iniciarGrabacion(index: number) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });

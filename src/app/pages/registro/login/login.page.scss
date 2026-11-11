@@ -1,83 +1,130 @@
-// Animación de Guía de Respiración (Inhala / Exhala)
-@keyframes respirar {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.3);
-  }
-  50% {
-    transform: scale(1.12);
-    box-shadow: 0 0 35px rgba(var(--ion-color-primary-rgb), 0.7);
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.3);
-  }
+ion-content.login-content {
+  --background: #e3dcfd; /* Fondo lavanda suave de la app */
 }
 
-.contenedor-logo {
-  text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 1.5rem;
+.login-wrapper {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  display: flex;
+  flex-direction: column;
+}
 
-  .circulo-respiracion {
-    width: 110px;
-    height: 110px;
-    margin: 0 auto 1rem auto;
+/* ENCABEZADO Y LOGO TOTALMENTE CENTRADOS */
+.login-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .brand-logo-container {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    background: rgba(108, 92, 231, 0.15);
+    border: 2px solid rgba(108, 92, 231, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--ion-color-light);
-    border: 3px solid var(--ion-color-primary);
-    // Aplicación del ciclo de respiración suave (4 segundos por ciclo)
-    animation: respirar 4s infinite ease-in-out;
+    margin: 0 auto 12px auto;
+    box-shadow: 0 4px 16px rgba(108, 92, 231, 0.2);
+    animation: respirarLogo 4s infinite ease-in-out;
+
+    .brand-logo-icon {
+      font-size: 42px;
+      color: #6c5ce7;
+    }
   }
 
-  .logo-passiflora {
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
-  }
-
-  .titulo-app {
-    color: var(--ion-color-primary);
-    font-weight: 700;
-    font-size: 1.8rem;
+  .brand-title {
+    color: #2d2448;
+    font-size: 28px;
+    font-weight: 800;
     margin: 0;
+    text-align: center;
+    letter-spacing: -0.5px;
   }
 
-  .subtitulo-app {
-    color: var(--ion-color-medium);
-    font-size: 0.9rem;
-    margin-top: 0.2rem;
+  .brand-subtitle {
+    color: #6e5da8;
+    font-size: 14px;
+    margin-top: 4px;
+    text-align: center;
+    font-weight: 500;
   }
 }
 
-// Estilos de los inputs y botones
-.segmento-personalizado {
-  margin-bottom: 1.5rem;
-  --background: var(--ion-color-light);
+/* ANIMACIÓN SUAVE DE RESPIRACIÓN */
+@keyframes respirarLogo {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+  }
 }
 
-.item-entrada {
-  --background: var(--ion-color-light);
-  --border-radius: 12px;
-  --padding-start: 12px;
-  border: 1px solid var(--ion-color-light-shade);
+/* PESTAÑAS PÍLDORA BLANCA (INGRESAR / REGISTRO) */
+.custom-segment {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 4px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 10px rgba(108, 92, 231, 0.08);
+
+  ion-segment-button {
+    --color: #6e5da8;
+    --color-checked: #6c5ce7;
+    --indicator-color: #f0ecff;
+    --border-radius: 12px;
+    font-weight: 700;
+    font-size: 13px;
+    min-height: 42px;
+  }
 }
 
-.boton-principal {
-  --background: var(--ion-color-primary);
+/* CAJAS DE ENTRADA BLANCAS DESTACADAS */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  .input-item {
+    ion-input.custom-input, ion-input {
+      --background: #ffffff;
+      --color: #2d274c;
+      --placeholder-color: #8c82b0;
+      --placeholder-opacity: 1;
+      --border-radius: 14px;
+      --border-color: #e2dbfc;
+      --highlight-color-focused: #6c5ce7;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      font-size: 15px;
+      padding-left: 12px;
+    }
+  }
+}
+
+/* BOTÓN PRINCIPAL PASSIFLORA (#6c5ce7) */
+ion-button.btn-login {
+  --background: #6c5ce7;
+  --background-activated: #5343be;
   --color: #ffffff;
-  font-weight: 600;
-  height: 48px;
-}
-
-.formulario-animado {
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  --border-radius: 14px;
+  height: 52px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(108, 92, 231, 0.35);
 }

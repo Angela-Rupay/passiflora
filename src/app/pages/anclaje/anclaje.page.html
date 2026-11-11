@@ -10,7 +10,7 @@
 
 <ion-content class="ion-padding fondo-anclaje">
 
-  <!-- PASO 5: VISTA -->
+<!-- PASO 5: VISTA -->
   <div *ngIf="pasoActual === 5" class="paso-contenedor animacion-entrada">
     <div class="header-paso">
       <span class="badge-numero">5</span>
@@ -26,10 +26,11 @@
         </button>
       </div>
 
-      <label *ngIf="fotosVista.length < 5" class="tarjeta-captura">
+      <!-- Botón que activa la cámara nativa y selector de archivos en web -->
+      <label *ngIf="fotosVista.length < 5" class="tarjeta-captura" (click)="capturarFotoNativa()">
         <ion-icon name="camera-outline"></ion-icon>
         <span>Tomar Foto ({{ fotosVista.length }}/5)</span>
-        <input type="file" accept="image/*" capture="environment" (change)="capturarFoto($event)" hidden />
+        <input type="file" accept="image/*" capture="environment" (change)="capturarFotoWeb($event)" hidden />
       </label>
     </div>
   </div>

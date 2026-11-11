@@ -9,6 +9,8 @@ import {
 } from '@ionic/angular';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { AuthService } from '../../../services/auth.service';
+import { addIcons } from 'ionicons';
+import { flowerOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +38,9 @@ export class LoginPage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private loadingController: LoadingController
-  ) {}
+  ) {
+    addIcons({ flowerOutline });
+  }
 
   ngOnInit() {
     // Mantiene la sesión persistente: si ya hay sesión iniciada, entra directo a la app

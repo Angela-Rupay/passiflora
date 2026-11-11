@@ -21,11 +21,7 @@
       "dom"
     ],
     "skipLibCheck": true,
-    "useDefineForClassFields": false,
-    "types": [
-      "jasmine",
-      "node"
-    ]
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

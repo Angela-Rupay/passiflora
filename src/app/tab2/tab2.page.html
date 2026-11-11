@@ -1,51 +1,44 @@
-<ion-content class="ion-padding fondo-tab2">
-
-  <div class="header-logo">
-    <div class="avatar-logo animacion-respirar">
-      <ion-icon name="flower-outline"></ion-icon>
-    </div>
+<ion-content class="ion-padding">
+  <!-- Logo único de Passiflora -->
+  <div class="brand-logo-container">
+    <ion-icon name="flower-outline" class="brand-logo-icon"></ion-icon>
   </div>
 
-  <div class="header-texto">
-    <span class="tag-subtitulo">TU ESPACIO DE BIENESTAR</span>
-    <h1 class="titulo-principal">Conecta contigo</h1>
-    <p class="descripcion">
+  <!-- Encabezado de la pestaña -->
+  <div class="header-section">
+    <p class="subtitle">TU ESPACIO DE BIENESTAR</p>
+    <h1>Conecta contigo</h1>
+    <p class="description">
       Elige una actividad para regalarte un momento de calma. No tienes que hacer nada a la perfección.
     </p>
+    <h2>¿Qué necesitas hoy?</h2>
   </div>
 
-  <h2 class="subtitulo-seccion">¿Qué necesitas hoy?</h2>
-
-  <!-- Tarjeta 1: Respiración Guiada -->
-  <div class="tarjeta-ejercicio" (click)="irARespiracion()">
-    <div class="icono-box icono-purpura">
-      <ion-icon name="leaf-outline"></ion-icon>
-    </div>
-    <div class="contenido-tarjeta">
-      <span class="categoria-tag">RESPIRA Y RELÁJATE</span>
-      <h3>Respiración guiada</h3>
+  <!-- Tarjeta 1: Respiración guiada -->
+  <ion-card class="exercise-card" (click)="irARespiracion()">
+    <ion-card-header>
+      <ion-card-subtitle>RESPIRA Y RELÁJATE</ion-card-subtitle>
+      <ion-card-title>Respiración guiada</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
       <p>Explora diferentes técnicas de respiración a tu propio ritmo.</p>
-      <div class="link-accion">
-        <span>Comenzar ejercicio</span>
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </div>
-    </div>
-  </div>
+      <ion-button fill="clear" (click)="irARespiracion(); $event.stopPropagation()">
+        Comenzar ejercicio &rarr;
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 
-  <!-- Tarjeta 2: Técnica 5-4-3-2-1 (Anclaje) -->
-  <div class="tarjeta-ejercicio ion-margin-top" (click)="irAAnclaje()">
-    <div class="icono-box icono-verde">
-      <ion-icon name="eye-outline"></ion-icon>
-    </div>
-    <div class="contenido-tarjeta">
-      <span class="categoria-tag tag-verde">CONECTA CON EL PRESENTE</span>
-      <h3>Técnica 5-4-3-2-1</h3>
+  <!-- Tarjeta 2: Técnica 5-4-3-2-1 -->
+  <ion-card class="exercise-card" (click)="irAAnclaje()">
+    <ion-card-header>
+      <ion-card-subtitle>CONECTA CON EL PRESENTE</ion-card-subtitle>
+      <ion-card-title>Técnica 5-4-3-2-1</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
       <p>Descubre lo que te rodea utilizando tus cinco sentidos.</p>
-      <div class="link-accion">
-        <span>Comenzar ejercicio</span>
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </div>
-    </div>
-  </div>
-
+      <ion-button fill="clear" (click)="irAAnclaje(); $event.stopPropagation()">
+        Comenzar ejercicio &rarr;
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

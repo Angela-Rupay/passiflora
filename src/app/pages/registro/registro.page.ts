@@ -1,6 +1,7 @@
 
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   FormBuilder,
   Validators,
@@ -36,7 +37,9 @@ import {
 })
 export class RegistroPage {
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   registroForm = this.fb.group({
     nombre: ['', [
@@ -79,19 +82,23 @@ export class RegistroPage {
     return /[0-9]/.test(this.contrasena);
   }
 
-  registrar() {
+ registrar() {
 
-    if (this.registroForm.invalid) {
-      this.registroForm.markAllAsTouched();
-      return;
-    }
-
-    const datos = this.registroForm.getRawValue();
-
-    console.log('Datos del registro:', datos);
-
-    // Aquí conectaremos Firebase Authentication
-    // y Firestore.
-
+  if (this.registroForm.invalid) {
+    this.registroForm.markAllAsTouched();
+    return;
   }
+
+  const datos = this.registroForm.getRawValue();
+
+  const nombreCompleto =
+    `${datos.nombre} ${datos.apellido}`;
+
+  this.router.navigate(['/gad7'], {
+    queryParams: {
+      nombre: nombreCompleto
+    }
+  });
+
+}
 }

@@ -1,0 +1,163 @@
+
+ion-content {
+  --background: #CEBEF6;
+}
+
+.ejercicios-container {
+  min-height: 100%;
+  padding: 30px 20px 35px;
+  max-width: 650px;
+  margin: auto;
+}
+
+.encabezado {
+  padding: 15px 5px 30px;
+}
+
+.icono-encabezado {
+  width: 62px;
+  height: 62px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+
+  ion-icon {
+    font-size: 34px;
+    color: #5C4789;
+  }
+}
+
+.etiqueta {
+  color: #8A72AD;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+}
+
+.encabezado h1 {
+  color: #434969;
+  font-size: 29px;
+  font-weight: 800;
+  margin: 10px 0;
+}
+
+.encabezado p {
+  color: #62677D;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.seccion-ejercicios h2 {
+  color: #434969;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 5px 5px 18px;
+}
+
+.tarjeta-ejercicio {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  text-align: left;
+  border: none;
+  border-radius: 23px;
+  padding: 22px 18px;
+  margin-bottom: 17px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.respiracion {
+  background: #F3EFFB;
+}
+
+.anclaje {
+  background: #EDF3EA;
+}
+
+.icono-tarjeta {
+  width: 53px;
+  height: 53px;
+  min-width: 53px;
+  border-radius: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ion-icon {
+    font-size: 29px;
+  }
+}
+
+.respiracion .icono-tarjeta {
+  background: #DED1F2;
+  color: #5C4789;
+}
+
+.anclaje .icono-tarjeta {
+  background: #D5E5D5;
+  color: #416D58;
+}
+
+.contenido-tarjeta {
+  flex: 1;
+
+  .categoria {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #8A72AD;
+  }
+
+  h3 {
+    font-size: 17px;
+    color: #434969;
+    font-weight: 800;
+    margin: 8px 0;
+  }
+
+  p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #6B6F76;
+    margin: 0 0 13px;
+  }
+
+  .enlace {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #5C4789;
+  }
+}
+
+.mensaje-final {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 22px 10px;
+  text-align: center;
+
+  ion-icon {
+    color: #80669E;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  p {
+    color: #655B80;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+}

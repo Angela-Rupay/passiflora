@@ -1,1 +1,21 @@
 
+ion-tab-bar.passiflora-tab-bar {
+  --background: #FFFFFF;
+  --border: 1px solid #EAE3F5;
+  height: 68px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+ion-tab-button {
+  --color: #9992A8;
+  --color-selected: #5C4789;
+  font-size: 12px;
+
+  ion-icon {
+    font-size: 23px;
+  }
+
+  ion-label {
+    font-weight: 600;
+  }
+}

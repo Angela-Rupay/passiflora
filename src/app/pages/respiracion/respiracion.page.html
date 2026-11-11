@@ -1,0 +1,174 @@
+<ion-content [fullscreen]="true">
+
+  <div class="respiracion-container">
+
+    <button class="volver" (click)="volver()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+      Volver a ejercicios
+    </button>
+
+    <header class="encabezado">
+      <div class="icono-encabezado">
+        <ion-icon name="leaf-outline"></ion-icon>
+      </div>
+
+      <span class="etiqueta">PASSIFLORA · BIENESTAR</span>
+      <h1>Respira a tu ritmo</h1>
+
+      <p>
+        Regálate unos minutos. No hay prisa,
+        encuentra el ritmo que te resulte cómodo.
+      </p>
+    </header>
+
+    <!-- SELECTOR DE EJERCICIOS -->
+
+    <section *ngIf="!ejercicioSeleccionado" class="selector">
+
+      <h2>Elige tu ejercicio</h2>
+
+      <button
+        class="ejercicio-card"
+        *ngFor="let ejercicio of ejercicios"
+        (click)="seleccionarEjercicio(ejercicio)"
+      >
+        <div class="card-icono">
+          <ion-icon name="leaf-outline"></ion-icon>
+        </div>
+
+        <div class="card-contenido">
+          <h3>{{ ejercicio.nombre }}</h3>
+          <p>{{ ejercicio.descripcion }}</p>
+        </div>
+
+        <span class="flecha">›</span>
+      </button>
+
+    </section>
+
+    <!-- SESIÓN DE RESPIRACIÓN -->
+
+    <section *ngIf="ejercicioSeleccionado" class="sesion">
+
+      <button
+        class="cambiar"
+        (click)="elegirOtroEjercicio()"
+      >
+        ← Cambiar ejercicio
+      </button>
+
+      <h2>{{ ejercicioSeleccionado.nombre }}</h2>
+
+      <p class="descripcion">
+        {{ ejercicioSeleccionado.descripcion }}
+      </p>
+
+      <!-- CÍRCULO ANIMADO -->
+
+        <div class="zona-animacion">
+
+          <div
+            class="circulo"
+            [ngClass]="[
+              ejecutando || pausado ? claseAnimacion : 'reposo',
+              pausado ? 'pausado' : ''
+            ]"
+            [style.--phase-duration]="duracionFase + 's'"
+          >
+
+            <div class="circulo-interior">
+
+              <ng-container *ngIf="ejecutando || pausado">
+                <span class="fase">{{ faseNombre }}</span>
+                <strong>{{ tiempoRestante }}</strong>
+              </ng-container>
+
+              <span *ngIf="!ejecutando && !finalizado">
+                {{ pausado ? 'En pausa' : 'Preparada' }}
+              </span>
+
+              <span *ngIf="finalizado" class="completado">
+                ¡Muy bien! 💜
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      <p class="indicacion" *ngIf="!ejecutando && !finalizado">
+        {{ pausado
+          ? 'Puedes continuar cuando quieras.'
+          : 'Cuando estés preparada, comienza.'
+        }}
+      </p>
+
+      <p class="indicacion" *ngIf="ejecutando">
+        Sigue el movimiento del círculo.
+      </p>
+
+      <p class="indicacion" *ngIf="finalizado">
+        Has terminado este ejercicio. Gracias por regalarte este momento.
+      </p>
+
+      <div class="progreso">
+        <span>Ciclos completados</span>
+        <strong>{{ ciclos }} / {{ totalCiclos }}</strong>
+      </div>
+
+      <div class="barra-progreso">
+        <div
+          class="barra-progreso-valor"
+          [style.width]="(ciclos / totalCiclos * 100) + '%'"
+        ></div>
+      </div>
+
+      <!-- CONTROLES -->
+
+      <div class="controles">
+
+        <ion-button
+          *ngIf="!ejecutando"
+          expand="block"
+          (click)="iniciar()"
+        >
+          <ion-icon
+            slot="start"
+            [name]="finalizado ? 'refresh-outline' : 'play-outline'"
+          ></ion-icon>
+
+          {{ finalizado ? 'Repetir ejercicio' :
+             pausado ? 'Continuar' : 'Comenzar' }}
+        </ion-button>
+
+        <ion-button
+          *ngIf="ejecutando"
+          expand="block"
+          (click)="pausar()"
+        >
+          <ion-icon name="pause-outline" slot="start"></ion-icon>
+          Pausar
+        </ion-button>
+
+        <ion-button
+          *ngIf="ejecutando || pausado"
+          expand="block"
+          fill="outline"
+          (click)="finalizar()"
+        >
+          Finalizar
+        </ion-button>
+
+      </div>
+
+      <p class="nota">
+        No fuerces la respiración. Si sientes incomodidad,
+        detente y respira con normalidad.
+      </p>
+
+    </section>
+
+  </div>
+
+</ion-content>

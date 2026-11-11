@@ -1,0 +1,118 @@
+
+<ion-content [fullscreen]="true">
+
+  <div class="gad-container">
+
+    <div class="encabezado">
+      <img
+        src="assets/img/flor-passiflora.png"
+        alt="Passiflora"
+      >
+
+      <h1>PASSIFLORA</h1>
+
+      <p>Tu espacio de calma y regulación emocional</p>
+    </div>
+
+    <div *ngIf="!resultadoVisible">
+
+      <div class="saludo">
+        <h2>
+          Hola {{ nombreUsuario }}, queremos conocer cómo te has sentido.
+        </h2>
+
+        <p>
+          Durante las últimas dos semanas, ¿con qué frecuencia has
+          experimentado las siguientes situaciones?
+        </p>
+      </div>
+
+      <div
+        class="pregunta-card"
+        *ngFor="let pregunta of preguntas; let i = index"
+      >
+
+        <h3>{{ i + 1 }}. {{ pregunta }}</h3>
+
+        <div class="opciones">
+
+          <label
+            class="opcion"
+            *ngFor="let opcion of opciones"
+            [class.seleccionada]="respuestas[i] === opcion.valor"
+          >
+
+            <input
+              type="radio"
+              [name]="'pregunta' + i"
+              [value]="opcion.valor"
+              [checked]="respuestas[i] === opcion.valor"
+              (change)="seleccionarRespuesta(i, opcion.valor)"
+            >
+
+            <span class="radio-personalizado"></span>
+
+            <span>
+              {{ opcion.valor }}: {{ opcion.texto }}
+            </span>
+
+          </label>
+
+        </div>
+
+      </div>
+
+      <div class="progreso">
+      {{ cantidadRespondidas }} de 7 preguntas respondidas
+      </div>
+
+      <ion-button
+        expand="block"
+        [disabled]="!todasRespondidas"
+        (click)="calcularResultado()"
+      >
+        Evaluar mis respuestas
+      </ion-button>
+
+    </div>
+
+    <div class="resultado" *ngIf="resultadoVisible">
+
+      <div class="resultado-card">
+
+        <h2>Resultado GAD-7</h2>
+
+        <div class="puntaje">
+          {{ puntajeTotal }}
+          <span>/ 21 puntos</span>
+        </div>
+
+        <h3>Nivel de síntomas: {{ nivel }}</h3>
+
+        <p>{{ mensaje }}</p>
+
+      </div>
+
+      <div class="aviso">
+        Este cuestionario es una herramienta de detección
+        y orientación, no sustituye un diagnóstico profesional.
+      </div>
+
+      <ion-button
+        expand="block"
+        (click)="volverAResponder()"
+      >
+        Volver a responder
+      </ion-button>
+
+       <ion-button
+         expand="block"
+         (click)="irAlInicio()">
+          Entrar a Passiflora
+       </ion-button>
+      
+    </div>
+
+  </div>
+
+</ion-content>

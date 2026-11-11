@@ -1,14 +1,46 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
-import { ExploreContainerComponent } from '../explore-container/explore-container.component';
+import {
+  IonContent,
+  IonIcon,
+  IonButton
+} from '@ionic/angular';
+
+import { addIcons } from 'ionicons';
+
+import {
+  eyeOutline,
+  arrowForwardOutline,
+  heartOutline,
+  leafOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, ExploreContainerComponent],
+  templateUrl: './tab2.page.html',
+  styleUrls: ['./tab2.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonContent,
+    IonIcon,
+    IonButton
+  ]
 })
 export class Tab2Page {
-  constructor() {}
+
+  constructor(private router: Router) {
+    addIcons({leafOutline,arrowForwardOutline,eyeOutline,heartOutline});
+  }
+
+ abrirRespiracion() {
+  this.router.navigate(['/tabs/respiracion']);
+}
+
+abrirAnclaje() {
+  this.router.navigate(['/tabs/anclaje']);
+}
+
 }

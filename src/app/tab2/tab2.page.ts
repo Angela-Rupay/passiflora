@@ -35,12 +35,12 @@ export class Tab2Page {
     addIcons({leafOutline,arrowForwardOutline,eyeOutline,heartOutline});
   }
 
-  abrirRespiracion() {
-    this.router.navigate(['/tabs/tab2/respiracion']);
-  }
+ abrirRespiracion() {
+  this.router.navigate(['/tabs/respiracion']);
+}
 
-  abrirAnclaje() {
-    this.router.navigate(['/tabs/tab2/anclaje']);
-  }
+abrirAnclaje() {
+  this.router.navigate(['/tabs/anclaje']);
+}
 
 }

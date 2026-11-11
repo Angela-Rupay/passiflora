@@ -1,37 +1,85 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
-
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
 
-/* Optional CSS utils that can be commented out */
+/* Optional CSS utils */
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/float-elements.css";
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Tipografía Global Nunito */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* --- MODO CLARO (Default) --- */
+:root {
+  --ion-font-family: 'Nunito', sans-serif;
+  --ion-background-color: #D6C7FF;  /* Fondo lila principal */
+  --bg-app: #D6C7FF;
+  --bg-tarjeta: #ffffff;             /* Tarjetas blancas */
+  --bg-icono: #f0ebf8;               /* Badges y chips claros */
+  --texto-principal: #382b47;        /* Texto oscuro legible */
+  --texto-secundario: #6e5a8a;      /* Subtítulos */
+  --color-primario: #5e4b8b;
+  --color-boton-flecha: #5e4b8b;
+}
+
+/* --- MODO OSCURO --- */
+body.dark {
+  --ion-background-color: #121020;  /* Fondo noche muy oscuro */
+  --bg-app: #121020;
+  --bg-tarjeta: #221c38;             /* Tarjetas moradas oscuras */
+  --bg-icono: #332952;               /* Badges y chips oscuros */
+  --texto-principal: #ffffff;        /* Texto blanco */
+  --texto-secundario: #b4a7d6;      /* Subtítulos claros */
+  --color-primario: #a594f9;
+  --color-boton-flecha: #a594f9;
+
+  ion-toolbar {
+    --background: #221c38;
+    --color: #ffffff;
+  }
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--ion-background-color);
+}
+
+ion-content {
+  --background: var(--ion-background-color);
+  --color: var(--texto-principal);
+}
+
+/* Corrección de Visibilidad del Calendario (ion-datetime) */
+ion-datetime {
+  --background: var(--bg-tarjeta);
+  --color: var(--texto-principal);
+  border-radius: 16px;
+  background: var(--bg-tarjeta);
+  color: var(--texto-principal);
+
+  &::part(calendar-day) {
+    color: var(--texto-principal);
+    font-weight: 700;
+  }
+
+  &::part(month-year-button) {
+    color: var(--texto-principal);
+    font-weight: 800;
+  }
+
+  &::part(day-of-week) {
+    color: var(--texto-secundario);
+    font-weight: 700;
+  }
+}
+
+ion-toolbar {
+  --background: var(--bg-tarjeta);
+  --color: var(--texto-principal);
+}

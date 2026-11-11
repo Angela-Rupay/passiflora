@@ -1,163 +1,184 @@
-
-ion-content {
-  --background: #CEBEF6;
+.fondo-tab2 {
+  --background: var(--ion-background-color);
 }
 
-.ejercicios-container {
-  min-height: 100%;
-  padding: 30px 20px 35px;
-  max-width: 650px;
-  margin: auto;
-}
-
-.encabezado {
-  padding: 15px 5px 30px;
-}
-
-.icono-encabezado {
-  width: 62px;
-  height: 62px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 20px;
+/* Header y Logo Respirando */
+.header-logo {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 22px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 
-  ion-icon {
-    font-size: 34px;
-    color: #5C4789;
+  .avatar-logo {
+    width: 54px;
+    height: 54px;
+    background: var(--bg-tarjeta);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+    ion-icon {
+      font-size: 28px;
+      color: var(--color-primario);
+    }
   }
 }
 
-.etiqueta {
-  color: #8A72AD;
-  font-size: 10px;
+/* Keyframes de la Animación de Respiración */
+.animacion-respirar {
+  animation: respirarLogo 4s ease-in-out infinite;
+}
+
+@keyframes respirarLogo {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+  }
+}
+
+/* Textos de la Tab */
+.header-texto {
+  margin-bottom: 24px;
+
+  .tag-subtitulo {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.9px;
+    color: var(--texto-secundario);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .titulo-principal {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--texto-principal);
+    margin: 0 0 10px 0;
+  }
+
+  .descripcion {
+    font-size: 0.95rem;
+    color: var(--texto-secundario);
+    line-height: 1.45;
+    margin: 0;
+  }
+}
+
+.subtitulo-seccion {
+  font-size: 1.15rem;
   font-weight: 800;
-  letter-spacing: 1.4px;
+  color: var(--texto-principal);
+  margin: 0 0 16px 0;
 }
 
-.encabezado h1 {
-  color: #434969;
-  font-size: 29px;
-  font-weight: 800;
-  margin: 10px 0;
-}
-
-.encabezado p {
-  color: #62677D;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.seccion-ejercicios h2 {
-  color: #434969;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 5px 5px 18px;
-}
-
+/* Tarjetas Adaptables a Modo Oscuro / Claro */
 .tarjeta-ejercicio {
-  width: 100%;
+  background: var(--bg-tarjeta);
+  border-radius: 24px;
+  padding: 20px 18px;
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  text-align: left;
-  border: none;
-  border-radius: 23px;
-  padding: 22px 18px;
-  margin-bottom: 17px;
+  gap: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:active {
     transform: scale(0.98);
   }
-}
 
-.respiracion {
-  background: #F3EFFB;
-}
-
-.anclaje {
-  background: #EDF3EA;
-}
-
-.icono-tarjeta {
-  width: 53px;
-  height: 53px;
-  min-width: 53px;
-  border-radius: 17px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  ion-icon {
-    font-size: 29px;
-  }
-}
-
-.respiracion .icono-tarjeta {
-  background: #DED1F2;
-  color: #5C4789;
-}
-
-.anclaje .icono-tarjeta {
-  background: #D5E5D5;
-  color: #416D58;
-}
-
-.contenido-tarjeta {
-  flex: 1;
-
-  .categoria {
-    font-size: 9px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: #8A72AD;
-  }
-
-  h3 {
-    font-size: 17px;
-    color: #434969;
-    font-weight: 800;
-    margin: 8px 0;
-  }
-
-  p {
-    font-size: 13px;
-    line-height: 1.6;
-    color: #6B6F76;
-    margin: 0 0 13px;
-  }
-
-  .enlace {
+  .icono-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
-    gap: 7px;
-    font-size: 12px;
-    font-weight: 800;
-    color: #5C4789;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 26px;
+    }
+
+    &.icono-purpura {
+      background: var(--bg-icono, #ede7f6);
+      ion-icon {
+        color: var(--color-primario);
+      }
+    }
+
+    &.icono-verde {
+      background: #e8f5e9;
+      ion-icon {
+        color: #2e7d32;
+      }
+    }
+  }
+
+  .contenido-tarjeta {
+    flex-grow: 1;
+
+    .categoria-tag {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--texto-secundario);
+      display: block;
+      margin-bottom: 2px;
+
+      &.tag-verde {
+        color: #388e3c;
+      }
+    }
+
+    h3 {
+      margin: 0 0 6px 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--texto-principal);
+    }
+
+    p {
+      margin: 0 0 12px 0;
+      font-size: 0.86rem;
+      color: var(--texto-secundario);
+      line-height: 1.4;
+    }
+
+    .link-accion {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--color-primario);
+
+      ion-icon {
+        font-size: 16px;
+        transition: transform 0.2s ease;
+      }
+    }
   }
 }
 
-.mensaje-final {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  padding: 22px 10px;
-  text-align: center;
-
-  ion-icon {
-    color: #80669E;
-    font-size: 20px;
-    flex-shrink: 0;
+body.dark {
+  .tarjeta-ejercicio .icono-box.icono-verde {
+    background: #1b3a26;
+    ion-icon {
+      color: #81c784;
+    }
   }
 
-  p {
-    color: #655B80;
-    font-size: 12px;
-    line-height: 1.6;
+  .tarjeta-ejercicio .contenido-tarjeta .categoria-tag.tag-verde {
+    color: #81c784;
   }
 }

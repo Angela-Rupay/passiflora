@@ -1,71 +1,43 @@
-
-<ion-content [fullscreen]="true">
-
-  <div class="inicio-container">
-
-    <!-- Encabezado -->
-
-    <div class="bienvenida">
-
-      <div class="flor-icono">
-        <ion-icon name="flower-outline"></ion-icon>
-      </div>
-
-      <p class="saludo">
-        Hola<span *ngIf="nombreUsuario">, {{ nombreUsuario }}</span> 💜
-      </p>
-
-      <h1>Qué bueno tenerte aquí.</h1>
-
-      <p class="subtitulo">
-        Este es tu espacio para respirar, conectar contigo
-        y cuidar de tu bienestar.
-      </p>
-
+<ion-content class="ion-padding">
+  
+  <div class="top-bar">
+    <div class="avatar-logo animacion-respirar">
+      <ion-icon name="flower-outline"></ion-icon>
     </div>
-
-    <!-- Tarjeta de respiración -->
-
-    <ion-card class="respiracion-card" (click)="iniciarRespiracion()">
-
-      <ion-card-content>
-
-        <div class="card-icono">
-          <ion-icon name="leaf-outline"></ion-icon>
-        </div>
-
-        <div class="card-texto">
-
-          <span class="etiqueta">
-            UN MOMENTO PARA TI
-          </span>
-
-          <h2>Respira conmigo</h2>
-
-          <p>
-            Regálate unos minutos para encontrar calma
-            y conectar con el presente.
-          </p>
-
-        </div>
-
-        <div class="card-boton">
-          <ion-icon name="arrow-forward-outline"></ion-icon>
-        </div>
-
-      </ion-card-content>
-
-    </ion-card>
-
-    <!-- Mensaje inferior -->
-
-    <div class="mensaje-final">
-      <p>
-        No tienes que tener todo resuelto.
-        A veces, simplemente respirar es suficiente.
-      </p>
+    <div class="acciones-header">
+      <ion-button fill="clear" class="btn-accion" (click)="themeService.toggleTema()">
+        <ion-icon [name]="themeService.modoOscuro ? 'sunny-outline' : 'moon-outline'" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" class="btn-accion btn-logout" (click)="cerrarSesion()">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
-
   </div>
 
+  <div class="header-usuario">
+    <p class="saludo-tag">Hola {{ nombreUsuario }} 💜</p>
+    <h1 class="titulo-principal">Qué bueno tenerte aquí.</h1>
+    <p class="descripcion">
+      Este es tu espacio para respirar, conectar contigo y cuidar de tu bienestar.
+    </p>
+  </div>
+
+<!--Tarjeta con respiración-->
+  >  <div class="tarjeta-respiracion" (click)="irARespiracion()">
+    <div class="icono-hoja-box">
+      <ion-icon name="leaf-outline"></ion-icon>
+    </div>
+    <div class="contenido-tarjeta">
+      <span class="subtitulo-tarjeta">UN MOMENTO PARA TI</span>
+      <h3>Respira conmigo</h3>
+      <p>Regálate unos minutos para encontrar calma y conectar con el presente.</p>
+    </div>
+    <div class="boton-flecha">
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </div>
+  </div>
+
+  <p class="frase-bottom">
+    No tienes que tener todo resuelto. A veces, simplemente respirar es suficiente.
+  </p>
 </ion-content>

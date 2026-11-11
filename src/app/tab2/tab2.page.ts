@@ -1,46 +1,29 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IonContent, IonIcon } from '@ionic/angular';
 import { Router } from '@angular/router';
-
-import {
-  IonContent,
-  IonIcon,
-  IonButton
-} from '@ionic/angular';
-
 import { addIcons } from 'ionicons';
-
-import {
-  eyeOutline,
-  arrowForwardOutline,
-  heartOutline,
-  leafOutline
-} from 'ionicons/icons';
+import { flowerOutline, leafOutline, eyeOutline, arrowForwardOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tab2',
-  templateUrl: './tab2.page.html',
-  styleUrls: ['./tab2.page.scss'],
+  templateUrl: 'tab2.page.html',
+  styleUrls: ['tab2.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    IonContent,
-    IonIcon,
-    IonButton
-  ]
+  imports: [CommonModule, IonContent, IonIcon]
 })
 export class Tab2Page {
 
   constructor(private router: Router) {
-    addIcons({leafOutline,arrowForwardOutline,eyeOutline,heartOutline});
+    addIcons({ flowerOutline, leafOutline, eyeOutline, arrowForwardOutline });
   }
 
- abrirRespiracion() {
-  this.router.navigate(['/tabs/respiracion']);
-}
+  irARespiracion() {
+    this.router.navigateByUrl('/pages/respiracion');
+  }
 
-abrirAnclaje() {
-  this.router.navigate(['/tabs/anclaje']);
-}
+  irAAnclaje() {
+    this.router.navigateByUrl('/pages/anclaje');
+  }
 
 }

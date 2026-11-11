@@ -1,137 +1,180 @@
-
-ion-content {
-  --background: #CEBEF6;
-}
-
-.inicio-container {
-  min-height: 100%;
-  padding: 35px 22px 40px;
+/* Barra Superior */
+.top-bar {
   display: flex;
-  flex-direction: column;
-}
-
-.bienvenida {
-  padding: 20px 5px 30px;
-}
-
-.flor-icono {
-  width: 65px;
-  height: 65px;
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 25px;
+  margin-top: 10px;
+  margin-bottom: 24px;
 
-  ion-icon {
-    color: #5C4789;
-    font-size: 36px;
+  .avatar-logo {
+    width: 52px;
+    height: 52px;
+    background: var(--bg-tarjeta);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+
+    ion-icon {
+      font-size: 28px;
+      color: var(--color-primario);
+    }
+  }
+
+  .acciones-header {
+    display: flex;
+    gap: 4px;
+
+    .btn-accion {
+      --color: var(--color-primario);
+      font-size: 1.3rem;
+
+      &.btn-logout {
+        --color: #e63946;
+      }
+    }
   }
 }
 
-.saludo {
-  color: #5C4789;
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 10px;
+/* Animación de Respiración para el Logo */
+.animacion-respirar {
+  animation: respirarLogo 4s ease-in-out infinite;
 }
 
-.bienvenida h1 {
-  color: #434969;
-  font-size: 29px;
-  font-weight: 800;
-  line-height: 1.25;
-  margin: 0 0 12px;
-}
-
-.subtitulo {
-  color: #62677D;
-  font-size: 15px;
-  line-height: 1.7;
-  margin: 0;
-}
-
-.respiracion-card {
-  margin: 10px 0;
-  border-radius: 25px;
-  background: #FFFFFF;
-  box-shadow: 0 8px 22px rgba(75, 54, 116, 0.10);
-  cursor: pointer;
-}
-
-.respiracion-card ion-card-content {
-  padding: 25px 22px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.card-icono {
-  min-width: 55px;
-  height: 55px;
-  background: #E9E0F7;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  ion-icon {
-    color: #5C4789;
-    font-size: 30px;
+@keyframes respirarLogo {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
   }
 }
 
-.card-texto {
-  flex: 1;
-
-  .etiqueta {
-    color: #A08ABD;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-  }
-
-  h2 {
-    color: #434969;
-    font-size: 19px;
+/* Sección de Saludo */
+.header-usuario {
+  .saludo-tag {
+    font-size: 1.15rem;
     font-weight: 800;
-    margin: 7px 0;
+    color: var(--color-primario);
+    margin: 0 0 6px 0;
   }
 
-  p {
-    color: #777889;
-    font-size: 13px;
-    line-height: 1.5;
-    margin: 0;
+  .titulo-principal {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--texto-principal);
+    line-height: 1.25;
+    margin: 0 0 12px 0;
+  }
+
+  .descripcion {
+    font-size: 1rem;
+    color: var(--texto-secundario);
+    line-height: 1.45;
+    margin: 0 0 28px 0;
   }
 }
 
-.card-boton {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  background: #5C4789;
-  border-radius: 50%;
+/* Tarjeta Principal ("Respira conmigo") */
+.tarjeta-respiracion {
+  background: var(--bg-tarjeta);
+  border-radius: 24px;
+  padding: 20px 16px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  ion-icon {
-    color: #FFFFFF;
-    font-size: 19px;
+  &:active {
+    transform: scale(0.98);
+  }
+
+  .icono-hoja-box {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-icono);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 26px;
+      color: var(--color-primario);
+    }
+  }
+
+  .contenido-tarjeta {
+    flex-grow: 1;
+
+    .subtitulo-tarjeta {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--texto-secundario);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    h3 {
+      margin: 0 0 4px 0;
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--texto-principal);
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--texto-secundario);
+      line-height: 1.35;
+    }
+  }
+
+  .boton-flecha {
+    width: 42px;
+    height: 42px;
+    background: var(--color-boton-flecha);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    ion-icon {
+      font-size: 20px;
+      color: #ffffff;
+    }
   }
 }
 
-.mensaje-final {
-  margin-top: auto;
-  padding: 30px 15px 10px;
+/* Frase final */
+.frase-bottom {
   text-align: center;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--texto-secundario);
+  margin-top: 40px;
+  padding: 0 12px;
+  line-height: 1.4;
+}
 
-  p {
-    color: #655B80;
-    font-size: 13px;
-    font-style: italic;
-    line-height: 1.7;
-  }
+.animacion-respirar {
+  animation: respirarLogo 4s ease-in-out infinite;
+}
+
+@keyframes respirarLogo {
+  0% { transform: scale(1); box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15); }
+  50% { transform: scale(1.12); box-shadow: 0 8px 24px rgba(108, 92, 231, 0.35); }
+  100% { transform: scale(1); box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15); }
 }

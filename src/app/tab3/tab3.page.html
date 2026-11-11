@@ -1,15 +1,110 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title> Tab 3 </ion-title>
+    <ion-title class="titulo-toolbar">Mi Espacio 🌸</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding fondo-espacio">
+  
+  <div class="header-espacio">
+    <h2>Diario Emocional</h2>
+    <p>Registra cómo te sientes hoy para acompañar tu proceso con amor y calma.</p>
+  </div>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <!-- Calendario para selección de fecha -->
+  <div class="tarjeta-contenedor">
+    <h3 class="subtitulo-seccion">📅 Selecciona la fecha</h3>
+    <ion-datetime 
+      presentation="date" 
+      [(ngModel)]="fechaSeleccionada"
+      locale="es-ES"
+      class="calendario-lindo">
+    </ion-datetime>
+  </div>
+
+  <!-- Paso 1: Seleccionar Emoción Principal con Caritas -->
+  <div class="tarjeta-contenedor ion-margin-top">
+    <h3 class="subtitulo-seccion">1. ¿Cómo te sientes hoy?</h3>
+    <div class="rueda-grid">
+      <div 
+        *ngFor="let item of ruedaEmociones" 
+        class="tarjeta-emocion"
+        [style.background-color]="item.colorFondo"
+        [style.border-color]="item.color"
+        [class.activa]="emocionSeleccionada?.nombre === item.nombre"
+        (click)="seleccionarEmocion(item)">
+        <span class="emoji-carita">{{ item.emoji }}</span>
+        <span class="nombre-emocion" [style.color]="item.color">{{ item.nombre }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 2: Seleccionar Sub-emoción -->
+  <div *ngIf="emocionSeleccionada" class="tarjeta-contenedor ion-margin-top animacion-entrada">
+    <h3 class="subtitulo-seccion">
+      2. Matiz de <strong>{{ emocionSeleccionada.nombre }}</strong> {{ emocionSeleccionada.emoji }}
+    </h3>
+    <div class="chips-subemociones">
+      <span 
+        *ngFor="let sub of emocionSeleccionada.subemociones"
+        class="chip-subemocion"
+        [class.chip-activo]="subemocionSeleccionada === sub"
+        (click)="seleccionarSubemocion(sub)">
+        {{ sub }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Paso 3: Slider de Intensidad dinámico -->
+  <div *ngIf="subemocionSeleccionada" class="tarjeta-contenedor ion-margin-top animacion-entrada">
+    <div class="header-intensidad">
+      <h3 class="subtitulo-seccion">3. Nivel de Intensidad</h3>
+      <span class="badge-intensidad">{{ obtenerEmojiIntensidad() }} ({{ nivelIntensidad }}/10)</span>
+    </div>
+
+    <ion-range 
+      [min]="1" 
+      [max]="10" 
+      [step]="1" 
+      [snaps]="true"
+      [(ngModel)]="nivelIntensidad" 
+      color="secondary"
+      class="range-lindo">
+      <ion-label slot="start" class="label-range">1</ion-label>
+      <ion-label slot="end" class="label-range">10</ion-label>
+    </ion-range>
+
+    <ion-button expand="block" shape="round" class="boton-guardar-lindo" (click)="guardarRegistro()">
+      Guardar en mi diario ✨
+    </ion-button>
+  </div>
+
+  <!-- Historial Reciente de Emociones -->
+  <div class="tarjeta-contenedor ion-margin-top">
+    <h3 class="subtitulo-seccion">🌿 Tu Historial Emocional</h3>
+
+    <div *ngIf="historialRegistros.length === 0" class="sin-registros">
+      <p>Aún no has registrado emociones. ¡Empieza hoy! 💜</p>
+    </div>
+
+    <div *ngFor="let registro of historialRegistros" class="tarjeta-registro-historial">
+      <div class="badge-emoji-historial" [style.background-color]="registro.color + '22'">
+        <span>{{ registro.emoji || '🌸' }}</span>
+      </div>
+      <div class="info-registro">
+        <h4>{{ registro.emocionPrincipal }} <span>({{ registro.subemocion }})</span></h4>
+        <p>📅 {{ registro.fecha }} &nbsp;|&nbsp; Intensidad: <strong>{{ registro.intensidad }}/10</strong></p>
+      </div>
+      <div class="barra-intensidad" [style.background-color]="registro.color"></div>
+    </div>
+  </div>
+
+  <ion-toast 
+    [isOpen]="mostrarToast" 
+    [message]="mensajeToast" 
+    [duration]="3000" 
+    position="bottom"
+    (didDismiss)="mostrarToast = false">
+  </ion-toast>
+
 </ion-content>

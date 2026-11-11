@@ -1,101 +1,51 @@
+<ion-content class="ion-padding fondo-tab2">
 
-<ion-content [fullscreen]="true">
-
-  <div class="ejercicios-container">
-
-    <header class="encabezado">
-
-      <div class="icono-encabezado">
-        <ion-icon name="leaf-outline"></ion-icon>
-      </div>
-
-      <span class="etiqueta">TU ESPACIO DE BIENESTAR</span>
-
-      <h1>Conecta contigo</h1>
-
-      <p>
-        Elige una actividad para regalarte un momento
-        de calma. No tienes que hacer nada a la perfección.
-      </p>
-
-    </header>
-
-    <section class="seccion-ejercicios">
-
-      <h2>¿Qué necesitas hoy?</h2>
-
-      <!-- Respiración -->
-
-      <button
-        class="tarjeta-ejercicio respiracion"
-        (click)="abrirRespiracion()"
-      >
-
-        <div class="icono-tarjeta">
-          <ion-icon name="leaf-outline"></ion-icon>
-        </div>
-
-        <div class="contenido-tarjeta">
-
-          <span class="categoria">RESPIRA Y RELÁJATE</span>
-
-          <h3>Respiración guiada</h3>
-
-          <p>
-            Explora diferentes técnicas de respiración
-            a tu propio ritmo.
-          </p>
-
-          <span class="enlace">
-            Comenzar ejercicio
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-          </span>
-
-        </div>
-
-      </button>
-
-      <!-- Anclaje -->
-
-      <button
-        class="tarjeta-ejercicio anclaje"
-        (click)="abrirAnclaje()"
-      >
-
-        <div class="icono-tarjeta">
-          <ion-icon name="eye-outline"></ion-icon>
-        </div>
-
-        <div class="contenido-tarjeta">
-
-          <span class="categoria">CONECTA CON EL PRESENTE</span>
-
-          <h3>Técnica 5-4-3-2-1</h3>
-
-          <p>
-            Descubre lo que te rodea utilizando
-            tus cinco sentidos.
-          </p>
-
-          <span class="enlace">
-            Comenzar ejercicio
-            <ion-icon name="arrow-forward-outline"></ion-icon>
-          </span>
-
-        </div>
-
-      </button>
-
-    </section>
-
-    <div class="mensaje-final">
-      <ion-icon name="heart-outline"></ion-icon>
-      <p>
-        Recuerda: puedes avanzar a tu ritmo
-        y saltarte cualquier actividad.
-      </p>
+  <div class="header-logo">
+    <div class="avatar-logo animacion-respirar">
+      <ion-icon name="flower-outline"></ion-icon>
     </div>
+  </div>
 
+  <div class="header-texto">
+    <span class="tag-subtitulo">TU ESPACIO DE BIENESTAR</span>
+    <h1 class="titulo-principal">Conecta contigo</h1>
+    <p class="descripcion">
+      Elige una actividad para regalarte un momento de calma. No tienes que hacer nada a la perfección.
+    </p>
+  </div>
+
+  <h2 class="subtitulo-seccion">¿Qué necesitas hoy?</h2>
+
+  <!-- Tarjeta 1: Respiración Guiada -->
+  <div class="tarjeta-ejercicio" (click)="irARespiracion()">
+    <div class="icono-box icono-purpura">
+      <ion-icon name="leaf-outline"></ion-icon>
+    </div>
+    <div class="contenido-tarjeta">
+      <span class="categoria-tag">RESPIRA Y RELÁJATE</span>
+      <h3>Respiración guiada</h3>
+      <p>Explora diferentes técnicas de respiración a tu propio ritmo.</p>
+      <div class="link-accion">
+        <span>Comenzar ejercicio</span>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tarjeta 2: Técnica 5-4-3-2-1 (Anclaje) -->
+  <div class="tarjeta-ejercicio ion-margin-top" (click)="irAAnclaje()">
+    <div class="icono-box icono-verde">
+      <ion-icon name="eye-outline"></ion-icon>
+    </div>
+    <div class="contenido-tarjeta">
+      <span class="categoria-tag tag-verde">CONECTA CON EL PRESENTE</span>
+      <h3>Técnica 5-4-3-2-1</h3>
+      <p>Descubre lo que te rodea utilizando tus cinco sentidos.</p>
+      <div class="link-accion">
+        <span>Comenzar ejercicio</span>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </div>
+    </div>
   </div>
 
 </ion-content>

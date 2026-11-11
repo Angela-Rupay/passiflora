@@ -1,13 +1,165 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>anclaje</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Técnica 5-4-3-2-1</ion-title>
   </ion-toolbar>
+  <ion-progress-bar [value]="(6 - pasoActual) / 5" color="secondary"></ion-progress-bar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">anclaje</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding fondo-anclaje">
+
+  <!-- PASO 5: VISTA -->
+  <div *ngIf="pasoActual === 5" class="paso-contenedor animacion-entrada">
+    <div class="header-paso">
+      <span class="badge-numero">5</span>
+      <h2>Vista 👁️</h2>
+      <p>Observa a tu alrededor y captura foto de <strong>5 objetos</strong> que puedas ver.</p>
+    </div>
+
+    <div class="grid-fotos">
+      <div *ngFor="let foto of fotosVista; let i = index" class="tarjeta-foto">
+        <img [src]="foto" alt="Foto objeto" />
+        <button class="btn-eliminar" (click)="eliminarFoto(i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </button>
+      </div>
+
+      <label *ngIf="fotosVista.length < 5" class="tarjeta-captura">
+        <ion-icon name="camera-outline"></ion-icon>
+        <span>Tomar Foto ({{ fotosVista.length }}/5)</span>
+        <input type="file" accept="image/*" capture="environment" (change)="capturarFoto($event)" hidden />
+      </label>
+    </div>
+  </div>
+
+  <!-- PASO 4: TACTO -->
+  <div *ngIf="pasoActual === 4" class="paso-contenedor animacion-entrada">
+    <div class="header-paso">
+      <span class="badge-numero">4</span>
+      <h2>Tacto ✋</h2>
+      <p>Siente tu entorno. Registra <strong>4 objetos</strong> que puedas tocar.</p>
+    </div>
+
+    <div *ngFor="let item of objetosTacto; let i = index" class="tarjeta-formulario ion-margin-bottom">
+      <h3 class="subtitulo-item">Objeto {{ i + 1 }}</h3>
+      <ion-input label="Nombre del objeto" labelPlacement="stacked" fill="outline" [(ngModel)]="item.nombre" placeholder="Ej: Cobija, Taza, Llaves"></ion-input>
+      
+      <div class="filas-selects ion-margin-top">
+        <ion-select label="Textura" labelPlacement="stacked" fill="outline" [(ngModel)]="item.textura" placeholder="Selecciona">
+          <ion-select-option value="Lisa">Lisa</ion-select-option>
+          <ion-select-option value="Rugosa">Rugosa</ion-select-option>
+          <ion-select-option value="Suave">Suave</ion-select-option>
+          <ion-select-option value="Áspera">Áspera</ion-select-option>
+        </ion-select>
+
+        <ion-select label="Temperatura" labelPlacement="stacked" fill="outline" [(ngModel)]="item.temperatura" placeholder="Selecciona">
+          <ion-select-option value="Frío">Frío</ion-select-option>
+          <ion-select-option value="Templado">Templado</ion-select-option>
+          <ion-select-option value="Caliente">Caliente</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 3: OÍDO -->
+  <div *ngIf="pasoActual === 3" class="paso-contenedor animacion-entrada">
+    <div class="header-paso">
+      <span class="badge-numero">3</span>
+      <h2>Oído 🎧</h2>
+      <p>Escucha con atención. Identifica y graba <strong>3 sonidos</strong> (5 segundos cada uno).</p>
+    </div>
+
+    <div *ngFor="let sonido of sonidosOido; let i = index" class="tarjeta-formulario ion-margin-bottom">
+      <h3 class="subtitulo-item">Sonido {{ i + 1 }}</h3>
+      <ion-input label="¿Qué sonido escuchaste?" labelPlacement="stacked" fill="outline" [(ngModel)]="sonido.nombre" placeholder="Ej: Pájaros, Viento, Reloj"></ion-input>
+
+      <div class="box-grabacion ion-margin-top">
+        <ion-button *ngIf="!sonido.grabando && !sonido.audioUrl" fill="outline" color="secondary" (click)="iniciarGrabacion(i)">
+          <ion-icon name="mic-outline" slot="start"></ion-icon>
+          Grabar 5 seg
+        </ion-button>
+
+        <div *ngIf="sonido.grabando" class="badge-grabando">
+          <span class="dot-rojo"></span> Grabando... {{ tiempoRestanteGrabacion }}s
+        </div>
+
+        <audio *ngIf="sonido.audioUrl" [src]="sonido.audioUrl" controls class="audio-player"></audio>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 2: GUSTO -->
+  <div *ngIf="pasoActual === 2" class="paso-contenedor animacion-entrada">
+    <div class="header-paso">
+      <span class="badge-numero">2</span>
+      <h2>Gusto 👅</h2>
+      <p>Conecta con tu sentido del gusto. Registra <strong>2 elementos</strong> y su sabor básico.</p>
+    </div>
+
+    <div *ngFor="let item of saboresGusto; let i = index" class="tarjeta-formulario ion-margin-bottom">
+      <h3 class="subtitulo-item">Elemento {{ i + 1 }}</h3>
+      <ion-input label="Nombre del elemento / alimento" labelPlacement="stacked" fill="outline" [(ngModel)]="item.objeto" placeholder="Ej: Café, Manzana, Agua"></ion-input>
+
+      <div class="ion-margin-top">
+        <ion-select label="Receptor de Sabor" labelPlacement="stacked" fill="outline" [(ngModel)]="item.sabor" placeholder="Selecciona el sabor">
+          <ion-select-option *ngFor="let sab of opcionesSabores" [value]="sab">{{ sab }}</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASO 1: OLFATO -->
+  <div *ngIf="pasoActual === 1" class="paso-contenedor animacion-entrada">
+    <div class="header-paso">
+      <span class="badge-numero">1</span>
+      <h2>Olfato 🌸</h2>
+      <p>Inhala profundo y describe <strong>1 olor</strong> que puedas percibir en este momento.</p>
+    </div>
+
+    <div class="tarjeta-formulario">
+      <ion-input 
+        label="¿A qué huele a tu alrededor?" 
+        labelPlacement="stacked" 
+        fill="outline" 
+        [(ngModel)]="descripcionOlor" 
+        placeholder="Ej: Olor a café recién hecho, lluvia, perfume suave...">
+      </ion-input>
+    </div>
+  </div>
+
+  <!-- MENSAJE DE FINALIZACIÓN -->
+  <div *ngIf="pasoActual === 0" class="paso-contenedor final-contenedor animacion-entrada">
+    <div class="icono-check-exito">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+    </div>
+    <h2>¡Excelente trabajo! ✨</h2>
+    <p class="frase-anclaje">
+      Muy bien por fijarte en tu mundo real. Recuerda que este ejercicio es válido para anclarte a la realidad, calmar tu mente y volver a tu presente siempre que lo necesites. 🌿
+    </p>
+
+    <ion-button expand="block" shape="round" class="btn-finalizar ion-margin-top" (click)="finalizarEjercicio()">
+      Volver a mis ejercicios 💜
+    </ion-button>
+  </div>
+
+  <!-- NAVEGACIÓN ENTRE PASOS -->
+  <div *ngIf="pasoActual > 0" class="botones-pasos ion-margin-top">
+    <ion-button fill="clear" color="medium" (click)="anteriorPaso()" [disabled]="pasoActual === 5">
+      Anterior
+    </ion-button>
+    <ion-button shape="round" class="btn-siguiente" (click)="siguientePaso()">
+      {{ pasoActual === 1 ? 'Finalizar' : 'Siguiente paso' }}
+    </ion-button>
+  </div>
+
+  <ion-toast 
+    [isOpen]="mostrarToast" 
+    [message]="mensajeToast" 
+    [duration]="3000" 
+    position="bottom"
+    (didDismiss)="mostrarToast = false">
+  </ion-toast>
+
 </ion-content>

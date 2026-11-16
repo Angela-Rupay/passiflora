@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -24,15 +24,23 @@ export class TarjetasPage implements OnInit, OnDestroy {
   mostrarToast = false;
   private cancelarSesion?: () => void;
 
-  constructor(private auth: Auth, public servicio: TarjetasService, private alertas: AlertController) {}
+  constructor(private auth: Auth, public servicio: TarjetasService, private alertas: AlertController, private cambios: ChangeDetectorRef, private injector: Injector) {}
 
   ngOnInit() {
-    this.cancelarSesion = onAuthStateChanged(this.auth, usuario => {
+    this.cancelarSesion = runInInjectionContext(this.injector, () => onAuthStateChanged(this.auth, usuario => {
       this.uid = usuario?.uid ?? null;
       this.tarjetas = [];
       this.cancelarEdicion();
       this.cargar();
-    });
+      this.cambios.markForCheck();
+    }, () => {
+      this.uid = null;
+      this.tarjetas = [];
+      this.cancelarEdicion();
+      this.cargando = false;
+      this.error = 'No pudimos recuperar tu sesión. Vuelve a iniciar sesión para acceder a tus tarjetas.';
+      this.cambios.markForCheck();
+    }));
   }
 
   ngOnDestroy() { this.cancelarSesion?.(); }
@@ -89,5 +97,5 @@ export class TarjetasPage implements OnInit, OnDestroy {
     await alerta.present();
   }
 
-  private notificar(mensaje: string) { this.mensaje = mensaje; this.mostrarToast = true; }
+  private notificar(mensaje: string) { this.mensaje = mensaje; this.mostrarToast = true; this.cambios.markForCheck(); }
 }

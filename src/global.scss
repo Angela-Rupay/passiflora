@@ -25,6 +25,7 @@
   --texto-principal: #382b47;        /* Texto oscuro legible */
   --texto-secundario: #6e5a8a;      /* Subtítulos */
   --color-primario: #5e4b8b;
+  --texto-sobre-primario: #ffffff;
   --color-boton-flecha: #5e4b8b;
 }
 
@@ -37,6 +38,7 @@ body.dark {
   --texto-principal: #ffffff;        /* Texto blanco */
   --texto-secundario: #b4a7d6;      /* Subtítulos claros */
   --color-primario: #a594f9;
+  --texto-sobre-primario: #121020;
   --color-boton-flecha: #a594f9;
 
   ion-toolbar {

@@ -188,3 +188,16 @@
   h2 { font-size: 1.2rem; margin-top: 0; }
   p { color: var(--texto-secundario); line-height: 1.5; }
 }
+
+.acceso-gad7 ion-button {
+  --background: var(--color-primario);
+  --background-hover: var(--color-primario);
+  --background-activated: var(--color-primario);
+  --background-focused: var(--color-primario);
+  --color: var(--texto-sobre-primario);
+  --border-radius: 18px;
+  min-height: 48px;
+  font-weight: 800;
+  text-transform: none;
+  white-space: normal;
+}

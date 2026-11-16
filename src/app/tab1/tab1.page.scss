@@ -178,3 +178,13 @@
   50% { transform: scale(1.12); box-shadow: 0 8px 24px rgba(108, 92, 231, 0.35); }
   100% { transform: scale(1); box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15); }
 }
+.acceso-gad7 {
+  margin-top: 24px;
+  padding: 20px 16px;
+  background: var(--bg-tarjeta);
+  color: var(--texto-principal);
+  border-radius: 24px;
+
+  h2 { font-size: 1.2rem; margin-top: 0; }
+  p { color: var(--texto-secundario); line-height: 1.5; }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,7 +22,10 @@ import { flowerOutline } from 'ionicons/icons';
     IonInput, IonButton, IonIcon, IonSegment, IonSegmentButton, IonLabel
   ]
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
+
+  private registrando = false;
+  private cancelarSesion?: () => void;
 
   seccionActual: string = 'ingreso';
   correoIngreso: string = '';
@@ -44,11 +47,16 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     // Mantiene la sesión persistente: si ya hay sesión iniciada, entra directo a la app
-    onAuthStateChanged(this.auth, (usuario) => {
-      if (usuario) {
+    this.cancelarSesion = onAuthStateChanged(this.auth, (usuario) => {
+      const enLogin = this.router.url.split(/[?#]/)[0] === '/login';
+      if (usuario && !this.registrando && enLogin) {
         this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.cancelarSesion?.();
   }
 
   async alIniciarSesion() {
@@ -71,6 +79,7 @@ export class LoginPage implements OnInit {
   }
 
   async alRegistrar() {
+    if (this.registrando) return;
     if (!this.nombreRegistro || !this.correoRegistro || !this.claveRegistro) {
       this.mostrarMensaje('Por favor, completa todos los campos requeridos.');
       return;
@@ -82,9 +91,10 @@ export class LoginPage implements OnInit {
     }
 
     const cargando = await this.loadingController.create({ message: 'Creando cuenta...' });
-    await cargando.present();
+    this.registrando = true;
 
     try {
+      await cargando.present();
       await this.authService.registrar(
         this.nombreRegistro,
         this.correoRegistro,
@@ -92,10 +102,15 @@ export class LoginPage implements OnInit {
       );
       await cargando.dismiss();
       this.mostrarMensaje('¡Cuenta creada con éxito!');
-      this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+      await this.router.navigate(['/gad7'], {
+        queryParams: { nombre: this.nombreRegistro.trim() },
+        replaceUrl: true
+      });
     } catch (error) {
       await cargando.dismiss();
       this.mostrarMensaje('Error al registrar cuenta.');
+    } finally {
+      this.registrando = false;
     }
   }
 

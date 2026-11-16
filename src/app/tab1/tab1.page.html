@@ -23,7 +23,7 @@
   </div>
 
 <!--Tarjeta con respiración-->
-  >  <div class="tarjeta-respiracion" (click)="irARespiracion()">
+  <div class="tarjeta-respiracion" (click)="irARespiracion()">
     <div class="icono-hoja-box">
       <ion-icon name="leaf-outline"></ion-icon>
     </div>
@@ -36,6 +36,12 @@
       <ion-icon name="arrow-forward-outline"></ion-icon>
     </div>
   </div>
+
+  <section class="acceso-gad7" aria-labelledby="titulo-gad7">
+    <h2 id="titulo-gad7">¿Cómo te has sentido?</h2>
+    <p>Responde de nuevo el cuestionario GAD-7 pensando en las últimas dos semanas. Es una herramienta orientativa y no sustituye una evaluación profesional.</p>
+    <ion-button expand="block" (click)="irAGad7()">Responder cuestionario GAD-7</ion-button>
+  </section>
 
   <p class="frase-bottom">
     No tienes que tener todo resuelto. A veces, simplemente respirar es suficiente.

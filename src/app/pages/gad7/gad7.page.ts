@@ -54,6 +54,11 @@ constructor(
   this.nombreUsuario =
     this.route.snapshot.queryParamMap.get('nombre') || 'Usuario';
 }
+  ionViewWillEnter() {
+    this.nombreUsuario = this.route.snapshot.queryParamMap.get('nombre') || 'Usuario';
+    this.volverAResponder();
+  }
+
   seleccionarRespuesta(pregunta: number, valor: number) {
     this.respuestas[pregunta] = valor;
   }

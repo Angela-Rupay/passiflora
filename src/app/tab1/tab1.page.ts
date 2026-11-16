@@ -61,6 +61,12 @@ export class Tab1Page implements OnInit {
     }
   }
 
+  irAGad7() {
+    this.router.navigate(['/gad7'], {
+      queryParams: { nombre: this.nombreUsuario }
+    });
+  }
+
   irARespiracion() {
     this.router.navigateByUrl('/pages/respiracion');
   }

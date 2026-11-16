@@ -85,9 +85,20 @@ ion-toolbar {
   --background: var(--bg-tarjeta);
   --color: var(--texto-principal);
 }
-.alerta-tarjetas {
+/* El overlay se monta fuera de la página; usa la paleta del tema activo. */
+ion-alert.alerta-tarjetas {
   --background: var(--bg-tarjeta);
-  .alert-title { color: var(--texto-principal); }
+  --ion-text-color: var(--texto-principal);
+  --ion-color-primary: var(--color-primario);
+  --ion-color-step-550: var(--texto-secundario);
+  --ion-text-color-step-450: var(--texto-secundario);
+
+  .alert-wrapper { border-radius: 22px; }
+  .alert-head .alert-title { color: var(--texto-principal); font-weight: 800; }
   .alert-message { color: var(--texto-secundario); }
-  .alert-button { color: var(--color-primario); }
+  button.alert-button {
+    color: var(--color-primario);
+    font-weight: 800;
+    text-transform: none;
+  }
 }

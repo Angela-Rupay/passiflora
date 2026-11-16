@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/respiracion/respiracion.page').then((m) => m.RespiracionPage),
   },
   {
+    path: 'tarjetas',
+    loadComponent: () => import('./pages/tarjetas/tarjetas.page').then((m) => m.TarjetasPage),
+  },
+  {
     path: 'gad7',
     loadComponent: () => import('./pages/gad7/gad7.page').then((m) => m.Gad7Page),
   },

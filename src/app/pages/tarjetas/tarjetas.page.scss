@@ -1,0 +1,14 @@
+main { max-width: 680px; margin: auto; padding: 24px 16px 40px; }
+.flor { display: block; width: 72px; height: 72px; object-fit: contain; margin: 0 auto 20px; }
+h1 { color: var(--color-primario); font-size: 1.8rem; font-weight: 800; }
+h2 { font-size: 1.2rem; font-weight: 800; }
+p { color: var(--texto-secundario); line-height: 1.6; }
+.ejemplo { font-style: italic; }
+.nota, .contador { font-size: .85rem; }
+.panel { background: var(--bg-tarjeta); color: var(--texto-principal); border-radius: 22px; padding: 20px; margin: 20px 0; }
+ion-textarea { --color: var(--texto-principal); --placeholder-color: var(--texto-secundario); --highlight-color-focused: var(--color-primario); border-bottom: 1px solid var(--texto-secundario); }
+.contador { text-align: end; }
+.recordatorio { color: var(--texto-principal); white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1.1rem; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+ion-button { --background: var(--color-primario); --background-hover: var(--color-primario); --background-focused: var(--color-primario); --background-activated: var(--color-primario); --color: var(--texto-sobre-primario); --border-radius: 16px; min-height: 46px; font-weight: 700; text-transform: none; }
+ion-button[fill="clear"], ion-button[fill="outline"] { --background: transparent; --background-hover: var(--bg-icono); --background-focused: var(--bg-icono); --background-activated: var(--bg-icono); --color: var(--color-primario); --border-color: var(--color-primario); }

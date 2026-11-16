@@ -85,3 +85,9 @@ ion-toolbar {
   --background: var(--bg-tarjeta);
   --color: var(--texto-principal);
 }
+.alerta-tarjetas {
+  --background: var(--bg-tarjeta);
+  .alert-title { color: var(--texto-principal); }
+  .alert-message { color: var(--texto-secundario); }
+  .alert-button { color: var(--color-primario); }
+}

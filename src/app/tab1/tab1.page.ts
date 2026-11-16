@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonIcon, IonButton } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Auth, signOut, onAuthStateChanged } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { addIcons } from 'ionicons';
@@ -13,7 +13,7 @@ import { ThemeService } from '../services/theme.service';
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonIcon, IonButton]
+  imports: [CommonModule, IonContent, IonIcon, IonButton, RouterLink]
 })
 export class Tab1Page implements OnInit {
 

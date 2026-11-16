@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonIcon, IonButton } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
@@ -15,15 +15,18 @@ import { ThemeService } from '../services/theme.service';
   standalone: true,
   imports: [CommonModule, IonContent, IonIcon, IonButton, RouterLink]
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page implements OnInit, OnDestroy {
 
-  nombreUsuario: string = 'Valeria';
+  nombreUsuario = 'Usuario';
+  private cancelarSesion?: () => void;
 
   constructor(
     private auth: Auth,
     private firestore: Firestore,
     private router: Router,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    private cambios: ChangeDetectorRef,
+    private injector: Injector
   ) {
     addIcons({ moonOutline, sunnyOutline, logOutOutline, flowerOutline, arrowForwardOutline, leafOutline });
   }
@@ -32,24 +35,22 @@ export class Tab1Page implements OnInit {
     this.obtenerNombreUsuario();
   }
 
-  ionViewWillEnter() {
-    this.obtenerNombreUsuario();
-  }
+  ngOnDestroy() { this.cancelarSesion?.(); }
 
   obtenerNombreUsuario() {
-    onAuthStateChanged(this.auth, async (usuarioActual) => {
-      if (usuarioActual) {
-        try {
-          const usuarioRef = doc(this.firestore, `usuarios/${usuarioActual.uid}`);
-          const snapshot = await getDoc(usuarioRef);
-          if (snapshot.exists() && snapshot.data()['nombre']) {
-            this.nombreUsuario = snapshot.data()['nombre'].split(' ')[0];
-          }
-        } catch (error) {
-          console.error('Error al obtener usuario:', error);
-        }
-      }
-    });
+    this.cancelarSesion?.();
+    this.cancelarSesion = runInInjectionContext(this.injector, () => onAuthStateChanged(this.auth, async usuario => {
+      this.nombreUsuario = 'Usuario';
+      this.cambios.markForCheck();
+      if (!usuario) return;
+      try {
+        const snapshot = await getDoc(doc(this.firestore, `usuarios/${usuario.uid}`));
+        if (this.auth.currentUser?.uid !== usuario.uid) return;
+        const nombre: unknown = snapshot.data()?.['nombre'];
+        if (typeof nombre === 'string' && nombre.trim()) this.nombreUsuario = nombre.trim().split(/\s+/)[0];
+      } catch (error) { console.error('Error al obtener usuario:', error); }
+      finally { this.cambios.markForCheck(); }
+    }));
   }
 
   async cerrarSesion() {
@@ -68,6 +69,6 @@ export class Tab1Page implements OnInit {
   }
 
   irARespiracion() {
-    this.router.navigateByUrl('/pages/respiracion');
+    this.router.navigateByUrl('/respiracion');
   }
 }

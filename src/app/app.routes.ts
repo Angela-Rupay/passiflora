@@ -1,29 +1,35 @@
 import { Routes } from '@angular/router';
+import { sesionGuard } from './guards/sesion.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'tabs',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
     path: 'tabs',
+    canActivate: [sesionGuard],
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
     path: 'anclaje',
+    canActivate: [sesionGuard],
     loadComponent: () => import('./pages/anclaje/anclaje.page').then((m) => m.AnclajePage),
   },
   {
     path: 'respiracion',
+    canActivate: [sesionGuard],
     loadComponent: () => import('./pages/respiracion/respiracion.page').then((m) => m.RespiracionPage),
   },
   {
     path: 'tarjetas',
+    canActivate: [sesionGuard],
     loadComponent: () => import('./pages/tarjetas/tarjetas.page').then((m) => m.TarjetasPage),
   },
   {
     path: 'gad7',
+    canActivate: [sesionGuard],
     loadComponent: () => import('./pages/gad7/gad7.page').then((m) => m.Gad7Page),
   },
   {
@@ -34,4 +40,5 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./pages/registro/login/login.page').then((m) => m.LoginPage),
   },
+  { path: '**', redirectTo: 'login' },
 ];

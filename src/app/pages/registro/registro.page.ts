@@ -1,104 +1,60 @@
-
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule
-} from '@angular/forms';
-
-import {
-  IonContent,
-  IonInput,
-  IonButton,
-  IonCheckbox,
-  IonText,
-  IonItem,
-  IonIcon
-} from '@ionic/angular';
+import { Router, RouterLink } from '@angular/router';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { IonContent, IonInput, IonButton, AlertController } from '@ionic/angular';
+import { AuthService } from '../../services/auth.service';
+import { codigoAuth, mensajeAuth, nombreValido, PATRON_CLAVE, PATRON_CORREO } from '../../shared/auth-validation';
 
 @Component({
-  selector: 'app-registro',
-  templateUrl: './registro.page.html',
-  styleUrls: ['./registro.page.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IonContent,
-    IonInput,
-    IonButton,
-    IonCheckbox,
-    IonText,
-    IonItem,
-    IonIcon
-  ]
+  selector: 'app-registro', templateUrl: './registro.page.html', styleUrls: ['./registro.page.scss'],
+  standalone: true, imports: [CommonModule, ReactiveFormsModule, RouterLink, IonContent, IonInput, IonButton]
 })
 export class RegistroPage {
+  registrando = false;
+  error = '';
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService,
+    private alertas: AlertController, private cambios: ChangeDetectorRef) {}
 
-  constructor(private fb: FormBuilder,
-    private router: Router
-  ) {}
-
-  registroForm = this.fb.group({
-    nombre: ['', [
-      Validators.required,
-      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)
-    ]],
-
-    apellido: ['', [
-      Validators.required,
-      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/)
-    ]],
-
-    correo: ['', [
-      Validators.required,
-      Validators.email
-    ]],
-
-    contrasena: ['', [
-      Validators.required,
-      Validators.minLength(8),
-      Validators.pattern(/^(?=.*[A-Z])(?=.*[0-9]).+$/)
-    ]],
-
-    terminos: [false, Validators.requiredTrue]
+  registroForm = this.fb.nonNullable.group({
+    nombre: ['', [Validators.required, nombreValido]],
+    apellido: ['', [Validators.required, nombreValido]],
+    correo: ['', [Validators.required, Validators.pattern(PATRON_CORREO)]],
+    contrasena: ['', [Validators.required, Validators.pattern(PATRON_CLAVE)]]
   });
 
-  get contrasena() {
-    return this.registroForm.get('contrasena')?.value || '';
-  }
+  get contrasena(): string { return this.registroForm.controls.contrasena.value; }
+  get tieneLargo(): boolean { return this.contrasena.length >= 8; }
+  get tieneMayuscula(): boolean { return /\p{Lu}/u.test(this.contrasena); }
+  get tieneNumero(): boolean { return /[0-9]/.test(this.contrasena); }
 
-  get tieneLargo(): boolean {
-    return this.contrasena.length >= 8;
-  }
-
-  get tieneMayuscula(): boolean {
-    return /[A-Z]/.test(this.contrasena);
-  }
-
-  get tieneNumero(): boolean {
-    return /[0-9]/.test(this.contrasena);
-  }
-
- registrar() {
-
-  if (this.registroForm.invalid) {
-    this.registroForm.markAllAsTouched();
-    return;
-  }
-
-  const datos = this.registroForm.getRawValue();
-
-  const nombreCompleto =
-    `${datos.nombre} ${datos.apellido}`;
-
-  this.router.navigate(['/gad7'], {
-    queryParams: {
-      nombre: nombreCompleto
+  async registrar() {
+    if (this.registrando) return;
+    if (this.registroForm.invalid) { this.registroForm.markAllAsTouched(); return; }
+    this.registrando = true;
+    this.error = '';
+    const datos = this.registroForm.getRawValue();
+    const nombre = `${datos.nombre.trim()} ${datos.apellido.trim()}`;
+    try {
+      await this.authService.registrar(nombre, datos.correo.trim(), datos.contrasena);
+      this.registroForm.reset();
+      await this.router.navigate(['/gad7'], { queryParams: { nombre }, replaceUrl: true });
+    } catch (error) {
+      if (codigoAuth(error) === 'auth/email-already-in-use') {
+        const alerta = await this.alertas.create({
+          header: 'Correo ya registrado',
+          message: 'El correo ingresado se encuentra vinculado a otra cuenta.',
+          cssClass: 'alerta-passiflora',
+          buttons: [
+            { text: 'Ir a inicio de sesión', handler: () => { void this.router.navigateByUrl('/login'); } },
+            { text: 'Cambiar correo', role: 'cancel' }
+          ]
+        });
+        await alerta.present();
+      } else { this.error = mensajeAuth(error); }
+    } finally {
+      this.registrando = false;
+      this.cambios.markForCheck();
     }
-  });
-
-}
+  }
 }

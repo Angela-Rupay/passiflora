@@ -75,24 +75,24 @@ constructor(
    0);
 
     if (this.puntajeTotal <= 4) {
-      this.nivel = 'Mínimo o ausente';
+      this.nivel = 'Ansiedad mínima';
       this.mensaje =
-        'Tus respuestas indican pocos síntomas de ansiedad. Continúa cultivando hábitos de autocuidado y prestando atención a tu bienestar emocional.';
+        'Tus niveles de ansiedad son bajos en este momento. Para mantener este equilibrio, te recomendamos practicar respiraciones breves de 2 minutos al día, cuidar tus horarios de sueño y hacer pausas de descanso como hábito preventivo.';
     } 
     else if (this.puntajeTotal <= 9) {
-      this.nivel = 'Leve';
+      this.nivel = 'Ansiedad leve';
       this.mensaje =
-        'Tus respuestas indican síntomas leves de ansiedad. Reconocer cómo te sientes es un primer paso importante para cuidar tu bienestar.';
+        'Presentas señales leves de ansiedad que puedes manejar con práctica constante. Te sugerimos realizar ejercicios de respiración guiada a diario, anotar qué situaciones detonan tu malestar y aplicar técnicas de relajación antes de dormir.';
     } 
     else if (this.puntajeTotal <= 14) {
-      this.nivel = 'Moderado';
+      this.nivel = 'Ansiedad moderada';
       this.mensaje =
-        'Tus respuestas sugieren síntomas moderados de ansiedad. Te recomendamos consultar con un profesional de salud mental para recibir una valoración integral.';
+        'Tu nivel de ansiedad está teniendo un impacto significativo en tu día a día. Apóyate en el ejercicio de anclaje 5-4-3-2-1 y en el botón de pánico cuando te sientas abrumado, y considera consultar a un profesional de la salud mental para recibir orientación personalizada.';
     } 
     else {
-      this.nivel = 'Severo';
+      this.nivel = 'Ansiedad severa';
       this.mensaje =
-        'Tus respuestas sugieren síntomas elevados de ansiedad. Es importante buscar acompañamiento profesional de salud mental para recibir el apoyo adecuado.';
+        'Estás atravesando un nivel alto de ansiedad y no tienes que cargarlo solo. Prioriza herramientas de calma inmediata como los audios guía y el contacto con tu red de apoyo, y busca atención psicológica o médica a la brevedad.';
     }
 
     this.resultadoVisible = true;

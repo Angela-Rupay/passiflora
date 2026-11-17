@@ -2,18 +2,21 @@ import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, runInInjecti
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { IonContent, IonInput, IonButton, ToastController } from '@ionic/angular';
+import { IonContent, IonInput, IonButton, IonIcon, ToastController } from '@ionic/angular';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { addIcons } from 'ionicons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { AuthService } from '../../../services/auth.service';
 import { codigoAuth, mensajeAuth, PATRON_CORREO } from '../../../shared/auth-validation';
 
 @Component({
   selector: 'app-login', templateUrl: './login.page.html', styleUrls: ['./login.page.scss'],
-  standalone: true, imports: [CommonModule, FormsModule, RouterLink, IonContent, IonInput, IonButton]
+  standalone: true, imports: [CommonModule, FormsModule, RouterLink, IonContent, IonInput, IonButton, IonIcon]
 })
 export class LoginPage implements OnInit, OnDestroy {
   correoIngreso = '';
   claveIngreso = '';
+  mostrarClave = false;
   ingresando = false;
   errorCorreo = '';
   errorClave = '';
@@ -21,7 +24,7 @@ export class LoginPage implements OnInit, OnDestroy {
   private cancelarSesion?: () => void;
 
   constructor(private auth: Auth, private authService: AuthService, private router: Router,
-    private toastController: ToastController, private cambios: ChangeDetectorRef, private injector: Injector) {}
+    private toastController: ToastController, private cambios: ChangeDetectorRef, private injector: Injector) { addIcons({ eyeOutline, eyeOffOutline }); }
 
   get correoValido(): boolean { return PATRON_CORREO.test(this.correoIngreso.trim()); }
 
@@ -32,6 +35,8 @@ export class LoginPage implements OnInit, OnDestroy {
       }
     }));
   }
+
+  ionViewDidLeave() { this.mostrarClave = false; }
 
   ngOnDestroy() { this.cancelarSesion?.(); }
 

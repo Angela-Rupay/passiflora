@@ -10,7 +10,11 @@
       <ion-input label="Correo electrónico" labelPlacement="stacked" type="email" autocomplete="email" [(ngModel)]="correoIngreso" (ngModelChange)="limpiarErrores()" name="correoIngreso" #correo="ngModel" placeholder="ejemplo@correo.com" fill="outline" [disabled]="ingresando" [class.campo-invalido]="!!errorCorreo || (correo.touched && !correoValido)" required></ion-input>
       <p class="error" role="alert" *ngIf="correo.touched && !correoValido">Correo inválido: usa un correo terminado en .com o .co.</p>
       <p class="error" role="alert" *ngIf="errorCorreo">{{ errorCorreo }}</p>
-      <ion-input label="Contraseña" labelPlacement="stacked" type="password" autocomplete="current-password" [(ngModel)]="claveIngreso" (ngModelChange)="limpiarErrores()" name="claveIngreso" fill="outline" [disabled]="ingresando" [class.campo-invalido]="!!errorClave || !!errorGeneral" required></ion-input>
+      <ion-input label="Contraseña" labelPlacement="stacked" [type]="mostrarClave ? 'text' : 'password'" autocomplete="current-password" [(ngModel)]="claveIngreso" (ngModelChange)="limpiarErrores()" name="claveIngreso" fill="outline" [disabled]="ingresando" [class.campo-invalido]="!!errorClave || !!errorGeneral" required>
+        <ion-button class="ver-clave" slot="end" type="button" fill="clear" [disabled]="ingresando" (click)="mostrarClave = !mostrarClave" [attr.aria-label]="mostrarClave ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.aria-pressed]="mostrarClave">
+          <ion-icon slot="icon-only" [name]="mostrarClave ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+        </ion-button>
+      </ion-input>
       <p class="error" role="alert" *ngIf="errorClave">{{ errorClave }}</p>
       <p class="error" role="alert" *ngIf="errorGeneral">{{ errorGeneral }}</p>
       <ion-button expand="block" type="submit" [disabled]="ingresando || !correoValido || !claveIngreso">{{ ingresando ? 'Ingresando…' : 'Ingresar' }}</ion-button>

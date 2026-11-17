@@ -1,3 +1,4 @@
+import { validarDatosRegistro } from '../shared/auth-validation';
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
@@ -22,15 +23,16 @@ export class AuthService {
 
   // Registro de usuario en Firebase Auth y guardado de perfil en Firestore
   async registrar(nombre: string, correo: string, clave: string): Promise<void> {
-    const credenciales = await createUserWithEmailAndPassword(this.auth, correo, clave);
+    validarDatosRegistro(nombre, correo, clave);
+    const credenciales = await createUserWithEmailAndPassword(this.auth, correo.trim(), clave);
     const uid = credenciales.user.uid;
 
     // Crear el documento del usuario en la colección usuarios
     const usuarioRef = doc(this.firestore, `usuarios/${uid}`);
     const datosUsuario: Usuario = {
       uid: uid,
-      nombre: nombre,
-      correo: correo,
+      nombre: nombre.trim(),
+      correo: correo.trim(),
       fechaRegistro: new Date()
     };
 

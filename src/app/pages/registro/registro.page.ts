@@ -2,19 +2,23 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { IonContent, IonInput, IonButton, AlertController } from '@ionic/angular';
+import { IonContent, IonInput, IonButton, IonIcon, AlertController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { SoloLetrasDirective } from '../../shared/solo-letras.directive';
 import { AuthService } from '../../services/auth.service';
 import { codigoAuth, mensajeAuth, nombreValido, PATRON_CLAVE, PATRON_CORREO } from '../../shared/auth-validation';
 
 @Component({
   selector: 'app-registro', templateUrl: './registro.page.html', styleUrls: ['./registro.page.scss'],
-  standalone: true, imports: [CommonModule, ReactiveFormsModule, RouterLink, IonContent, IonInput, IonButton]
+  standalone: true, imports: [CommonModule, ReactiveFormsModule, RouterLink, IonContent, IonInput, IonButton, IonIcon, SoloLetrasDirective]
 })
 export class RegistroPage {
   registrando = false;
   error = '';
+  mostrarClave = false;
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService,
-    private alertas: AlertController, private cambios: ChangeDetectorRef) {}
+    private alertas: AlertController, private cambios: ChangeDetectorRef) { addIcons({ eyeOutline, eyeOffOutline }); }
 
   registroForm = this.fb.nonNullable.group({
     nombre: ['', [Validators.required, nombreValido]],
@@ -22,6 +26,8 @@ export class RegistroPage {
     correo: ['', [Validators.required, Validators.pattern(PATRON_CORREO)]],
     contrasena: ['', [Validators.required, Validators.pattern(PATRON_CLAVE)]]
   });
+
+  ionViewDidLeave() { this.mostrarClave = false; }
 
   get contrasena(): string { return this.registroForm.controls.contrasena.value; }
   get tieneLargo(): boolean { return this.contrasena.length >= 8; }

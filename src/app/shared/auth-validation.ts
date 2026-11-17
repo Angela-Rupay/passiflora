@@ -15,6 +15,7 @@ export function codigoAuth(error: unknown): string {
 
 export function mensajeAuth(error: unknown): string {
   switch (codigoAuth(error)) {
+    case 'app/invalid-name': return 'El nombre y apellido deben contener solo letras y espacios.';
     case 'auth/user-not-found': return 'No se encuentra una cuenta vinculada a ese correo, por favor verifica.';
     case 'auth/wrong-password': return 'Contraseña incorrecta.';
     case 'auth/invalid-credential': return 'El correo o la contraseña no coinciden. Verifica tus datos.';
@@ -24,5 +25,17 @@ export function mensajeAuth(error: unknown): string {
     case 'auth/too-many-requests': return 'Hubo demasiados intentos. Espera un momento y vuelve a intentarlo.';
     case 'auth/user-disabled': return 'Esta cuenta está deshabilitada. Contacta al administrador.';
     default: return 'No pudimos completar la solicitud. Inténtalo de nuevo.';
+  }
+}
+
+export function validarDatosRegistro(nombre: string, correo: string, clave: string): void {
+  if (!PATRON_NOMBRE.test(nombre.trim())) {
+    throw Object.assign(new Error('Nombre inválido: solo letras y espacios.'), { code: 'app/invalid-name' });
+  }
+  if (!PATRON_CORREO.test(correo.trim())) {
+    throw Object.assign(new Error('Correo inválido.'), { code: 'auth/invalid-email' });
+  }
+  if (!PATRON_CLAVE.test(clave)) {
+    throw Object.assign(new Error('Contraseña inválida.'), { code: 'auth/weak-password' });
   }
 }

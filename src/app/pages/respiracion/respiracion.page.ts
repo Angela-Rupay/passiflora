@@ -13,8 +13,7 @@ import {
   arrowBackOutline,
   playOutline,
   pauseOutline,
-  refreshOutline,
-  leafOutline
+  refreshOutline
 } from 'ionicons/icons';
 
 interface Fase {
@@ -84,8 +83,7 @@ constructor(
       arrowBackOutline,
       playOutline,
       pauseOutline,
-      refreshOutline,
-      leafOutline
+      refreshOutline
     });
   }
 

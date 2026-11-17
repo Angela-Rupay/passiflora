@@ -8,10 +8,6 @@
     </button>
 
     <header class="encabezado">
-      <div class="icono-encabezado">
-        <ion-icon name="leaf-outline"></ion-icon>
-      </div>
-
       <span class="etiqueta">PASSIFLORA · BIENESTAR</span>
       <h1>Respira a tu ritmo</h1>
 
@@ -32,10 +28,6 @@
         *ngFor="let ejercicio of ejercicios"
         (click)="seleccionarEjercicio(ejercicio)"
       >
-        <div class="card-icono">
-          <ion-icon name="leaf-outline"></ion-icon>
-        </div>
-
         <div class="card-contenido">
           <h3>{{ ejercicio.nombre }}</h3>
           <p>{{ ejercicio.descripcion }}</p>

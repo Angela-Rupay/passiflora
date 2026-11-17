@@ -15,3 +15,15 @@ ion-button { --background: var(--color-primario); --background-hover: var(--colo
 a { color: var(--color-primario); font-weight: 800; }
 @keyframes respirarLogo { 50% { transform: scale(1.08); } }
 @media (prefers-reduced-motion: reduce) { .brand-logo { animation: none; } }
+
+ion-button.ver-clave {
+  --background: transparent;
+  --background-hover: var(--bg-icono);
+  --background-focused: var(--bg-icono);
+  --background-activated: var(--bg-icono);
+  --color: var(--color-primario);
+  min-height: 44px;
+  min-width: 44px;
+  margin: 0;
+  ion-icon { font-size: 24px; }
+}

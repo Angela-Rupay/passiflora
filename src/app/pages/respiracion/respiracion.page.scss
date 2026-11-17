@@ -31,21 +31,7 @@ ion-content {
   padding: 25px 5px 30px;
 }
 
-.icono-encabezado {
-  width: 62px;
-  height: 62px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
 
-  ion-icon {
-    color: var(--color-primario);
-    font-size: 34px;
-  }
-}
 
 .etiqueta {
   color: var(--texto-secundario);
@@ -93,21 +79,7 @@ ion-content {
   }
 }
 
-.card-icono {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  border-radius: 16px;
-  background: var(--bg-icono);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  ion-icon {
-    color: var(--color-primario);
-    font-size: 26px;
-  }
-}
 
 .card-contenido {
   flex: 1;

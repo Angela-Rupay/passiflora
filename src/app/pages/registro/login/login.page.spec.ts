@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { By } from '@angular/platform-browser';
+import { IonInput } from '@ionic/angular';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
@@ -51,4 +53,21 @@ describe('Ingreso con validaciones y retroalimentación', () => {
     expect(pagina.errorClave).toBe('Contraseña incorrecta.');
     expect(toast).toHaveBeenCalled();
   });
+  it('permite mostrar y ocultar la contraseña y la oculta al salir', () => {
+    const fixture = TestBed.createComponent(LoginPage);
+    fixture.detectChanges();
+    const campo = fixture.debugElement.queryAll(By.directive(IonInput)).find(elemento => elemento.componentInstance.autocomplete === 'current-password')!;
+    const boton = fixture.debugElement.query(By.css('.ver-clave'));
+    expect(campo.componentInstance.type).toBe('password');
+    boton.triggerEventHandler('click');
+    fixture.detectChanges();
+    expect(campo.componentInstance.type).toBe('text');
+    boton.triggerEventHandler('click');
+    fixture.detectChanges();
+    expect(campo.componentInstance.type).toBe('password');
+    fixture.componentInstance.mostrarClave = true;
+    fixture.componentInstance.ionViewDidLeave();
+    expect(fixture.componentInstance.mostrarClave).toBe(false);
+  });
+
 });

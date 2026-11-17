@@ -9,13 +9,17 @@
     <p>Crea tu cuenta y comienza este camino de bienestar.</p>
     <form [formGroup]="registroForm" (ngSubmit)="registrar()">
       <fieldset [disabled]="registrando">
-        <ion-input label="Nombre" labelPlacement="stacked" fill="outline" autocomplete="given-name" formControlName="nombre" [readonly]="registrando"></ion-input>
+        <ion-input label="Nombre" labelPlacement="stacked" fill="outline" autocomplete="given-name" soloLetras inputmode="text" formControlName="nombre" [readonly]="registrando"></ion-input>
         <p class="error" *ngIf="registroForm.controls.nombre.touched && registroForm.controls.nombre.invalid">Ingresa tu nombre, solo letras y espacios.</p>
-        <ion-input label="Apellido" labelPlacement="stacked" fill="outline" autocomplete="family-name" formControlName="apellido" [readonly]="registrando"></ion-input>
+        <ion-input label="Apellido" labelPlacement="stacked" fill="outline" autocomplete="family-name" soloLetras inputmode="text" formControlName="apellido" [readonly]="registrando"></ion-input>
         <p class="error" *ngIf="registroForm.controls.apellido.touched && registroForm.controls.apellido.invalid">Ingresa tu apellido, solo letras y espacios.</p>
         <ion-input label="Correo electrónico" labelPlacement="stacked" fill="outline" type="email" autocomplete="email" formControlName="correo" [readonly]="registrando"></ion-input>
         <p class="error" *ngIf="registroForm.controls.correo.touched && registroForm.controls.correo.invalid">Correo inválido: usa un correo terminado en .com o .co.</p>
-        <ion-input label="Contraseña" labelPlacement="stacked" fill="outline" type="password" autocomplete="new-password" formControlName="contrasena" [readonly]="registrando"></ion-input>
+        <ion-input label="Contraseña" labelPlacement="stacked" fill="outline" [type]="mostrarClave ? 'text' : 'password'" autocomplete="new-password" formControlName="contrasena" [readonly]="registrando">
+          <ion-button class="ver-clave" slot="end" type="button" fill="clear" [disabled]="registrando" (click)="mostrarClave = !mostrarClave" [attr.aria-label]="mostrarClave ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.aria-pressed]="mostrarClave">
+            <ion-icon slot="icon-only" [name]="mostrarClave ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </ion-input>
         <div class="requisitos" aria-live="polite">
           <p [class.cumplido]="tieneLargo">{{ tieneLargo ? '✓' : '○' }} Mínimo 8 caracteres</p>
           <p [class.cumplido]="tieneMayuscula">{{ tieneMayuscula ? '✓' : '○' }} Al menos una mayúscula</p>

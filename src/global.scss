@@ -157,3 +157,17 @@ ion-modal.modal-tarjeta-calma {
   --ion-text-color: #ffffff;
 }
 ion-modal.modal-tarjeta-calma::part(content) { overflow-y: auto; }
+
+ion-action-sheet.selector-anclaje {
+  --background: var(--bg-tarjeta);
+  --button-background: var(--bg-tarjeta);
+  --button-background-selected: var(--bg-icono);
+  --button-background-activated: var(--bg-icono);
+  --button-color: var(--texto-principal);
+  --color: var(--texto-principal);
+  .action-sheet-group { background: var(--bg-tarjeta); border-radius: 24px 24px 0 0; }
+  .action-sheet-title { color: var(--texto-secundario); font-weight: 800; }
+  button.action-sheet-button { color: var(--texto-principal); font-family: var(--ion-font-family); min-height: 56px; }
+  button.action-sheet-selected { color: var(--color-primario); font-weight: 800; background: var(--bg-icono); }
+  .action-sheet-cancel { color: var(--color-primario); font-weight: 800; }
+}

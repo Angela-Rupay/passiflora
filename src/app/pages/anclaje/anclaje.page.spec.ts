@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { AlertController, NavController } from '@ionic/angular';
 import { AnclajePage } from './anclaje.page';
@@ -72,5 +72,146 @@ describe('Anclaje: flujo de fotos', () => {
     pagina.fotosVista = Array(5).fill(foto);
     await pagina.capturarFotoNativa();
     expect(crear).toHaveBeenCalledOnce();
+  });
+  it('muestra el aviso solo para la primera foto de la sesión', async () => {
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    await pagina.capturarFotoNativa();
+    await pagina.capturarFotoNativa();
+    expect(capturar).toHaveBeenCalledTimes(2);
+    expect(crear).toHaveBeenCalledOnce();
+    pagina.ionViewWillLeave();
+    await pagina.capturarFotoNativa();
+    expect(crear).toHaveBeenCalledTimes(2);
+  });
+});
+
+class GrabadorPrueba {
+  static isTypeSupported(tipo: string) {
+    return tipo === 'audio/webm;codecs=opus';
+  }
+  state = 'inactive';
+  mimeType = 'audio/webm;codecs=opus';
+  ondataavailable: ((evento: { data: Blob }) => void) | null = null;
+  onstop: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+  start() {
+    this.state = 'recording';
+  }
+  stop() {
+    this.state = 'inactive';
+    this.ondataavailable?.({ data: new Blob(['sonido'], { type: this.mimeType }) });
+    this.onstop?.();
+  }
+}
+
+describe('Anclaje: micrófono y grabación', () => {
+  const obtener = vi.fn();
+  const pararPista = vi.fn();
+  const crear = vi.fn();
+  const crearUrl = vi.fn();
+  let mediaAnterior: PropertyDescriptor | undefined;
+  let urlAnterior: PropertyDescriptor | undefined;
+  let revocarAnterior: PropertyDescriptor | undefined;
+  beforeEach(async () => {
+    mediaAnterior = Object.getOwnPropertyDescriptor(navigator, 'mediaDevices');
+    urlAnterior = Object.getOwnPropertyDescriptor(URL, 'createObjectURL');
+    revocarAnterior = Object.getOwnPropertyDescriptor(URL, 'revokeObjectURL');
+    pararPista.mockReset();
+    obtener.mockReset().mockResolvedValue({ getTracks: () => [{ stop: pararPista }] });
+    crear
+      .mockReset()
+      .mockResolvedValue({ present: vi.fn(), onDidDismiss: vi.fn().mockResolvedValue({ role: 'confirm' }) });
+    crearUrl.mockReset().mockReturnValue('blob:grabacion');
+    Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: { getUserMedia: obtener } });
+    Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: crearUrl });
+    Object.defineProperty(URL, 'revokeObjectURL', { configurable: true, value: vi.fn() });
+    vi.stubGlobal('MediaRecorder', GrabadorPrueba);
+    await TestBed.configureTestingModule({
+      imports: [AnclajePage],
+      providers: [
+        { provide: CamaraService, useValue: { capturar: vi.fn() } },
+        { provide: AlertController, useValue: { create: crear } },
+        { provide: NavController, useValue: { navigateBack: vi.fn() } },
+      ],
+    }).compileComponents();
+  });
+  afterEach(() => {
+    TestBed.resetTestingModule();
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+    if (mediaAnterior) Object.defineProperty(navigator, 'mediaDevices', mediaAnterior);
+    else Reflect.deleteProperty(navigator, 'mediaDevices');
+    if (urlAnterior) Object.defineProperty(URL, 'createObjectURL', urlAnterior);
+    else Reflect.deleteProperty(URL, 'createObjectURL');
+    if (revocarAnterior) Object.defineProperty(URL, 'revokeObjectURL', revocarAnterior);
+    else Reflect.deleteProperty(URL, 'revokeObjectURL');
+  });
+
+  it('no solicita el micrófono si se cancela el aviso', async () => {
+    crear.mockResolvedValue({ present: vi.fn(), onDidDismiss: vi.fn().mockResolvedValue({ role: 'cancel' }) });
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    await pagina.iniciarGrabacion(0);
+    expect(obtener).not.toHaveBeenCalled();
+    expect(pagina.solicitandoMicrofono).toBe(false);
+  });
+
+  it('graba cinco segundos, conserva el formato real y no repite el aviso', async () => {
+    vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] });
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    await pagina.iniciarGrabacion(0);
+    expect(obtener).toHaveBeenCalledWith({ audio: true });
+    expect(pagina.sonidosOido[0].grabando).toBe(true);
+    vi.advanceTimersByTime(5000);
+    expect(pagina.sonidosOido[0].audioUrl).toBe('blob:grabacion');
+    expect(crearUrl.mock.calls[0][0].type).toBe('audio/webm;codecs=opus');
+    expect(pararPista).toHaveBeenCalled();
+    expect(pagina.indiceGrabando).toBeNull();
+    await pagina.iniciarGrabacion(1);
+    expect(crear).toHaveBeenCalledOnce();
+    pagina.cancelarGrabacion();
+    expect(pagina.sonidosOido[1].audioUrl).toBe('');
+  });
+
+  it('denegar el permiso permite reintentar sin dejar grabación activa', async () => {
+    obtener.mockRejectedValueOnce(new DOMException('Denegado', 'NotAllowedError'));
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    await pagina.iniciarGrabacion(0);
+    expect(pagina.mensajeToast).toContain('No se autorizó');
+    expect(pagina.indiceGrabando).toBeNull();
+    expect(pagina.solicitandoMicrofono).toBe(false);
+    await pagina.iniciarGrabacion(0);
+    expect(pagina.sonidosOido[0].grabando).toBe(true);
+    pagina.cancelarGrabacion();
+  });
+
+  it('impide dos grabaciones simultáneas y libera el micrófono al salir', async () => {
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    await pagina.iniciarGrabacion(0);
+    await pagina.iniciarGrabacion(1);
+    expect(obtener).toHaveBeenCalledOnce();
+    pagina.ionViewWillLeave();
+    expect(pararPista).toHaveBeenCalled();
+    expect(pagina.indiceGrabando).toBeNull();
+    expect(pagina.sonidosOido.every((s) => !s.grabando)).toBe(true);
+  });
+
+  it('cierra un permiso tardío si ya se abandonó la pantalla', async () => {
+    let resolver!: (flujo: unknown) => void;
+    obtener.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolver = resolve;
+        }),
+    );
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    const pendiente = pagina.iniciarGrabacion(0);
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
+    pagina.ionViewWillLeave();
+    resolver({ getTracks: () => [{ stop: pararPista }] });
+    await pendiente;
+    expect(pararPista).toHaveBeenCalled();
+    expect(pagina.indiceGrabando).toBeNull();
   });
 });

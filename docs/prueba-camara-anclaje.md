@@ -21,7 +21,7 @@ En Android Studio, ejecutar de nuevo la app en el teléfono para instalar el man
 6. Tomar cinco fotos: no debe permitir una sexta. Eliminar una debe permitir reemplazarla.
 7. Los toques repetidos mientras se abre no deben lanzar varias cámaras o selectores.
 
-El aviso de Passiflora se presenta en cada intento. El diálogo de Android depende del estado del permiso y no se puede forzar si el sistema ya lo recuerda. Si se deniega de forma permanente, habilitarlo en Ajustes → Aplicaciones → Passiflora → Permisos → Cámara.
+El aviso de Passiflora se presenta antes de la primera foto de cada sesión del ejercicio; después de capturarla no se repite para las siguientes. Si se cancela o deniega antes de obtener esa primera foto, se puede volver a intentar. El diálogo de Android depende del estado del permiso y no se puede forzar si el sistema ya lo recuerda. Si se deniega de forma permanente, habilitarlo en Ajustes → Aplicaciones → Passiflora → Permisos → Cámara.
 
 En navegador se utiliza el selector de imágenes/captura gestionado por el navegador; la comprobación del permiso nativo corresponde a la instalación Android.
 

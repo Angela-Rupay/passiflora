@@ -5,12 +5,11 @@
     </ion-buttons>
     <ion-title>Técnica 5-4-3-2-1</ion-title>
   </ion-toolbar>
-  <ion-progress-bar [value]="(6 - pasoActual) / 5" color="secondary"></ion-progress-bar>
+  <ion-progress-bar [value]="(6 - pasoActual) / 5" color="primary"></ion-progress-bar>
 </ion-header>
 
 <ion-content class="ion-padding fondo-anclaje">
-
-<!-- PASO 5: VISTA -->
+  <!-- PASO 5: VISTA -->
   <div *ngIf="pasoActual === 5" class="paso-contenedor animacion-entrada">
     <div class="header-paso">
       <span class="badge-numero">5</span>
@@ -26,7 +25,13 @@
         </button>
       </div>
 
-      <button *ngIf="fotosVista.length < 5" type="button" class="tarjeta-captura" (click)="capturarFotoNativa()" [disabled]="abriendoCamara">
+      <button
+        *ngIf="fotosVista.length < 5"
+        type="button"
+        class="tarjeta-captura"
+        (click)="capturarFotoNativa()"
+        [disabled]="abriendoCamara"
+      >
         <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
         <span>{{ abriendoCamara ? 'Abriendo cámara…' : 'Tomar foto (' + fotosVista.length + '/5)' }}</span>
       </button>
@@ -43,17 +48,41 @@
 
     <div *ngFor="let item of objetosTacto; let i = index" class="tarjeta-formulario ion-margin-bottom">
       <h3 class="subtitulo-item">Objeto {{ i + 1 }}</h3>
-      <ion-input label="Nombre del objeto" labelPlacement="stacked" fill="outline" [(ngModel)]="item.nombre" placeholder="Ej: Cobija, Taza, Llaves"></ion-input>
-      
+      <ion-input
+        label="Nombre del objeto"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="item.nombre"
+        placeholder="Ej: Cobija, Taza, Llaves"
+      ></ion-input>
+
       <div class="filas-selects ion-margin-top">
-        <ion-select label="Textura" labelPlacement="stacked" fill="outline" [(ngModel)]="item.textura" placeholder="Selecciona">
+        <ion-select
+          interface="action-sheet"
+          [interfaceOptions]="opcionesSelector"
+          cancelText="Cancelar"
+          label="Textura"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="item.textura"
+          placeholder="Selecciona"
+        >
           <ion-select-option value="Lisa">Lisa</ion-select-option>
           <ion-select-option value="Rugosa">Rugosa</ion-select-option>
           <ion-select-option value="Suave">Suave</ion-select-option>
           <ion-select-option value="Áspera">Áspera</ion-select-option>
         </ion-select>
 
-        <ion-select label="Temperatura" labelPlacement="stacked" fill="outline" [(ngModel)]="item.temperatura" placeholder="Selecciona">
+        <ion-select
+          interface="action-sheet"
+          [interfaceOptions]="opcionesSelector"
+          cancelText="Cancelar"
+          label="Temperatura"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="item.temperatura"
+          placeholder="Selecciona"
+        >
           <ion-select-option value="Frío">Frío</ion-select-option>
           <ion-select-option value="Templado">Templado</ion-select-option>
           <ion-select-option value="Caliente">Caliente</ion-select-option>
@@ -72,18 +101,38 @@
 
     <div *ngFor="let sonido of sonidosOido; let i = index" class="tarjeta-formulario ion-margin-bottom">
       <h3 class="subtitulo-item">Sonido {{ i + 1 }}</h3>
-      <ion-input label="¿Qué sonido escuchaste?" labelPlacement="stacked" fill="outline" [(ngModel)]="sonido.nombre" placeholder="Ej: Pájaros, Viento, Reloj"></ion-input>
+      <ion-input
+        label="¿Qué sonido escuchaste?"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="sonido.nombre"
+        placeholder="Ej: Pájaros, Viento, Reloj"
+      ></ion-input>
 
       <div class="box-grabacion ion-margin-top">
-        <ion-button *ngIf="!sonido.grabando && !sonido.audioUrl" fill="outline" color="secondary" (click)="iniciarGrabacion(i)">
+        <ion-button
+          *ngIf="!sonido.grabando && !sonido.audioUrl"
+          fill="outline"
+          color="primary"
+          (click)="iniciarGrabacion(i)"
+          [disabled]="solicitandoMicrofono || indiceGrabando !== null"
+        >
           <ion-icon name="mic-outline" slot="start"></ion-icon>
-          Grabar 5 seg
+          {{ solicitandoMicrofono ? 'Preparando micrófono…' : 'Grabar 5 segundos' }}
         </ion-button>
 
         <div *ngIf="sonido.grabando" class="badge-grabando">
-          <span class="dot-rojo"></span> Grabando... {{ tiempoRestanteGrabacion }}s
+          <span class="dot-rojo"></span> Grabando… {{ tiempoRestanteGrabacion }}s
+          <ion-button fill="clear" (click)="cancelarGrabacion()">Cancelar</ion-button>
         </div>
 
+        <ion-button
+          *ngIf="sonido.audioUrl && !sonido.grabando"
+          fill="clear"
+          (click)="iniciarGrabacion(i)"
+          [disabled]="solicitandoMicrofono || indiceGrabando !== null"
+          >Grabar de nuevo</ion-button
+        >
         <audio *ngIf="sonido.audioUrl" [src]="sonido.audioUrl" controls class="audio-player"></audio>
       </div>
     </div>
@@ -99,10 +148,25 @@
 
     <div *ngFor="let item of saboresGusto; let i = index" class="tarjeta-formulario ion-margin-bottom">
       <h3 class="subtitulo-item">Elemento {{ i + 1 }}</h3>
-      <ion-input label="Nombre del elemento / alimento" labelPlacement="stacked" fill="outline" [(ngModel)]="item.objeto" placeholder="Ej: Café, Manzana, Agua"></ion-input>
+      <ion-input
+        label="Nombre del elemento / alimento"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="item.objeto"
+        placeholder="Ej: Café, Manzana, Agua"
+      ></ion-input>
 
       <div class="ion-margin-top">
-        <ion-select label="Receptor de Sabor" labelPlacement="stacked" fill="outline" [(ngModel)]="item.sabor" placeholder="Selecciona el sabor">
+        <ion-select
+          interface="action-sheet"
+          [interfaceOptions]="opcionesSelector"
+          cancelText="Cancelar"
+          label="Receptor de Sabor"
+          labelPlacement="stacked"
+          fill="outline"
+          [(ngModel)]="item.sabor"
+          placeholder="Selecciona el sabor"
+        >
           <ion-select-option *ngFor="let sab of opcionesSabores" [value]="sab">{{ sab }}</ion-select-option>
         </ion-select>
       </div>
@@ -118,12 +182,13 @@
     </div>
 
     <div class="tarjeta-formulario">
-      <ion-input 
-        label="¿A qué huele a tu alrededor?" 
-        labelPlacement="stacked" 
-        fill="outline" 
-        [(ngModel)]="descripcionOlor" 
-        placeholder="Ej: Olor a café recién hecho, lluvia, perfume suave...">
+      <ion-input
+        label="¿A qué huele a tu alrededor?"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="descripcionOlor"
+        placeholder="Ej: Olor a café recién hecho, lluvia, perfume suave..."
+      >
       </ion-input>
     </div>
   </div>
@@ -135,7 +200,8 @@
     </div>
     <h2>¡Excelente trabajo! ✨</h2>
     <p class="frase-anclaje">
-      Muy bien por fijarte en tu mundo real. Recuerda que este ejercicio es válido para anclarte a la realidad, calmar tu mente y volver a tu presente siempre que lo necesites. 🌿
+      Muy bien por fijarte en tu mundo real. Recuerda que este ejercicio es válido para anclarte a la realidad, calmar
+      tu mente y volver a tu presente siempre que lo necesites. 🌿
     </p>
 
     <ion-button expand="block" shape="round" class="btn-finalizar ion-margin-top" (click)="finalizarEjercicio()">
@@ -153,12 +219,12 @@
     </ion-button>
   </div>
 
-  <ion-toast 
-    [isOpen]="mostrarToast" 
-    [message]="mensajeToast" 
-    [duration]="3000" 
+  <ion-toast
+    [isOpen]="mostrarToast"
+    [message]="mensajeToast"
+    [duration]="3000"
     position="bottom"
-    (didDismiss)="mostrarToast = false">
+    (didDismiss)="mostrarToast = false"
+  >
   </ion-toast>
-
 </ion-content>

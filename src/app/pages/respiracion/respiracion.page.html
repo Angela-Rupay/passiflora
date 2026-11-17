@@ -41,6 +41,11 @@
       <ion-button class="elegir" fill="outline" (click)="elegirOtroEjercicio()">Elegir otro ejercicio</ion-button>
       <h2>{{ ejercicioSeleccionado.nombre }}</h2>
       <p class="instrucciones">{{ ejercicioSeleccionado.instrucciones }}</p>
+      <div class="fase-ejercicio">
+        <span *ngIf="!ejecutando && !pausado && !finalizado">A tu ritmo</span>
+        <span *ngIf="ejecutando || pausado">{{ faseNombre }}{{ pausado ? ' · En pausa' : '' }}</span>
+        <span *ngIf="finalizado">{{ terminadoAntes ? 'Gracias por cuidarte' : 'Ejercicio completado' }}</span>
+      </div>
       <div class="zona-animacion" [class.en-pausa]="pausado">
         <svg
           *ngIf="ejercicioSeleccionado.id === 'caja'; else animacionRedonda"
@@ -67,14 +72,7 @@
             <ng-template #circulo><circle class="pulso" cx="100" cy="100" [attr.r]="86 * escala" /></ng-template>
           </svg>
         </ng-template>
-        <div class="contador">
-          <span *ngIf="!ejecutando && !pausado && !finalizado">A tu ritmo</span>
-          <ng-container *ngIf="ejecutando || pausado"
-            ><span>{{ faseNombre }}</span><strong>{{ tiempoRestante }}</strong
-            ><span *ngIf="pausado">En pausa</span></ng-container
-          >
-          <span *ngIf="finalizado">{{ terminadoAntes ? 'Gracias por cuidarte' : 'Ejercicio completado' }}</span>
-        </div>
+        <div class="contador"><strong *ngIf="ejecutando || pausado">{{ tiempoRestante }}</strong></div>
       </div>
       <p class="estado" role="status">
         {{ finalizado ? (terminadoAntes ? 'Terminaste cuando lo necesitabas. Está bien.' : 'Has completado la práctica.

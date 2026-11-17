@@ -201,3 +201,7 @@
 .tarjeta-captura { font-family: var(--ion-font-family); }
 .tarjeta-captura:disabled { opacity: .6; cursor: wait; }
 .tarjeta-captura:focus-visible { outline: 3px solid var(--color-primario); outline-offset: 4px; }
+
+ion-select { --highlight-color-valid: var(--color-primario); --highlight-color-focused: var(--color-primario); --placeholder-color: var(--texto-secundario); }
+ion-select::part(label) { color: var(--texto-principal); }
+.box-grabacion { flex-wrap: wrap; gap: 8px; }

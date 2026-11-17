@@ -1,6 +1,6 @@
 
 ion-content {
-  --background: #CEBEF6;
+  --background: var(--bg-app);
 }
 
 .respiracion-container {
@@ -17,14 +17,14 @@ ion-content {
   gap: 7px;
   border: none;
   background: transparent;
-  color: #5C4789;
-  font-size: 14px;
+  color: var(--color-primario);
+  font-size: var(--texto-cuerpo);
   font-weight: 700;
   padding: 10px 0;
 }
 
 .volver ion-icon {
-  font-size: 19px;
+  font-size: var(--texto-subtitulo);
 }
 
 .encabezado {
@@ -42,36 +42,36 @@ ion-content {
   margin-bottom: 20px;
 
   ion-icon {
-    color: #5C4789;
+    color: var(--color-primario);
     font-size: 34px;
   }
 }
 
 .etiqueta {
-  color: #8A72AD;
+  color: var(--texto-secundario);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 1.3px;
 }
 
 .encabezado h1 {
-  color: #434969;
-  font-size: 29px;
+  color: var(--texto-principal);
+  font-size: var(--texto-titulo);
   font-weight: 800;
   margin: 10px 0;
 }
 
 .encabezado p,
 .descripcion {
-  color: #62677D;
-  font-size: 14px;
+  color: var(--texto-secundario);
+  font-size: var(--texto-cuerpo);
   line-height: 1.7;
 }
 
 .selector h2,
 .sesion h2 {
-  color: #434969;
-  font-size: 19px;
+  color: var(--texto-principal);
+  font-size: var(--texto-subtitulo);
   font-weight: 800;
 }
 
@@ -82,7 +82,7 @@ ion-content {
   gap: 13px;
   padding: 18px;
   margin: 14px 0;
-  background: #FFFFFF;
+  background: var(--bg-tarjeta);
   border: none;
   border-radius: 21px;
   text-align: left;
@@ -98,13 +98,13 @@ ion-content {
   height: 48px;
   min-width: 48px;
   border-radius: 16px;
-  background: #E9E0F7;
+  background: var(--bg-icono);
   display: flex;
   align-items: center;
   justify-content: center;
 
   ion-icon {
-    color: #5C4789;
+    color: var(--color-primario);
     font-size: 26px;
   }
 }
@@ -113,14 +113,14 @@ ion-content {
   flex: 1;
 
   h3 {
-    color: #434969;
-    font-size: 15px;
+    color: var(--texto-principal);
+    font-size: var(--texto-subtitulo);
     font-weight: 800;
     margin: 0 0 7px;
   }
 
   p {
-    color: #777889;
+    color: var(--texto-secundario);
     font-size: 12px;
     line-height: 1.5;
     margin: 0;
@@ -128,7 +128,7 @@ ion-content {
 }
 
 .flecha {
-  color: #5C4789;
+  color: var(--color-primario);
   font-size: 28px;
 }
 
@@ -159,9 +159,9 @@ ion-content {
 
   background: radial-gradient(
     circle,
-    #FFFFFF 0%,
-    #E9E0F7 45%,
-    #A58CCB 100%
+    var(--bg-tarjeta) 0%,
+    var(--bg-icono) 45%,
+    var(--color-primario) 100%
   );
 
   box-shadow: 0 0 35px rgba(92, 71, 137, 0.22);
@@ -211,7 +211,7 @@ ion-content {
   align-items: center;
   justify-content: center;
 
-  color: #5C4789;
+  color: var(--color-primario);
   font-weight: 700;
 
   strong {
@@ -221,25 +221,25 @@ ion-content {
 }
 
 .fase {
-  font-size: 14px;
+  font-size: var(--texto-cuerpo);
 }
 
 .completado {
-  font-size: 19px;
+  font-size: var(--texto-subtitulo);
 }
 
 
 .fase {
-  font-size: 14px;
+  font-size: var(--texto-cuerpo);
 }
 
 .completado {
-  font-size: 19px;
+  font-size: var(--texto-subtitulo);
 }
 
 .indicacion {
-  color: #5C4789;
-  font-size: 14px;
+  color: var(--color-primario);
+  font-size: var(--texto-cuerpo);
   line-height: 1.6;
   margin: 15px 0;
 }
@@ -247,7 +247,7 @@ ion-content {
 .progreso {
   display: flex;
   justify-content: space-between;
-  color: #655B80;
+  color: var(--texto-secundario);
   font-size: 13px;
   margin-top: 25px;
 }
@@ -262,7 +262,7 @@ ion-content {
 
 .barra-progreso-valor {
   height: 100%;
-  background: #8065A8;
+  background: var(--color-primario);
   border-radius: 20px;
   transition: width 0.3s ease;
 }
@@ -271,9 +271,9 @@ ion-content {
   margin-top: 25px;
 
   ion-button {
-    --background: #5C4789;
-    --background-activated: #45336E;
-    --color: #FFFFFF;
+    --background: var(--color-primario);
+    --background-activated: var(--color-primario);
+    --color: var(--texto-sobre-primario);
     --border-radius: 17px;
     height: 49px;
     font-weight: 700;
@@ -282,13 +282,13 @@ ion-content {
 
   ion-button[fill="outline"] {
     --background: transparent;
-    --color: #5C4789;
-    --border-color: #5C4789;
+    --color: var(--color-primario);
+    --border-color: var(--color-primario);
   }
 }
 
 .nota {
-  color: #726784;
+  color: var(--texto-secundario);
   font-size: 11px;
   line-height: 1.6;
   margin-top: 20px;

@@ -24,7 +24,7 @@
 
 .tarjeta-contenedor {
   background: var(--bg-tarjeta);
-  border-radius: 20px;
+  border-radius: var(--radio-tarjeta);
   padding: 16px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
@@ -36,7 +36,7 @@
   margin: 0 0 12px 0;
 
   strong {
-    color: #8a508f;
+    color: var(--color-primario);
   }
 }
 
@@ -101,7 +101,7 @@
   background: var(--bg-icono, #f0ebf8);
   color: var(--texto-principal);
   padding: 8px 16px;
-  border-radius: 20px;
+  border-radius: var(--radio-tarjeta);
   font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
@@ -112,8 +112,8 @@
   }
 
   &.chip-activo {
-    background: #8a508f;
-    color: #ffffff;
+    background: var(--color-primario);
+    color: var(--texto-sobre-primario);
     box-shadow: 0 4px 10px rgba(138, 80, 143, 0.3);
   }
 }
@@ -145,7 +145,7 @@
 }
 
 .boton-guardar-lindo {
-  --background: linear-gradient(135deg, #a460a9 0%, #7b4397 100%);
+  --background: var(--color-primario);
   --border-radius: 25px;
   font-weight: 800;
   font-size: 1rem;
@@ -195,7 +195,7 @@
 
       span {
         font-weight: 600;
-        color: #8a508f;
+        color: var(--color-primario);
       }
     }
 
@@ -229,3 +229,7 @@
     transform: translateY(0);
   }
 }
+.calendario-lindo { margin-inline: auto; --wheel-highlight-background: var(--bg-icono); }
+.header-intensidad { flex-wrap: wrap; gap: 12px; }
+.range-lindo { --bar-background-active: var(--color-primario); --knob-background: var(--color-primario); }
+.boton-guardar-lindo { --color: var(--texto-sobre-primario); --background-hover: var(--color-primario); --background-activated: var(--color-primario); text-transform: none; }

@@ -1,15 +1,12 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title class="titulo-toolbar">Mi Espacio 🌸</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding fondo-espacio">
+<ion-content class="fondo-espacio">
+  <main class="page-shell">
+  <app-tab-header></app-tab-header>
   
-  <div class="header-espacio">
-    <h2>Diario Emocional</h2>
+  <header class="page-heading">
+    <p class="eyebrow">TU ESPACIO PERSONAL</p>
+    <h1>Diario emocional</h1>
     <p>Registra cómo te sientes hoy para acompañar tu proceso con amor y calma.</p>
-  </div>
+  </header>
 
   <!-- Calendario para selección de fecha -->
   <div class="tarjeta-contenedor">
@@ -68,7 +65,7 @@
       [step]="1" 
       [snaps]="true"
       [(ngModel)]="nivelIntensidad" 
-      color="secondary"
+      color="primary"
       class="range-lindo">
       <ion-label slot="start" class="label-range">1</ion-label>
       <ion-label slot="end" class="label-range">10</ion-label>
@@ -99,6 +96,7 @@
     </div>
   </div>
 
+  </main>
   <ion-toast 
     [isOpen]="mostrarToast" 
     [message]="mensajeToast" 

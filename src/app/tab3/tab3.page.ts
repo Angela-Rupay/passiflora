@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { 
-  IonContent, IonHeader, IonToolbar, IonTitle,
-  IonDatetime, IonButton, IonRange, IonIcon,
-  IonToast, IonCard, IonCardContent, IonItem, IonLabel 
+import {
+  IonContent,
+  IonDatetime, IonButton, IonRange,
+  IonToast, IonLabel
 } from '@ionic/angular';
+import { TabHeaderComponent } from '../shared/components/tab-header.component';
 import { Auth } from '@angular/fire/auth';
 import { Firestore, collection, addDoc, query, getDocs, orderBy } from '@angular/fire/firestore';
 
@@ -32,9 +33,8 @@ interface RegistroEmocional {
   styleUrls: ['tab3.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, FormsModule, IonContent, IonHeader, 
-    IonToolbar, IonTitle, IonDatetime, IonButton, 
-    IonRange, IonIcon, IonToast, IonCard, IonCardContent, IonItem, IonLabel
+    TabHeaderComponent, CommonModule, FormsModule, IonContent,
+    IonDatetime, IonButton, IonRange, IonToast, IonLabel
   ]
 })
 export class Tab3Page implements OnInit {
@@ -138,7 +138,7 @@ export class Tab3Page implements OnInit {
         const coleccionRef = collection(this.firestore, `usuarios/${usuario.uid}/registrosEmocionales`);
         await addDoc(coleccionRef, nuevoRegistro);
       }
-      
+
       this.historialRegistros.unshift(nuevoRegistro);
       this.mostrarNotificacion('¡Tu estado emocional ha sido registrado con éxito! 💜');
       this.limpiarFormulario();
@@ -155,7 +155,7 @@ export class Tab3Page implements OnInit {
         const coleccionRef = collection(this.firestore, `usuarios/${usuario.uid}/registrosEmocionales`);
         const q = query(coleccionRef, orderBy('fecha', 'desc'));
         const snapshot = await getDocs(q);
-        
+
         this.historialRegistros = snapshot.docs.map(doc => doc.data() as RegistroEmocional);
       } catch (error) {
         console.error('Error al cargar historial:', error);

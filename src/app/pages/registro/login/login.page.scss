@@ -4,7 +4,7 @@ ion-content { --background: var(--bg-app); }
 .login-header { text-align: center; margin-bottom: 24px; }
 .brand-logo { width: 88px; height: 88px; object-fit: contain; animation: respirarLogo 4s ease-in-out infinite; }
 h1 { color: var(--color-primario); font-weight: 800; }
-h2 { font-size: 1.3rem; color: var(--texto-principal); }
+h2 { font-size: var(--texto-subtitulo); color: var(--texto-principal); }
 p { color: var(--texto-secundario); line-height: 1.5; }
 .form-container { display: flex; flex-direction: column; gap: 16px; }
 ion-input { --background: var(--bg-tarjeta); --color: var(--texto-principal); --placeholder-color: var(--texto-secundario); --border-color: var(--texto-secundario); --highlight-color-focused: var(--color-primario); }

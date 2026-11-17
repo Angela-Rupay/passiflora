@@ -1,6 +1,6 @@
 main { max-width: 680px; margin: auto; padding: 24px 16px 40px; }
 .flor { display: block; width: 72px; height: 72px; object-fit: contain; margin: 0 auto 20px; }
-h1 { color: var(--color-primario); font-size: 1.8rem; font-weight: 800; }
+h1 { color: var(--color-primario); font-size: var(--texto-titulo); font-weight: 800; }
 h2 { font-size: 1.2rem; font-weight: 800; }
 p { color: var(--texto-secundario); line-height: 1.6; }
 .ejemplo { font-style: italic; }

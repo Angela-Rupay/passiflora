@@ -1,19 +1,17 @@
 import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonIcon, IonButton } from '@ionic/angular';
-import { Router, RouterLink } from '@angular/router';
-import { Auth, signOut, onAuthStateChanged } from '@angular/fire/auth';
+import { IonContent } from '@ionic/angular';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
-import { addIcons } from 'ionicons';
-import { moonOutline, sunnyOutline, logOutOutline, flowerOutline, arrowForwardOutline, leafOutline } from 'ionicons/icons';
-import { ThemeService } from '../services/theme.service';
+import { TabHeaderComponent } from '../shared/components/tab-header.component';
+import { ActionCardComponent } from '../shared/components/action-card.component';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonIcon, IonButton, RouterLink]
+  imports: [CommonModule, IonContent, TabHeaderComponent, ActionCardComponent]
 })
 export class Tab1Page implements OnInit, OnDestroy {
 
@@ -23,12 +21,9 @@ export class Tab1Page implements OnInit, OnDestroy {
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private router: Router,
-    public themeService: ThemeService,
     private cambios: ChangeDetectorRef,
     private injector: Injector
   ) {
-    addIcons({ moonOutline, sunnyOutline, logOutOutline, flowerOutline, arrowForwardOutline, leafOutline });
   }
 
   ngOnInit() {
@@ -53,22 +48,4 @@ export class Tab1Page implements OnInit, OnDestroy {
     }));
   }
 
-  async cerrarSesion() {
-    try {
-      await signOut(this.auth);
-      this.router.navigateByUrl('/login', { replaceUrl: true });
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  }
-
-  irAGad7() {
-    this.router.navigate(['/gad7'], {
-      queryParams: { nombre: this.nombreUsuario }
-    });
-  }
-
-  irARespiracion() {
-    this.router.navigateByUrl('/respiracion');
-  }
 }

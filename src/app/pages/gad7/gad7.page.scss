@@ -21,14 +21,14 @@ ion-content {
 
   h1 {
     color: var(--color-primario);
-    font-size: 30px;
+    font-size: var(--texto-titulo);
     font-weight: 800;
     margin: 10px 0;
   }
 
   p {
     color: var(--texto-secundario);
-    font-size: 14px;
+    font-size: var(--texto-cuerpo);
   }
 }
 
@@ -44,7 +44,7 @@ ion-content {
 
   p {
     color: var(--texto-principal);
-    font-size: 14px;
+    font-size: var(--texto-cuerpo);
     line-height: 1.6;
   }
 }
@@ -78,7 +78,7 @@ ion-content {
   padding: 12px 8px;
   border-radius: 12px;
   color: var(--texto-secundario);
-  font-size: 14px;
+  font-size: var(--texto-cuerpo);
   cursor: pointer;
 
   input {
@@ -156,7 +156,7 @@ ion-button[disabled] {
   p {
     color: var(--texto-principal);
     line-height: 1.7;
-    font-size: 15px;
+    font-size: var(--texto-cuerpo);
   }
 }
 
@@ -168,7 +168,7 @@ ion-button[disabled] {
 
   span {
     display: block;
-    font-size: 14px;
+    font-size: var(--texto-cuerpo);
     font-weight: 400;
   }
 }

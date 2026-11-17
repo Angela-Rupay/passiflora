@@ -195,7 +195,7 @@ export class AnclajePage implements OnDestroy {
 
   finalizarEjercicio() {
     this.limpiarRecursosTemporales();
-    this.navCtrl.navigateBack('/tabs/tab2');
+    this.navCtrl.navigateBack('/panico');
   }
 
   limpiarRecursosTemporales() {

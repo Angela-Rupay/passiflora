@@ -13,9 +13,15 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
-    path: 'anclaje',
+    path: 'panico/anclaje',
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/anclaje/anclaje.page').then((m) => m.AnclajePage),
+  },
+  { path: 'anclaje', redirectTo: 'panico', pathMatch: 'full' },
+  {
+    path: 'panico',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/panico/panico.page').then((m) => m.PanicoPage),
   },
   {
     path: 'respiracion',

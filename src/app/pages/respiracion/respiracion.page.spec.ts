@@ -1,5 +1,5 @@
 import { ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RespiracionPage } from './respiracion.page';
 
@@ -10,6 +10,7 @@ describe('Respiración: tiempos, guía visual y controles', () => {
     pagina = new RespiracionPage(
       { navigate: vi.fn() } as unknown as Router,
       { markForCheck: vi.fn() } as unknown as ChangeDetectorRef,
+      { snapshot: { queryParamMap: { get: () => null } } } as unknown as ActivatedRoute,
     );
   });
   afterEach(() => {
@@ -140,5 +141,16 @@ describe('Respiración: tiempos, guía visual y controles', () => {
     pagina.alCambiarVisibilidad();
     expect(pagina.pausado).toBe(true);
     expect(vi.getTimerCount()).toBe(0);
+  });
+  it('vuelve al espacio de pánico cuando la práctica se abrió desde allí', () => {
+    const navegar = vi.fn();
+    const practica = new RespiracionPage(
+      { navigate: navegar } as unknown as Router,
+      { markForCheck: vi.fn() } as unknown as ChangeDetectorRef,
+      { snapshot: { queryParamMap: { get: () => 'panico' } } } as unknown as ActivatedRoute,
+    );
+    practica.volver();
+    expect(navegar).toHaveBeenCalledWith(['/panico']);
+    practica.ngOnDestroy();
   });
 });

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonContent, IonButton, IonIcon } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, playOutline, pauseOutline, refreshOutline } from 'ionicons/icons';
@@ -98,6 +98,7 @@ export class RespiracionPage implements OnDestroy {
   constructor(
     private router: Router,
     private cambios: ChangeDetectorRef,
+    private ruta: ActivatedRoute,
   ) {
     addIcons({ arrowBackOutline, playOutline, pauseOutline, refreshOutline });
   }
@@ -235,7 +236,7 @@ export class RespiracionPage implements OnDestroy {
   }
   volver() {
     this.pausar();
-    void this.router.navigate(['/tabs/tab2']);
+    void this.router.navigate([this.ruta.snapshot.queryParamMap.get('origen') === 'panico' ? '/panico' : '/tabs/tab2']);
   }
   ionViewWillLeave() {
     this.pausar();

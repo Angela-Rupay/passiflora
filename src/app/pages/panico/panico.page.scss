@@ -1,0 +1,94 @@
+/* Usar los colores del tema noche de Passiflora sin cambiar el tema del usuario. */
+:host {
+  --calma-fondo: #121020;
+  --calma-tarjeta: #221c38;
+  --calma-icono: #a594f9;
+  --calma-texto: #ffffff;
+  --calma-secundario: #b4a7d6;
+}
+.espacio-calma {
+  --background: var(--calma-fondo);
+  --color: var(--calma-texto);
+}
+.calma-container {
+  max-width: 600px;
+  padding: 28px 20px 40px;
+  margin: auto;
+}
+.logo {
+  display: block;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 24px;
+}
+h1 {
+  font-size: clamp(1.5rem, 5vw, 1.9rem);
+  color: var(--calma-texto);
+  margin: 0 0 16px;
+}
+header p {
+  color: var(--calma-secundario);
+  font-size: 1.2rem;
+  margin-bottom: 28px;
+}
+.opciones {
+  display: grid;
+  gap: 16px;
+}
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 20px;
+  min-height: 80px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--calma-tarjeta);
+  color: var(--calma-texto);
+  text-decoration: none;
+  text-align: left;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.opcion ion-icon {
+  flex: 0 0 30px;
+  font-size: 30px;
+  color: var(--calma-icono);
+}
+.opcion:focus-visible {
+  outline: 3px solid var(--calma-icono);
+  outline-offset: 4px;
+}
+.volver {
+  background: transparent;
+  color: var(--calma-secundario);
+}
+.tarjeta-calma {
+  padding: 28px 24px;
+}
+.tarjeta-calma h2 {
+  color: #ffffff;
+  font-size: 1.3rem;
+}
+.mensaje {
+  color: #ffffff;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.origen {
+  color: #b4a7d6;
+  font-size: 0.9rem;
+}
+.tarjeta-calma ion-button {
+  --background: #a594f9;
+  --background-hover: #a594f9;
+  --background-activated: #a594f9;
+  --color: #121020;
+  --border-radius: 16px;
+  min-height: 50px;
+}

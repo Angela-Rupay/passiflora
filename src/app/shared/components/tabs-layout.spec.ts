@@ -30,12 +30,13 @@ describe('Acciones disponibles en todas las pestañas', () => {
       const cabecera = fixture.debugElement.query(By.directive(TabHeaderComponent));
       expect(cabecera).not.toBeNull();
       const botones = cabecera.queryAll(By.directive(IonButton));
-      expect(botones.length).toBe(2);
-      botones[0].triggerEventHandler('click');
+      expect(botones.length).toBe(3);
+      expect(cabecera.nativeElement.querySelector('.panico')).not.toBeNull();
+      botones[1].triggerEventHandler('click');
       await fixture.whenStable();
       expect(document.body.classList.contains('dark')).toBe(true);
       expect(localStorage.getItem('passiflora_modo_oscuro')).toBe('true');
-      botones[1].triggerEventHandler('click');
+      botones[2].triggerEventHandler('click');
       await fixture.whenStable();
       expect(salir).toHaveBeenCalledOnce();
       expect(navegar).toHaveBeenCalledWith('/login', { replaceUrl: true });

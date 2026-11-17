@@ -29,6 +29,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/respiracion/respiracion.page').then((m) => m.RespiracionPage),
   },
   {
+    path: 'ambientacion',
+    canActivate: [sesionGuard],
+    loadComponent: () => import('./pages/ambientacion/ambientacion.page').then((m) => m.AmbientacionPage),
+  },
+  {
     path: 'tarjetas',
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/tarjetas/tarjetas.page').then((m) => m.TarjetasPage),

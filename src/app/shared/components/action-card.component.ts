@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonIcon } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { arrowForwardOutline, leafOutline, heartOutline, chatbubbleEllipsesOutline, handLeftOutline } from 'ionicons/icons';
+import { arrowForwardOutline, leafOutline, heartOutline, chatbubbleEllipsesOutline, handLeftOutline, musicalNotesOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-action-card', standalone: true, imports: [RouterLink, IonIcon],
@@ -40,5 +40,5 @@ export class ActionCardComponent {
   @Input() descripcion = '';
   @Input() etiqueta = '';
   @Input() icono = 'leaf-outline';
-  constructor() { addIcons({ arrowForwardOutline, leafOutline, heartOutline, chatbubbleEllipsesOutline, handLeftOutline }); }
+  constructor() { addIcons({ arrowForwardOutline, leafOutline, heartOutline, chatbubbleEllipsesOutline, handLeftOutline, musicalNotesOutline }); }
 }

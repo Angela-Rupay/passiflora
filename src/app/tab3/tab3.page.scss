@@ -1,25 +1,5 @@
-.titulo-toolbar {
-  font-weight: 800;
-  color: var(--texto-principal);
-}
-
 .fondo-espacio {
   --background: var(--ion-background-color);
-}
-
-.header-espacio {
-  margin-bottom: 16px;
-  h2 {
-    font-size: 1.6rem;
-    font-weight: 800;
-    color: var(--texto-principal);
-    margin: 0 0 4px 0;
-  }
-  p {
-    font-size: 0.95rem;
-    color: var(--texto-secundario);
-    margin: 0;
-  }
 }
 
 .tarjeta-contenedor {
@@ -63,7 +43,9 @@
   border-radius: 18px;
   border: 2px solid transparent;
   cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease;
 
   .emoji-carita {
     font-size: 2.2rem;
@@ -83,7 +65,7 @@
   &.activa {
     transform: scale(1.08);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    
+
     .emoji-carita {
       transform: scale(1.2);
     }
@@ -229,7 +211,37 @@
     transform: translateY(0);
   }
 }
-.calendario-lindo { margin-inline: auto; --wheel-highlight-background: var(--bg-icono); }
-.header-intensidad { flex-wrap: wrap; gap: 12px; }
-.range-lindo { --bar-background-active: var(--color-primario); --knob-background: var(--color-primario); }
-.boton-guardar-lindo { --color: var(--texto-sobre-primario); --background-hover: var(--color-primario); --background-activated: var(--color-primario); text-transform: none; }
+.calendario-lindo {
+  margin-inline: auto;
+  --wheel-highlight-background: var(--bg-icono);
+}
+.header-intensidad {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.range-lindo {
+  --bar-background-active: var(--color-primario);
+  --knob-background: var(--color-primario);
+}
+.boton-guardar-lindo {
+  --color: var(--texto-sobre-primario);
+  --background-hover: var(--color-primario);
+  --background-activated: var(--color-primario);
+  text-transform: none;
+}
+
+.formulario-diario {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.estado-sincronizacion {
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+[role='button']:focus-visible {
+  outline: 3px solid var(--color-primario);
+  outline-offset: 3px;
+}

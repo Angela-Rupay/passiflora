@@ -26,12 +26,10 @@
         </button>
       </div>
 
-      <!-- Botón que activa la cámara nativa y selector de archivos en web -->
-      <label *ngIf="fotosVista.length < 5" class="tarjeta-captura" (click)="capturarFotoNativa()">
-        <ion-icon name="camera-outline"></ion-icon>
-        <span>Tomar Foto ({{ fotosVista.length }}/5)</span>
-        <input type="file" accept="image/*" capture="environment" (change)="capturarFotoWeb($event)" hidden />
-      </label>
+      <button *ngIf="fotosVista.length < 5" type="button" class="tarjeta-captura" (click)="capturarFotoNativa()" [disabled]="abriendoCamara">
+        <ion-icon name="camera-outline" aria-hidden="true"></ion-icon>
+        <span>{{ abriendoCamara ? 'Abriendo cámara…' : 'Tomar foto (' + fotosVista.length + '/5)' }}</span>
+      </button>
     </div>
   </div>
 

@@ -1,10 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { 
   IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton,
   IonButton, IonIcon, IonInput, IonSelect, IonSelectOption,
-  IonProgressBar, IonToast, NavController
+  IonProgressBar, IonToast, NavController, AlertController
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { 
@@ -12,7 +12,7 @@ import {
   restaurantOutline, roseOutline, checkmarkCircleOutline,
   micOutline, trashOutline
 } from 'ionicons/icons';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { CamaraService } from '../../services/camara.service';
 
 @Component({
   selector: 'app-anclaje',
@@ -29,6 +29,8 @@ export class AnclajePage implements OnDestroy {
 
   pasoActual: number = 5;
   fotosVista: string[] = [];
+  abriendoCamara = false;
+  private versionFoto = 0;
 
   // 4 - TACTO
   objetosTacto = [
@@ -62,7 +64,7 @@ export class AnclajePage implements OnDestroy {
   mostrarToast: boolean = false;
   mensajeToast: string = '';
 
-  constructor(private navCtrl: NavController) {
+  constructor(private navCtrl: NavController, private camara: CamaraService, private alertas: AlertController, private cambios: ChangeDetectorRef) {
     addIcons({ 
       cameraOutline, handLeftOutline, volumeHighOutline, 
       restaurantOutline, roseOutline, checkmarkCircleOutline,
@@ -74,38 +76,30 @@ export class AnclajePage implements OnDestroy {
     this.limpiarRecursosTemporales();
   }
 
-  // --- CAPTURA DE CÁMARA NATIVA O WEB ---
   async capturarFotoNativa() {
-    if (this.fotosVista.length >= 5) return;
-
+    if (this.abriendoCamara || this.fotosVista.length >= 5) return;
+    this.abriendoCamara = true;
+    const version = this.versionFoto;
     try {
-      // Intenta abrir la cámara nativa del dispositivo
-      const image = await Camera.getPhoto({
-        quality: 85,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Camera
+      const aviso = await this.alertas.create({
+        header: 'Permiso para usar la cámara',
+        message: 'Para fotografiar los objetos necesitamos tu autorización. Las fotos se usan solo durante este ejercicio y no se suben a tu cuenta.',
+        cssClass: 'alerta-passiflora',
+        buttons: [ { text: 'Ahora no', role: 'cancel' }, { text: 'Aceptar', role: 'confirm' } ]
       });
-
-      if (image.webPath) {
-        this.fotosVista.push(image.webPath);
-      }
+      await aviso.present();
+      const resultado = await aviso.onDidDismiss();
+      if (resultado.role !== 'confirm' || version !== this.versionFoto) return;
+      const foto = await this.camara.capturar();
+      if (version === this.versionFoto && foto && this.fotosVista.length < 5) this.fotosVista.push(foto);
     } catch (error) {
-      // Si se cancela o se prueba en web sin plugin nativo disponible, solicita archivo
-      console.log('Cámara nativa no disponible o cancelada por el usuario.', error);
+      if (version === this.versionFoto) this.notificar(error instanceof Error ? error.message : 'No pudimos abrir la cámara. Revisa sus permisos e inténtalo de nuevo.');
+    } finally {
+      if (version === this.versionFoto) { this.abriendoCamara = false; this.cambios.markForCheck(); }
     }
   }
 
-  capturarFotoWeb(event: any) {
-    const archivo = event.target.files[0];
-    if (archivo && this.fotosVista.length < 5) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fotosVista.push(e.target.result);
-      };
-      reader.readAsDataURL(archivo);
-    }
-  }
+  ionViewWillLeave() { this.versionFoto++; this.abriendoCamara = false; }
 
   eliminarFoto(index: number) {
     this.fotosVista.splice(index, 1);
@@ -199,6 +193,8 @@ export class AnclajePage implements OnDestroy {
   }
 
   limpiarRecursosTemporales() {
+    this.versionFoto++;
+    this.abriendoCamara = false;
     this.fotosVista = [];
     this.sonidosOido.forEach(s => {
       if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
@@ -208,5 +204,6 @@ export class AnclajePage implements OnDestroy {
   notificar(msj: string) {
     this.mensajeToast = msj;
     this.mostrarToast = true;
+    this.cambios.markForCheck();
   }
 }

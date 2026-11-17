@@ -28,3 +28,9 @@ ion-button.ver-clave {
   margin: 0;
   ion-icon { font-size: 24px; }
 }
+
+.terminos { background: var(--bg-tarjeta); color: var(--texto-principal); border-radius: 16px; padding: 16px; }
+.terminos summary { color: var(--color-primario); font-weight: 800; cursor: pointer; }
+.terminos h3 { font-size: 1rem; margin-top: 18px; }
+.terminos p { font-size: .9rem; }
+ion-checkbox { --checkbox-background: var(--bg-tarjeta); --checkbox-background-checked: var(--color-primario); --border-color: var(--texto-secundario); --border-color-checked: var(--color-primario); --checkmark-color: var(--texto-sobre-primario); white-space: normal; line-height: 1.5; }

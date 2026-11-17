@@ -18,7 +18,7 @@ describe('Registro único con Firebase', () => {
       { provide: AlertController, useValue: { create: crearAlerta } }
     ] }).compileComponents();
   });
-  const completar = (pagina: RegistroPage) => pagina.registroForm.setValue({ nombre: ' Ángela ', apellido: ' Rupay ', correo: 'ana@example.com', contrasena: 'Segura123' });
+  const completar = (pagina: RegistroPage) => pagina.registroForm.setValue({ nombre: ' Ángela ', apellido: ' Rupay ', correo: 'ana@example.com', contrasena: 'Segura123', terminos: true });
 
   it('no crea cuentas ni navega si el formulario es inválido', async () => {
     const pagina = TestBed.createComponent(RegistroPage).componentInstance;
@@ -32,7 +32,7 @@ describe('Registro único con Firebase', () => {
     const navegar = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     completar(pagina);
     await pagina.registrar();
-    expect(registrar).toHaveBeenCalledWith('Ángela Rupay', 'ana@example.com', 'Segura123');
+    expect(registrar).toHaveBeenCalledWith('Ángela Rupay', 'ana@example.com', 'Segura123', true);
     expect(navegar).toHaveBeenCalledWith(['/gad7'], { queryParams: { nombre: 'Ángela Rupay' }, replaceUrl: true });
     expect(pagina.registroForm.controls.contrasena.value).toBe('');
   });
@@ -76,6 +76,17 @@ describe('Registro único con Firebase', () => {
     fixture.componentInstance.mostrarClave = true;
     fixture.componentInstance.ionViewDidLeave();
     expect(fixture.componentInstance.mostrarClave).toBe(false);
+  });
+
+  it('no registra hasta aceptar los términos y permite leerlos', () => {
+    const fixture = TestBed.createComponent(RegistroPage);
+    const pagina = fixture.componentInstance;
+    completar(pagina); pagina.registroForm.controls.terminos.setValue(false);
+    fixture.detectChanges();
+    expect(pagina.registroForm.invalid).toBe(true);
+    expect(fixture.nativeElement.querySelector('details.terminos summary').textContent).toContain('Términos');
+    pagina.registroForm.controls.terminos.setValue(true);
+    expect(pagina.registroForm.valid).toBe(true);
   });
 
 });

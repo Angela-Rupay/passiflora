@@ -15,6 +15,7 @@ export function codigoAuth(error: unknown): string {
 
 export function mensajeAuth(error: unknown): string {
   switch (codigoAuth(error)) {
+    case 'app/terms-required': return 'Debes aceptar los términos para crear tu cuenta.';
     case 'app/invalid-name': return 'El nombre y apellido deben contener solo letras y espacios.';
     case 'auth/user-not-found': return 'No se encuentra una cuenta vinculada a ese correo, por favor verifica.';
     case 'auth/wrong-password': return 'Contraseña incorrecta.';

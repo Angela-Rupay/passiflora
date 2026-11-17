@@ -20,4 +20,9 @@ describe('Validación previa al registro en Firebase', () => {
     await expect(servicio.registrar('Ángela Muñoz', 'correo', 'Segura123')).rejects.toMatchObject({ code: 'auth/invalid-email' });
     await expect(servicio.registrar('Ángela Muñoz', 'ana@example.com', 'abc')).rejects.toMatchObject({ code: 'auth/weak-password' });
   });
+  it('rechaza el registro sin aceptación aunque se omita el formulario', async () => {
+    await expect(TestBed.inject(AuthService).registrar('Ana Muñoz', 'ana@example.com', 'Segura123', false))
+      .rejects.toMatchObject({ code: 'app/terms-required' });
+  });
+
 });

@@ -29,6 +29,7 @@ import {
   micOutline,
   trashOutline,
 } from 'ionicons/icons';
+import { GrabacionService } from '../../services/grabacion.service';
 import { CamaraService } from '../../services/camara.service';
 
 @Component({
@@ -80,10 +81,9 @@ export class AnclajePage implements OnDestroy {
     { nombre: '', audioUrl: '', grabando: false },
     { nombre: '', audioUrl: '', grabando: false },
   ];
-  private mediaRecorder?: MediaRecorder;
+  private abortarAudio?: AbortController;
   private flujoAudio?: MediaStream;
   tiempoRestanteGrabacion: number = 5;
-  private intervaloTimer?: ReturnType<typeof setInterval>;
 
   // 2 - GUSTO
   saboresGusto = [
@@ -101,6 +101,7 @@ export class AnclajePage implements OnDestroy {
   constructor(
     private navCtrl: NavController,
     private camara: CamaraService,
+    private grabacion: GrabacionService,
     private alertas: AlertController,
     private cambios: ChangeDetectorRef,
   ) {
@@ -197,7 +198,7 @@ export class AnclajePage implements OnDestroy {
         const respuesta = await aviso.onDidDismiss();
         if (respuesta.role !== 'confirm' || version !== this.versionAudio) return;
       }
-      if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined') {
+      if (!navigator.mediaDevices?.getUserMedia || typeof AudioContext === 'undefined') {
         throw new Error(
           'La grabación no está disponible aquí. Prueba la app instalada o un navegador actualizado con HTTPS.',
         );
@@ -208,50 +209,33 @@ export class AnclajePage implements OnDestroy {
         return;
       }
       this.flujoAudio = flujo;
-      const tipo = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/webm', 'audio/ogg;codecs=opus'].find((mime) =>
-        MediaRecorder.isTypeSupported?.(mime),
-      );
-      const grabador = tipo ? new MediaRecorder(flujo, { mimeType: tipo }) : new MediaRecorder(flujo);
-      const fragmentos: Blob[] = [];
-      this.mediaRecorder = grabador;
-      grabador.ondataavailable = (evento) => {
-        if (evento.data.size > 0) fragmentos.push(evento.data);
-      };
-      grabador.onstop = () => {
-        if (version !== this.versionAudio) return;
-        try {
-          const audio = new Blob(fragmentos, { type: grabador.mimeType || fragmentos[0]?.type || 'audio/webm' });
-          if (!audio.size) {
-            this.notificar('No se recibió audio. Intenta grabar de nuevo.');
-            return;
-          }
-          if (this.sonidosOido[index].audioUrl) URL.revokeObjectURL(this.sonidosOido[index].audioUrl);
-          this.sonidosOido[index].audioUrl = URL.createObjectURL(audio);
-        } finally {
-          this.cancelarGrabacion();
-          this.cambios.markForCheck();
-        }
-      };
-      grabador.onerror = () => {
-        this.cancelarGrabacion();
-        this.notificar('No pudimos completar la grabación. Inténtalo de nuevo.');
-      };
-      grabador.start();
-      this.avisoMicrofonoAceptado = true;
+      this.abortarAudio = new AbortController();
       this.indiceGrabando = index;
       this.sonidosOido[index].grabando = true;
       this.tiempoRestanteGrabacion = 5;
-      const inicio = Date.now();
-      this.intervaloTimer = setInterval(() => {
-        this.tiempoRestanteGrabacion = Math.max(0, 5 - Math.floor((Date.now() - inicio) / 1000));
-        if (this.tiempoRestanteGrabacion <= 0) {
-          clearInterval(this.intervaloTimer);
-          this.intervaloTimer = undefined;
-          if (grabador.state !== 'inactive') grabador.stop();
-          flujo?.getTracks().forEach((pista) => pista.stop());
-        }
-        this.cambios.markForCheck();
-      }, 200);
+      await this.grabacion.iniciar(
+        flujo,
+        this.abortarAudio.signal,
+        (segundos) => {
+          if (version !== this.versionAudio) return;
+          this.tiempoRestanteGrabacion = Math.max(0, Math.ceil(5 - segundos));
+          this.cambios.markForCheck();
+        },
+        (audio) => {
+          if (version !== this.versionAudio) return;
+          if (this.sonidosOido[index].audioUrl) URL.revokeObjectURL(this.sonidosOido[index].audioUrl);
+          this.sonidosOido[index].audioUrl = URL.createObjectURL(audio);
+          this.cancelarGrabacion();
+          this.cambios.markForCheck();
+        },
+        () => {
+          if (version === this.versionAudio) {
+            this.cancelarGrabacion();
+            this.notificar('No pudimos completar la grabación. Inténtalo de nuevo.');
+          }
+        },
+      );
+      if (version === this.versionAudio) this.avisoMicrofonoAceptado = true;
     } catch (error) {
       flujo?.getTracks().forEach((pista) => pista.stop());
       if (version !== this.versionAudio) return;
@@ -272,16 +256,8 @@ export class AnclajePage implements OnDestroy {
 
   cancelarGrabacion() {
     this.versionAudio++;
-    if (this.intervaloTimer !== undefined) clearInterval(this.intervaloTimer);
-    this.intervaloTimer = undefined;
-    const grabador = this.mediaRecorder;
-    this.mediaRecorder = undefined;
-    if (grabador) {
-      grabador.onstop = null;
-      grabador.ondataavailable = null;
-      grabador.onerror = null;
-      if (grabador.state !== 'inactive') grabador.stop();
-    }
+    this.abortarAudio?.abort();
+    this.abortarAudio = undefined;
     this.flujoAudio?.getTracks().forEach((pista) => pista.stop());
     this.flujoAudio = undefined;
     this.sonidosOido.forEach((sonido) => (sonido.grabando = false));

@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { AlertController, NavController } from '@ionic/angular';
 import { AnclajePage } from './anclaje.page';
+import { GrabacionService } from '../../services/grabacion.service';
 import { CamaraService } from '../../services/camara.service';
 
 describe('Anclaje: flujo de fotos', () => {
@@ -85,25 +86,6 @@ describe('Anclaje: flujo de fotos', () => {
   });
 });
 
-class GrabadorPrueba {
-  static isTypeSupported(tipo: string) {
-    return tipo === 'audio/webm;codecs=opus';
-  }
-  state = 'inactive';
-  mimeType = 'audio/webm;codecs=opus';
-  ondataavailable: ((evento: { data: Blob }) => void) | null = null;
-  onstop: (() => void) | null = null;
-  onerror: (() => void) | null = null;
-  start() {
-    this.state = 'recording';
-  }
-  stop() {
-    this.state = 'inactive';
-    this.ondataavailable?.({ data: new Blob(['sonido'], { type: this.mimeType }) });
-    this.onstop?.();
-  }
-}
-
 describe('Anclaje: micrófono y grabación', () => {
   const obtener = vi.fn();
   const pararPista = vi.fn();
@@ -125,11 +107,20 @@ describe('Anclaje: micrófono y grabación', () => {
     Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: { getUserMedia: obtener } });
     Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: crearUrl });
     Object.defineProperty(URL, 'revokeObjectURL', { configurable: true, value: vi.fn() });
-    vi.stubGlobal('MediaRecorder', GrabadorPrueba);
+    vi.stubGlobal('AudioContext', class {});
     await TestBed.configureTestingModule({
       imports: [AnclajePage],
       providers: [
         { provide: CamaraService, useValue: { capturar: vi.fn() } },
+        {
+          provide: GrabacionService,
+          useValue: {
+            iniciar: async (_flujo: unknown, signal: AbortSignal, _progreso: unknown, fin: (blob: Blob) => void) => {
+              const timer = setTimeout(() => fin(new Blob(['audio'], { type: 'audio/wav' })), 5000);
+              signal.addEventListener('abort', () => clearTimeout(timer), { once: true });
+            },
+          },
+        },
         { provide: AlertController, useValue: { create: crear } },
         { provide: NavController, useValue: { navigateBack: vi.fn() } },
       ],
@@ -156,14 +147,14 @@ describe('Anclaje: micrófono y grabación', () => {
   });
 
   it('graba cinco segundos, conserva el formato real y no repite el aviso', async () => {
-    vi.useFakeTimers({ toFake: ['Date', 'setInterval', 'clearInterval'] });
+    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
     const pagina = TestBed.createComponent(AnclajePage).componentInstance;
     await pagina.iniciarGrabacion(0);
     expect(obtener).toHaveBeenCalledWith({ audio: true });
     expect(pagina.sonidosOido[0].grabando).toBe(true);
     vi.advanceTimersByTime(5000);
     expect(pagina.sonidosOido[0].audioUrl).toBe('blob:grabacion');
-    expect(crearUrl.mock.calls[0][0].type).toBe('audio/webm;codecs=opus');
+    expect(crearUrl.mock.calls[0][0].type).toBe('audio/wav');
     expect(pararPista).toHaveBeenCalled();
     expect(pagina.indiceGrabando).toBeNull();
     await pagina.iniciarGrabacion(1);

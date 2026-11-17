@@ -1,0 +1,119 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sonidos de Relajación</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding fondo-sonidos">
+  <!-- Tarjeta de Anclaje Sensorial y Respiración -->
+  <div class="tarjeta-anclaje">
+    <div class="circulo-respiracion" [ngClass]="estadoPulso">
+      <div class="nucleo-respiracion">
+        <ion-icon name="musical-notes-outline"></ion-icon>
+      </div>
+    </div>
+    <div class="texto-anclaje">
+      <span class="badge-calma">ANCLAJE AUDITIVO</span>
+      <h2>{{ faseRespiracion }}</h2>
+      <p>
+        Permite que cada sonido te traiga al presente. Siente tu cuerpo apoyado y acompaña la melodía con una respiración tranquila.
+      </p>
+    </div>
+  </div>
+
+  <!-- Filtros de Ambientes Sonoros -->
+  <div class="filtros-scroll">
+    <button
+      *ngFor="let cat of categorias"
+      class="chip-categoria"
+      [class.activo]="categoriaSeleccionada === cat.id"
+      (click)="cargarPistas(cat.id)">
+      <ion-icon [name]="cat.icono"></ion-icon>
+      <span>{{ cat.nombre }}</span>
+    </button>
+  </div>
+
+  <!-- Reproductor Activo -->
+  <div class="tarjeta-reproductor" *ngIf="pistaActual">
+    <div class="info-pista-activa">
+      <img
+        [src]="pistaActual.album_image || pistaActual.image || 'assets/icon/favicon.png'"
+        alt="Portada de pista"
+        class="caratula-activa" />
+      <div class="detalles-pista">
+        <span class="etiqueta-sonando">{{ reproduciendo ? 'ESCUCHANDO AHORA' : 'LISTO PARA REPRODUCIR' }}</span>
+        <h3>{{ pistaActual.name }}</h3>
+        <p>{{ pistaActual.artist_name }}</p>
+      </div>
+      <ion-button fill="clear" class="btn-volumen" (click)="alternarSilencio()">
+        <ion-icon [name]="silenciado ? 'volume-mute-outline' : 'volume-high-outline'" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Barra de progreso -->
+    <div class="barra-tiempo">
+      <ion-range
+        min="0"
+        [max]="duracionTotal || 100"
+        [value]="tiempoActual"
+        (ionChange)="cambiarProgreso($event)">
+      </ion-range>
+      <div class="tiempos-texto">
+        <span>{{ formatearTiempo(tiempoActual) }}</span>
+        <span>{{ formatearTiempo(duracionTotal) }}</span>
+      </div>
+    </div>
+
+    <!-- Controles de reproducción -->
+    <div class="controles-reproductor">
+      <button class="btn-secundario" (click)="anteriorPista()" aria-label="Pista anterior">
+        <ion-icon name="play-skip-back-outline"></ion-icon>
+      </button>
+      <button class="btn-play-principal" (click)="alternarReproduccion()" aria-label="Reproducir o pausar">
+        <ion-icon [name]="reproduciendo ? 'pause' : 'play'"></ion-icon>
+      </button>
+      <button class="btn-secundario" (click)="siguientePista()" aria-label="Siguiente pista">
+        <ion-icon name="play-skip-forward-outline"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Estado de carga -->
+  <div class="estado-centrado" *ngIf="cargando">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Buscando sonidos de calma...</p>
+  </div>
+
+  <!-- Estado de error -->
+  <div class="tarjeta-error" *ngIf="!cargando && errorCarga">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ errorCarga }}</p>
+    <ion-button size="small" (click)="cargarPistas(categoriaSeleccionada)">Reintentar</ion-button>
+  </div>
+
+  <!-- Lista de Pistas de Jamendo -->
+  <div class="seccion-lista" *ngIf="!cargando && pistas.length > 0">
+    <h3 class="titulo-lista">Paisajes sonoros disponibles</h3>
+
+    <div
+      class="item-pista"
+      *ngFor="let pista of pistas; let i = index"
+      [class.seleccionada]="pistaActual?.id === pista.id"
+      (click)="prepararPista(i, true)">
+      <img
+        [src]="pista.album_image || pista.image || 'assets/icon/favicon.png'"
+        alt="Miniatura"
+        class="miniatura-pista" />
+      <div class="texto-item">
+        <h4>{{ pista.name }}</h4>
+        <span>{{ pista.artist_name }} · {{ formatearTiempo(pista.duration) }}</span>
+      </div>
+      <div class="indicador-play">
+        <ion-icon [name]="pistaActual?.id === pista.id && reproduciendo ? 'pause' : 'play'"></ion-icon>
+      </div>
+    </div>
+  </div>
+</ion-content>

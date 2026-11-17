@@ -1,0 +1,324 @@
+:host {
+  --fondo-calma: #F2EFF0;
+  --violeta-calma: #9B88C0;
+  --verde-regulador: #9FC6A4;
+  --profundo-noche: #434969;
+  --acento-suave: #E3E4B7;
+  --violeta-punto: #5C4789;
+  font-family: 'Nunito', sans-serif;
+}
+
+ion-toolbar {
+  --background: var(--bg-tarjeta, #ffffff);
+  --color: var(--texto-principal, #434969);
+  font-family: 'Nunito', sans-serif;
+
+  ion-title {
+    font-weight: 800;
+    font-size: 1.15rem;
+  }
+}
+
+.fondo-sonidos {
+  --background: var(--bg-app, var(--fondo-calma));
+  font-family: 'Nunito', sans-serif;
+}
+
+.tarjeta-anclaje {
+  background: var(--bg-tarjeta, #ffffff);
+  border-radius: 22px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 6px 18px rgba(67, 73, 105, 0.07);
+  margin-bottom: 16px;
+}
+
+.circulo-respiracion {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 50%;
+  background: rgba(159, 198, 164, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 4s ease-in-out, background-color 2s ease;
+
+  &.inhale {
+    transform: scale(1.16);
+    background: rgba(159, 198, 164, 0.42);
+  }
+
+  &.hold {
+    transform: scale(1.16);
+    background: rgba(155, 136, 192, 0.35);
+  }
+
+  &.exhale {
+    transform: scale(0.92);
+    background: rgba(155, 136, 192, 0.22);
+    transition: transform 6s ease-in-out, background-color 3s ease;
+  }
+
+  .nucleo-respiracion {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--verde-regulador);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+}
+
+.texto-anclaje {
+  .badge-calma {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--profundo-noche);
+    background: var(--acento-suave);
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 4px;
+  }
+
+  h2 {
+    margin: 2px 0 4px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--texto-principal, var(--profundo-noche));
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--texto-secundario, #6e5a8a);
+  }
+}
+
+.filtros-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chip-categoria {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1.5px solid rgba(155, 136, 192, 0.35);
+  background: var(--bg-tarjeta, #ffffff);
+  color: var(--texto-principal, var(--profundo-noche));
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+
+  &.activo {
+    background: var(--violeta-calma);
+    border-color: var(--violeta-calma);
+    color: #ffffff;
+  }
+}
+
+.tarjeta-reproductor {
+  background: var(--bg-tarjeta, #ffffff);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 8px 22px rgba(67, 73, 105, 0.08);
+  margin-bottom: 20px;
+  border-top: 4px solid var(--violeta-calma);
+}
+
+.info-pista-activa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .caratula-activa {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    object-fit: cover;
+    background: rgba(155, 136, 192, 0.2);
+  }
+
+  .detalles-pista {
+    flex: 1;
+    min-width: 0;
+
+    .etiqueta-sonando {
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--violeta-punto);
+    }
+
+    h3 {
+      margin: 2px 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--texto-principal, var(--profundo-noche));
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--texto-secundario, #6e5a8a);
+    }
+  }
+
+  .btn-volumen {
+    --color: var(--violeta-punto);
+  }
+}
+
+.barra-tiempo {
+  margin-top: 8px;
+
+  ion-range {
+    --bar-background: rgba(155, 136, 192, 0.25);
+    --bar-background-active: var(--violeta-calma);
+    --knob-background: var(--violeta-punto);
+    --knob-size: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .tiempos-texto {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--texto-secundario, #6e5a8a);
+  }
+}
+
+.controles-reproductor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 10px;
+
+  .btn-secundario {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(155, 136, 192, 0.16);
+    color: var(--texto-principal, var(--profundo-noche));
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-play-principal {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: none;
+    background: var(--violeta-calma);
+    color: #ffffff;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(155, 136, 192, 0.45);
+  }
+}
+
+.titulo-lista {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--texto-principal, var(--profundo-noche));
+  margin: 0 0 12px 4px;
+}
+
+.item-pista {
+  background: var(--bg-tarjeta, #ffffff);
+  border-radius: 18px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+
+  &.seleccionada {
+    border-color: var(--verde-regulador);
+    background: rgba(159, 198, 164, 0.14);
+  }
+
+  .miniatura-pista {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  .texto-item {
+    flex: 1;
+    min-width: 0;
+
+    h4 {
+      margin: 0 0 2px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--texto-principal, var(--profundo-noche));
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    span {
+      font-size: 0.78rem;
+      color: var(--texto-secundario, #6e5a8a);
+    }
+  }
+
+  .indicador-play {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(159, 198, 164, 0.25);
+    color: var(--profundo-noche);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.estado-centrado,
+.tarjeta-error {
+  text-align: center;
+  padding: 28px 16px;
+  color: var(--texto-secundario, #6e5a8a);
+
+  ion-icon {
+    font-size: 2rem;
+    color: var(--violeta-punto);
+  }
+}

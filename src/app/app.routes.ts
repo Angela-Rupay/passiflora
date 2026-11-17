@@ -23,6 +23,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/respiracion/respiracion.page').then((m) => m.RespiracionPage),
   },
   {
+    path: 'sonidos-relajacion',
+    canActivate: [sesionGuard],
+    loadComponent: () =>
+      import('./pages/sonidos-relajacion/sonidos-relajacion.page').then(
+        (m) => m.SonidosRelajacionPage
+      ),
+  },
+  {
     path: 'tarjetas',
     canActivate: [sesionGuard],
     loadComponent: () => import('./pages/tarjetas/tarjetas.page').then((m) => m.TarjetasPage),

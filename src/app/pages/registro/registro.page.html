@@ -20,7 +20,7 @@
           [readonly]="registrando"
         ></ion-input>
         <p class="error" *ngIf="registroForm.controls.nombre.touched && registroForm.controls.nombre.invalid">
-          Ingresa tu nombre, solo letras y espacios.
+          Ingresa tu nombre con al menos 4 letras, sin números.
         </p>
         <ion-input
           label="Apellido"
@@ -33,7 +33,7 @@
           [readonly]="registrando"
         ></ion-input>
         <p class="error" *ngIf="registroForm.controls.apellido.touched && registroForm.controls.apellido.invalid">
-          Ingresa tu apellido, solo letras y espacios.
+          Ingresa tu apellido con al menos 4 letras, sin números.
         </p>
         <ion-input
           label="Correo electrónico"

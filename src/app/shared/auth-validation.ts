@@ -5,7 +5,9 @@ export const PATRON_CORREO = /^[^\s@]+@[^\s@]+\.(?:com|co)$/i;
 export const PATRON_CLAVE = /^(?=.*\p{Lu})(?=.*[0-9]).{8,}$/u;
 
 export function nombreValido(control: AbstractControl): ValidationErrors | null {
-  return PATRON_NOMBRE.test(String(control.value ?? '').trim()) ? null : { nombre: true };
+  const nombre = String(control.value ?? '').normalize('NFC').trim();
+  if (!PATRON_NOMBRE.test(nombre)) return { nombre: true };
+  return (nombre.match(/\p{L}/gu)?.length ?? 0) >= 4 ? null : { nombreCorto: true };
 }
 
 export function codigoAuth(error: unknown): string {

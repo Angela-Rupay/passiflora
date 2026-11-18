@@ -22,4 +22,12 @@ describe('Validación de credenciales', () => {
     expect(mensajeAuth({ code: 'auth/invalid-credential' })).toContain('correo o la contraseña');
     expect(mensajeAuth({ code: 'auth/network-request-failed' })).toContain('conexión');
   });
+  it('exige más de tres letras y no cuenta espacios ni tildes combinadas como letras extra', () => {
+    expect(nombreValido(new FormControl('Ana'))).toEqual({ nombreCorto: true });
+    expect(nombreValido(new FormControl(' A na '))).toEqual({ nombreCorto: true });
+    expect(nombreValido(new FormControl('Jose\u0301'))).toBeNull();
+    expect(nombreValido(new FormControl('José'))).toBeNull();
+    expect(nombreValido(new FormControl('Ruiz'))).toBeNull();
+  });
+
 });

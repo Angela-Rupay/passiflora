@@ -89,4 +89,16 @@ describe('Registro único con Firebase', () => {
     expect(pagina.registroForm.valid).toBe(true);
   });
 
+  it('requiere cuatro letras tanto en nombre como en apellido', () => {
+    const pagina = TestBed.createComponent(RegistroPage).componentInstance;
+    completar(pagina);
+    pagina.registroForm.controls.nombre.setValue('Ana');
+    expect(pagina.registroForm.invalid).toBe(true);
+    pagina.registroForm.controls.nombre.setValue('Sara');
+    pagina.registroForm.controls.apellido.setValue('Paz');
+    expect(pagina.registroForm.invalid).toBe(true);
+    pagina.registroForm.controls.apellido.setValue('Ruiz');
+    expect(pagina.registroForm.valid).toBe(true);
+  });
+
 });

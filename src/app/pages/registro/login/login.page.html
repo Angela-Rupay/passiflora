@@ -1,112 +1,24 @@
 <ion-content class="ion-padding login-content">
-  <div class="login-wrapper">
-    <!-- Logo e Identidad centrado -->
-    <div class="login-header">
-      <div class="brand-logo-container">
-        <ion-icon name="flower-outline" class="brand-logo-icon"></ion-icon>
-      </div>
-      <h1 class="brand-title">Passiflora</h1>
-      <p class="brand-subtitle">Inhala... Exhala...</p>
-    </div>
-
-    <!-- Pestañas Ingreso / Registro alineadas con seccionActual -->
-    <ion-segment [(ngModel)]="seccionActual" class="custom-segment">
-      <ion-segment-button value="ingreso">
-        <ion-label>Ingresar</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="registro">
-        <ion-label>Registro</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-
-    <!-- FORMULARIO DE INGRESO -->
-    @if (seccionActual === 'ingreso') {
-      <form (ngSubmit)="alIniciarSesion()" class="form-container">
-        <div class="input-item">
-          <ion-input
-            type="email"
-            [(ngModel)]="correoIngreso"
-            name="correoIngreso"
-            placeholder="Correo electrónico"
-            fill="outline"
-            class="custom-input"
-            required>
-          </ion-input>
-        </div>
-
-        <div class="input-item">
-          <ion-input
-            type="password"
-            [(ngModel)]="claveIngreso"
-            name="claveIngreso"
-            placeholder="Contraseña"
-            fill="outline"
-            class="custom-input"
-            required>
-          </ion-input>
-        </div>
-
-        <ion-button expand="block" type="submit" class="btn-login">
-          INICIAR SESIÓN
+  <main class="login-wrapper">
+    <header class="login-header">
+      <img class="brand-logo" src="assets/img/flor-passiflora.png" alt="Passiflora">
+      <h1>Passiflora</h1>
+      <p>Inhala… Exhala…</p>
+    </header>
+    <h2>Bienvenido a tu espacio</h2>
+    <form #ingreso="ngForm" (ngSubmit)="alIniciarSesion()" class="form-container">
+      <ion-input label="Correo electrónico" labelPlacement="stacked" type="email" autocomplete="email" [(ngModel)]="correoIngreso" (ngModelChange)="limpiarErrores()" name="correoIngreso" #correo="ngModel" placeholder="ejemplo@correo.com" fill="outline" [disabled]="ingresando" [class.campo-invalido]="!!errorCorreo || (correo.touched && !correoValido)" required></ion-input>
+      <p class="error" role="alert" *ngIf="correo.touched && !correoValido">Correo inválido: usa un correo terminado en .com o .co.</p>
+      <p class="error" role="alert" *ngIf="errorCorreo">{{ errorCorreo }}</p>
+      <ion-input label="Contraseña" labelPlacement="stacked" [type]="mostrarClave ? 'text' : 'password'" autocomplete="current-password" [(ngModel)]="claveIngreso" (ngModelChange)="limpiarErrores()" name="claveIngreso" fill="outline" [disabled]="ingresando" [class.campo-invalido]="!!errorClave || !!errorGeneral" required>
+        <ion-button class="ver-clave" slot="end" type="button" fill="clear" [disabled]="ingresando" (click)="mostrarClave = !mostrarClave" [attr.aria-label]="mostrarClave ? 'Ocultar contraseña' : 'Mostrar contraseña'" [attr.aria-pressed]="mostrarClave">
+          <ion-icon slot="icon-only" [name]="mostrarClave ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
         </ion-button>
-      </form>
-    }
-
-    <!-- FORMULARIO DE REGISTRO -->
-    @if (seccionActual === 'registro') {
-      <form (ngSubmit)="alRegistrar()" class="form-container">
-        <div class="input-item">
-          <ion-input
-            type="text"
-            [(ngModel)]="nombreRegistro"
-            name="nombreRegistro"
-            placeholder="Nombre completo"
-            fill="outline"
-            class="custom-input"
-            required>
-          </ion-input>
-        </div>
-
-        <div class="input-item">
-          <ion-input
-            type="email"
-            [(ngModel)]="correoRegistro"
-            name="correoRegistro"
-            placeholder="Correo electrónico"
-            fill="outline"
-            class="custom-input"
-            required>
-          </ion-input>
-        </div>
-
-        <div class="input-item">
-          <ion-input
-            type="password"
-            [(ngModel)]="claveRegistro"
-            name="claveRegistro"
-            placeholder="Contraseña"
-            fill="outline"
-            class="custom-input"
-            required>
-          </ion-input>
-        </div>
-
-        <div class="input-item">
-          <ion-input
-            type="password"
-            [(ngModel)]="confirmarClaveRegistro"
-            name="confirmarClaveRegistro"
-            placeholder="Confirmar contraseña"
-            fill="outline"
-            class="custom-input"
-            required>
-          </ion-input>
-        </div>
-
-        <ion-button expand="block" type="submit" class="btn-login">
-          CREAR CUENTA
-        </ion-button>
-      </form>
-    }
-  </div>
+      </ion-input>
+      <p class="error" role="alert" *ngIf="errorClave">{{ errorClave }}</p>
+      <p class="error" role="alert" *ngIf="errorGeneral">{{ errorGeneral }}</p>
+      <ion-button expand="block" type="submit" [disabled]="ingresando || !correoValido || !claveIngreso">{{ ingresando ? 'Ingresando…' : 'Ingresar' }}</ion-button>
+    </form>
+    <p class="enlace">¿No tienes una cuenta? <a routerLink="/registro">Regístrate aquí</a></p>
+  </main>
 </ion-content>

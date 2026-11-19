@@ -1,0 +1,40 @@
+<ion-content class="espacio-calma">
+  <main class="calma-container">
+    <img class="logo" src="assets/img/flor-passiflora.png" alt="Passiflora" />
+    <header>
+      <h1>Entendemos que es una situación difícil.</h1>
+      <p>¿Qué te gustaría hacer?</p>
+    </header>
+    <nav class="opciones" aria-label="Herramientas de calma">
+      <a class="opcion" routerLink="/respiracion" [queryParams]="{origen: 'panico'}"
+        ><ion-icon name="heart-outline" aria-hidden="true"></ion-icon><span>Respirar</span></a
+      >
+      <a class="opcion" routerLink="/panico/anclaje"
+        ><ion-icon name="hand-left-outline" aria-hidden="true"></ion-icon><span>Ejercicio de anclaje</span></a
+      >
+      <button class="opcion" type="button" (click)="abrirTarjeta()">
+        <ion-icon name="chatbubble-ellipses-outline" aria-hidden="true"></ion-icon><span>Tarjetas de realidad</span>
+      </button>
+      <a class="opcion volver" routerLink="/tabs/tab1" [replaceUrl]="true"
+        ><ion-icon name="home-outline" aria-hidden="true"></ion-icon><span>Volver a mi espacio</span></a
+      >
+    </nav>
+    <ion-modal
+      [isOpen]="tarjetaAbierta"
+      (didDismiss)="cerrarTarjeta()"
+      cssClass="modal-tarjeta-calma"
+      aria-labelledby="titulo-tarjeta-calma"
+    >
+      <ng-template>
+        <section class="tarjeta-calma">
+          <h2 id="titulo-tarjeta-calma">Un recordatorio para ti</h2>
+          <p class="mensaje">{{ textoTarjeta }}</p>
+          <p class="origen">
+            {{ tarjetaPersonal ? 'Un mensaje que escribiste para ti.' : 'Un recordatorio de Passiflora.' }}
+          </p>
+          <ion-button expand="block" (click)="cerrarTarjeta()">Volver</ion-button>
+        </section>
+      </ng-template>
+    </ion-modal>
+  </main>
+</ion-content>

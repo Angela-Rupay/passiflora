@@ -1,34 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { 
-  IonHeader, IonToolbar, IonTitle, IonContent, 
-  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, 
-  IonCardContent, IonButton, IonIcon 
-} from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { flowerOutline } from 'ionicons/icons';
+import { IonContent } from '@ionic/angular';
+import { TabHeaderComponent } from '../shared/components/tab-header.component';
+import { ActionCardComponent } from '../shared/components/action-card.component';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: './tab2.page.html',
-  styleUrls: ['./tab2.page.scss'],
-  standalone: true,
-  imports: [
-    IonHeader, IonToolbar, IonTitle, IonContent, 
-    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, 
-    IonCardContent, IonButton, IonIcon
-  ],
+  selector: 'app-tab2', templateUrl: './tab2.page.html', styleUrls: ['./tab2.page.scss'], standalone: true,
+  imports: [IonContent, TabHeaderComponent, ActionCardComponent]
 })
-export class Tab2Page {
-  constructor(private router: Router) {
-    addIcons({ flowerOutline });
-  }
-
-  irARespiracion() {
-    this.router.navigate(['/respiracion']);
-  }
-
-  irAAnclaje() {
-    this.router.navigate(['/anclaje']);
-  }
-}
+export class Tab2Page {}

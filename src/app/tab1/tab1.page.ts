@@ -1,67 +1,51 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonIcon, IonButton } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { Auth, signOut, onAuthStateChanged } from '@angular/fire/auth';
+import { IonContent } from '@ionic/angular';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
-import { addIcons } from 'ionicons';
-import { moonOutline, sunnyOutline, logOutOutline, flowerOutline, arrowForwardOutline, leafOutline } from 'ionicons/icons';
-import { ThemeService } from '../services/theme.service';
+import { TabHeaderComponent } from '../shared/components/tab-header.component';
+import { ActionCardComponent } from '../shared/components/action-card.component';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonContent, IonIcon, IonButton]
+  imports: [CommonModule, IonContent, TabHeaderComponent, ActionCardComponent]
 })
-export class Tab1Page implements OnInit {
+export class Tab1Page implements OnInit, OnDestroy {
 
-  nombreUsuario: string = 'Valeria';
+  nombreUsuario = 'Usuario';
+  private cancelarSesion?: () => void;
 
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private router: Router,
-    public themeService: ThemeService
+    private cambios: ChangeDetectorRef,
+    private injector: Injector
   ) {
-    addIcons({ moonOutline, sunnyOutline, logOutOutline, flowerOutline, arrowForwardOutline, leafOutline });
   }
 
   ngOnInit() {
     this.obtenerNombreUsuario();
   }
 
-  ionViewWillEnter() {
-    this.obtenerNombreUsuario();
-  }
+  ngOnDestroy() { this.cancelarSesion?.(); }
 
   obtenerNombreUsuario() {
-    onAuthStateChanged(this.auth, async (usuarioActual) => {
-      if (usuarioActual) {
-        try {
-          const usuarioRef = doc(this.firestore, `usuarios/${usuarioActual.uid}`);
-          const snapshot = await getDoc(usuarioRef);
-          if (snapshot.exists() && snapshot.data()['nombre']) {
-            this.nombreUsuario = snapshot.data()['nombre'].split(' ')[0];
-          }
-        } catch (error) {
-          console.error('Error al obtener usuario:', error);
-        }
-      }
-    });
+    this.cancelarSesion?.();
+    this.cancelarSesion = runInInjectionContext(this.injector, () => onAuthStateChanged(this.auth, async usuario => {
+      this.nombreUsuario = 'Usuario';
+      this.cambios.markForCheck();
+      if (!usuario) return;
+      try {
+        const snapshot = await getDoc(doc(this.firestore, `usuarios/${usuario.uid}`));
+        if (this.auth.currentUser?.uid !== usuario.uid) return;
+        const nombre: unknown = snapshot.data()?.['nombre'];
+        if (typeof nombre === 'string' && nombre.trim()) this.nombreUsuario = nombre.trim().split(/\s+/)[0];
+      } catch (error) { console.error('Error al obtener usuario:', error); }
+      finally { this.cambios.markForCheck(); }
+    }));
   }
 
-  async cerrarSesion() {
-    try {
-      await signOut(this.auth);
-      this.router.navigateByUrl('/login', { replaceUrl: true });
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  }
-
-  irARespiracion() {
-    this.router.navigateByUrl('/pages/respiracion');
-  }
 }

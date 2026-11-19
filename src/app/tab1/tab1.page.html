@@ -1,43 +1,16 @@
-<ion-content class="ion-padding">
-  
-  <div class="top-bar">
-    <div class="avatar-logo animacion-respirar">
-      <ion-icon name="flower-outline"></ion-icon>
-    </div>
-    <div class="acciones-header">
-      <ion-button fill="clear" class="btn-accion" (click)="themeService.toggleTema()">
-        <ion-icon [name]="themeService.modoOscuro ? 'sunny-outline' : 'moon-outline'" slot="icon-only"></ion-icon>
-      </ion-button>
-      <ion-button fill="clear" class="btn-accion btn-logout" (click)="cerrarSesion()">
-        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
-      </ion-button>
-    </div>
-  </div>
-
-  <div class="header-usuario">
-    <p class="saludo-tag">Hola {{ nombreUsuario }} 💜</p>
-    <h1 class="titulo-principal">Qué bueno tenerte aquí.</h1>
-    <p class="descripcion">
-      Este es tu espacio para respirar, conectar contigo y cuidar de tu bienestar.
-    </p>
-  </div>
-
-<!--Tarjeta con respiración-->
-  >  <div class="tarjeta-respiracion" (click)="irARespiracion()">
-    <div class="icono-hoja-box">
-      <ion-icon name="leaf-outline"></ion-icon>
-    </div>
-    <div class="contenido-tarjeta">
-      <span class="subtitulo-tarjeta">UN MOMENTO PARA TI</span>
-      <h3>Respira conmigo</h3>
-      <p>Regálate unos minutos para encontrar calma y conectar con el presente.</p>
-    </div>
-    <div class="boton-flecha">
-      <ion-icon name="arrow-forward-outline"></ion-icon>
-    </div>
-  </div>
-
-  <p class="frase-bottom">
-    No tienes que tener todo resuelto. A veces, simplemente respirar es suficiente.
-  </p>
+<ion-content>
+  <main class="page-shell">
+    <app-tab-header></app-tab-header>
+    <header class="page-heading">
+      <p class="eyebrow">Hola {{ nombreUsuario }} 💜</p>
+      <h1>Qué bueno tenerte aquí.</h1>
+      <p>Este es tu espacio para respirar, conectar contigo y cuidar de tu bienestar.</p>
+    </header>
+    <nav class="card-list" aria-label="Herramientas de bienestar">
+      <app-action-card ruta="/respiracion" icono="leaf-outline" etiqueta="UN MOMENTO PARA TI" titulo="Respira conmigo" descripcion="Regálate unos minutos para encontrar calma y conectar con el presente."></app-action-card>
+      <app-action-card ruta="/gad7" [parametros]="{nombre: nombreUsuario}" icono="heart-outline" etiqueta="ESCUCHA CÓMO TE SIENTES" titulo="¿Cómo te has sentido?" descripcion="Responde el cuestionario GAD-7 sobre las últimas dos semanas. Es orientativo y no sustituye una evaluación profesional."></app-action-card>
+      <app-action-card ruta="/tarjetas" icono="chatbubble-ellipses-outline" etiqueta="PALABRAS QUE TE ACOMPAÑAN" titulo="Tarjetas de realidad" descripcion="Escribe un mensaje amable para leerlo cuando necesites calma. Se guarda en este dispositivo para tu cuenta."></app-action-card>
+    </nav>
+    <p class="frase-bottom">No tienes que tener todo resuelto. A veces, simplemente respirar es suficiente.</p>
+  </main>
 </ion-content>

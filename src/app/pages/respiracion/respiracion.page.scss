@@ -1,295 +1,218 @@
-
-ion-content {
-  --background: #CEBEF6;
-}
-
-.respiracion-container {
-  min-height: 100%;
-  max-width: 600px;
-  margin: auto;
-  padding: 22px;
-}
-
-.volver,
-.cambiar {
-  display: flex;
+.volver {
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  border: none;
+  gap: 8px;
   background: transparent;
-  color: #5C4789;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 10px 0;
-}
-
-.volver ion-icon {
-  font-size: 19px;
-}
-
-.encabezado {
-  padding: 25px 5px 30px;
-}
-
-.icono-encabezado {
-  width: 62px;
-  height: 62px;
-  background: rgba(255,255,255,0.6);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-
-  ion-icon {
-    color: #5C4789;
-    font-size: 34px;
-  }
-}
-
-.etiqueta {
-  color: #8A72AD;
-  font-size: 10px;
+  color: var(--color-primario);
+  border: 0;
+  min-height: 44px;
   font-weight: 800;
-  letter-spacing: 1.3px;
+  font-size: 1rem;
+  padding: 0;
+  margin-bottom: 24px;
+  cursor: pointer;
 }
-
-.encabezado h1 {
-  color: #434969;
-  font-size: 29px;
-  font-weight: 800;
-  margin: 10px 0;
+.lista-ejercicios {
+  display: grid;
+  gap: 16px;
 }
-
-.encabezado p,
-.descripcion {
-  color: #62677D;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.selector h2,
-.sesion h2 {
-  color: #434969;
-  font-size: 19px;
-  font-weight: 800;
-}
-
 .ejercicio-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 18px;
-  margin: 14px 0;
-  background: #FFFFFF;
-  border: none;
-  border-radius: 21px;
   text-align: left;
-  box-shadow: 0 5px 15px rgba(75,54,116,0.08);
-
-  &:active {
-    transform: scale(0.98);
-  }
+  border: 0;
+  border-radius: var(--radio-tarjeta);
+  background: var(--bg-tarjeta);
+  color: var(--texto-principal);
+  padding: 20px;
+  cursor: pointer;
+  box-shadow: var(--sombra-tarjeta);
 }
-
-.card-icono {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  border-radius: 16px;
-  background: #E9E0F7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  ion-icon {
-    color: #5C4789;
-    font-size: 26px;
-  }
+.ejercicio-card:focus-visible,
+.volver:focus-visible {
+  outline: 3px solid var(--color-primario);
+  outline-offset: 4px;
 }
-
-.card-contenido {
+.ilustracion {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  background: var(--bg-icono);
+  color: var(--color-primario);
+  border-radius: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+}
+.ilustracion text {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--ion-font-family);
+  font-size: 15px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+.relleno {
+  fill: currentColor;
+}
+.contenido {
   flex: 1;
-
-  h3 {
-    color: #434969;
-    font-size: 15px;
-    font-weight: 800;
-    margin: 0 0 7px;
-  }
-
-  p {
-    color: #777889;
-    font-size: 12px;
-    line-height: 1.5;
-    margin: 0;
-  }
+  display: grid;
+  gap: 6px;
 }
-
+.contenido strong {
+  font-size: var(--texto-subtitulo);
+  line-height: 1.3;
+  font-weight: 800;
+}
+.contenido span {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--texto-secundario);
+}
 .flecha {
-  color: #5C4789;
-  font-size: 28px;
+  font-size: 2rem;
+  color: var(--color-primario);
 }
-
 .sesion {
-  text-align: center;
+  background: var(--bg-tarjeta);
+  border-radius: var(--radio-tarjeta);
+  padding: 24px;
 }
-
 .sesion h2 {
-  margin-top: 22px;
+  margin: 24px 0 12px;
 }
-
+.instrucciones,
+.estado {
+  line-height: 1.6;
+  color: var(--texto-secundario);
+}
 .zona-animacion {
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 15px 0;
+  width: min(100%, 280px);
+  aspect-ratio: 1;
+  position: relative;
+  margin: 24px auto;
 }
-
-
-.circulo {
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: radial-gradient(
-    circle,
-    #FFFFFF 0%,
-    #E9E0F7 45%,
-    #A58CCB 100%
-  );
-
-  box-shadow: 0 0 35px rgba(92, 71, 137, 0.22);
-
-  transform: scale(0.72);
+.guia {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
-
-.circulo.inhala {
-  animation: inhalar var(--phase-duration) linear forwards;
+.contorno {
+  fill: none;
+  stroke: var(--bg-icono);
+  stroke-width: 7;
+  stroke-linejoin: round;
 }
-
-.circulo.mantener-arriba {
-  transform: scale(1);
+.trazo {
+  fill: none;
+  stroke: var(--color-primario);
+  stroke-width: 5;
 }
-
-.circulo.exhala {
-  animation: exhalar var(--phase-duration) linear forwards;
+.marcador {
+  fill: var(--color-primario);
+  stroke: var(--bg-tarjeta);
+  stroke-width: 2;
 }
-
-.circulo.mantener-abajo,
-.circulo.reposo {
-  transform: scale(0.72);
+.pulso {
+  fill: var(--bg-icono);
+  stroke: var(--color-primario);
+  stroke-width: 3;
 }
-
-.circulo.pausado {
-  animation-play-state: paused !important;
-}
-
-@keyframes inhalar {
-  from { transform: scale(0.72); }
-  to { transform: scale(1); }
-}
-
-@keyframes exhalar {
-  from { transform: scale(1); }
-  to { transform: scale(0.72); }
-}
-
-.circulo-interior {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-
+.contador {
+  position: absolute;
+  inset: 25% 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  color: #5C4789;
-  font-weight: 700;
-
-  strong {
-    font-size: 38px;
-    margin-top: 5px;
-  }
+  text-align: center;
+  color: var(--color-primario);
+  font-size: 1.1rem;
+  font-weight: 800;
+  pointer-events: none;
 }
-
-.fase {
-  font-size: 14px;
+.contador strong {
+  font-size: 3rem;
+  line-height: 1.2;
 }
-
-.completado {
-  font-size: 19px;
+.estado {
+  min-height: 3.2em;
+  text-align: center;
 }
-
-
-.fase {
-  font-size: 14px;
-}
-
-.completado {
-  font-size: 19px;
-}
-
-.indicacion {
-  color: #5C4789;
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 15px 0;
-}
-
-.progreso {
+.progreso-info {
   display: flex;
   justify-content: space-between;
-  color: #655B80;
-  font-size: 13px;
-  margin-top: 25px;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--texto-secundario);
+  font-size: 0.9rem;
 }
-
-.barra-progreso {
-  height: 8px;
-  background: rgba(255,255,255,0.65);
-  border-radius: 20px;
+progress {
+  display: block;
+  width: 100%;
+  height: 10px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 8px;
   overflow: hidden;
-  margin-top: 9px;
+  background: var(--bg-icono);
+  accent-color: var(--color-primario);
 }
-
-.barra-progreso-valor {
-  height: 100%;
-  background: #8065A8;
-  border-radius: 20px;
-  transition: width 0.3s ease;
+progress::-webkit-progress-bar {
+  background: var(--bg-icono);
 }
-
+progress::-webkit-progress-value {
+  background: var(--color-primario);
+}
+progress::-moz-progress-bar {
+  background: var(--color-primario);
+}
 .controles {
-  margin-top: 25px;
-
-  ion-button {
-    --background: #5C4789;
-    --background-activated: #45336E;
-    --color: #FFFFFF;
-    --border-radius: 17px;
-    height: 49px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-
-  ion-button[fill="outline"] {
-    --background: transparent;
-    --color: #5C4789;
-    --border-color: #5C4789;
-  }
-}
-
-.nota {
-  color: #726784;
-  font-size: 11px;
-  line-height: 1.6;
+  display: grid;
+  gap: 8px;
   margin-top: 20px;
 }
+ion-button {
+  --background: var(--color-primario);
+  --background-hover: var(--color-primario);
+  --background-focused: var(--color-primario);
+  --background-activated: var(--color-primario);
+  --color: var(--texto-sobre-primario);
+  --border-radius: 16px;
+  min-height: 48px;
+  font-size: 1rem;
+}
+ion-button[fill='outline'] {
+  --background: transparent;
+  --color: var(--color-primario);
+  --border-color: var(--color-primario);
+  --background-hover: var(--bg-icono);
+  --background-activated: var(--bg-icono);
+  --background-focused: var(--bg-icono);
+}
+.nota {
+  margin-bottom: 0;
+  color: var(--texto-secundario);
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+@media (max-width: 400px) {
+  .sesion {
+    padding: 20px 16px;
+  }
+  .ejercicio-card {
+    padding: 18px 14px;
+    gap: 12px;
+  }
+  .ilustracion {
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+  }
+}
+
+.fase-ejercicio { color: var(--color-primario); text-align: center; font-size: 1.2rem; font-weight: 800; line-height: 1.5; margin: 24px 0 8px; min-height: 1.5em; }

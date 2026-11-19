@@ -1,6 +1,6 @@
 
 ion-content {
-  --background: #CEBEF6;
+  --background: var(--bg-app);
 }
 
 .gad-container {
@@ -20,15 +20,15 @@ ion-content {
   }
 
   h1 {
-    color: #5C4789;
-    font-size: 30px;
+    color: var(--color-primario);
+    font-size: var(--texto-titulo);
     font-weight: 800;
     margin: 10px 0;
   }
 
   p {
-    color: #6B6F76;
-    font-size: 14px;
+    color: var(--texto-secundario);
+    font-size: var(--texto-cuerpo);
   }
 }
 
@@ -36,28 +36,28 @@ ion-content {
   margin-bottom: 22px;
 
   h2 {
-    color: #434969;
+    color: var(--texto-principal);
     font-size: 19px;
     font-weight: 700;
     line-height: 1.5;
   }
 
   p {
-    color: #434969;
-    font-size: 14px;
+    color: var(--texto-principal);
+    font-size: var(--texto-cuerpo);
     line-height: 1.6;
   }
 }
 
 .pregunta-card {
-  background: #F3F4E1;
-  border: 1px solid #E2DFEA;
+  background: var(--bg-tarjeta);
+  border: 1px solid var(--bg-icono);
   border-radius: 22px;
   padding: 20px;
   margin-bottom: 18px;
 
   h3 {
-    color: #434969;
+    color: var(--texto-principal);
     font-size: 16px;
     font-weight: 700;
     line-height: 1.5;
@@ -77,8 +77,8 @@ ion-content {
   gap: 12px;
   padding: 12px 8px;
   border-radius: 12px;
-  color: #6B6F76;
-  font-size: 14px;
+  color: var(--texto-secundario);
+  font-size: var(--texto-cuerpo);
   cursor: pointer;
 
   input {
@@ -89,25 +89,25 @@ ion-content {
   .radio-personalizado {
     width: 21px;
     height: 21px;
-    border: 2px solid #BFB8CE;
+    border: 2px solid var(--texto-secundario);
     border-radius: 50%;
     flex-shrink: 0;
     position: relative;
   }
 
   &.seleccionada {
-    background: rgba(155, 136, 192, 0.13);
-    color: #434969;
+    background: var(--bg-icono);
+    color: var(--texto-principal);
     font-weight: 600;
 
     .radio-personalizado {
-      border-color: #5C4789;
+      border-color: var(--color-primario);
 
       &::after {
         content: '';
         position: absolute;
         inset: 4px;
-        background: #5C4789;
+        background: var(--color-primario);
         border-radius: 50%;
       }
     }
@@ -116,15 +116,17 @@ ion-content {
 
 .progreso {
   text-align: center;
-  color: #434969;
+  color: var(--texto-principal);
   font-size: 13px;
   margin: 22px 0;
 }
 
 ion-button {
-  --background: #5C4789;
-  --background-activated: #434969;
-  --color: #FFFFFF;
+  --background: var(--color-primario);
+  --background-activated: var(--color-primario);
+  --background-hover: var(--color-primario);
+  --background-focused: var(--color-primario);
+  --color: var(--texto-sobre-primario);
   --border-radius: 18px;
   height: 52px;
   font-weight: 700;
@@ -136,43 +138,43 @@ ion-button[disabled] {
 }
 
 .resultado-card {
-  background: #FFFFFF;
+  background: var(--bg-tarjeta);
   border-radius: 25px;
   padding: 28px 22px;
   text-align: center;
 
   h2 {
-    color: #9B88C0;
+    color: var(--color-primario);
     font-size: 19px;
   }
 
   h3 {
-    color: #434969;
+    color: var(--texto-principal);
     font-size: 18px;
   }
 
   p {
-    color: #434969;
+    color: var(--texto-principal);
     line-height: 1.7;
-    font-size: 15px;
+    font-size: var(--texto-cuerpo);
   }
 }
 
 .puntaje {
-  color: #5C4789;
+  color: var(--color-primario);
   font-size: 65px;
   font-weight: 800;
   margin: 20px 0;
 
   span {
     display: block;
-    font-size: 14px;
+    font-size: var(--texto-cuerpo);
     font-weight: 400;
   }
 }
 
 .aviso {
-  color: #434969;
+  color: var(--texto-principal);
   font-size: 12px;
   line-height: 1.6;
   text-align: center;

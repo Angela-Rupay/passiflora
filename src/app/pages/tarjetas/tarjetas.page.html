@@ -1,0 +1,47 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/tabs/tab1" text="Volver"></ion-back-button></ion-buttons>
+    <ion-title>Tarjetas de realidad</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <main>
+    <img class="flor" src="assets/img/flor-passiflora.png" alt="">
+    <h1>Un mensaje de calma para ti</h1>
+    <p>Escribe cuando te sientas en calma: un recordatorio amable, algo que te ayuda o una persona a quien puedes acudir. Podrás leerlo cuando necesites volver al presente.</p>
+    <p class="ejemplo">Por ejemplo: «Puedo ir paso a paso. Puedo pedir compañía cuando la necesite».</p>
+    <p class="nota">Tus tarjetas se guardan solo en este dispositivo y para tu cuenta. No se sincronizan con otros dispositivos. Si borras los datos de la app o la desinstalas, puedes perderlas.</p>
+
+    <p *ngIf="cargando" role="status">Cargando tus tarjetas…</p>
+    <section *ngIf="!cargando && !uid" class="panel">
+      <h2>Inicia sesión</h2>
+      <p>Así tus tarjetas quedan separadas de las de otras cuentas.</p>
+      <ion-button routerDirection="root" routerLink="/login">Ir a inicio de sesión</ion-button>
+    </section>
+    <section *ngIf="error" class="panel" role="alert">
+      <p>{{ error }}</p>
+      <ion-button (click)="cargar()">Volver a cargar</ion-button>
+    </section>
+
+    <ng-container *ngIf="uid && !error">
+      <form class="panel" (ngSubmit)="guardar()">
+        <h2>{{ editandoId ? 'Editar tu tarjeta' : 'Crear una tarjeta' }}</h2>
+        <ion-textarea label="Tu recordatorio" labelPlacement="stacked" name="texto" [(ngModel)]="texto" [maxlength]="servicio.longitudMaxima" [autoGrow]="true" rows="4" placeholder="¿Qué te gustaría recordar en un momento difícil?"></ion-textarea>
+        <p class="contador">{{ texto.length }} / {{ servicio.longitudMaxima }}</p>
+        <ion-button type="submit" expand="block" [disabled]="!texto.trim() || texto.trim().length > servicio.longitudMaxima">{{ editandoId ? 'Guardar cambios' : 'Guardar tarjeta' }}</ion-button>
+        <ion-button *ngIf="editandoId" fill="clear" expand="block" (click)="cancelarEdicion()">Cancelar edición</ion-button>
+      </form>
+
+      <h2>Tus tarjetas</h2>
+      <p *ngIf="!tarjetas.length" class="panel">Todavía no tienes tarjetas. Crea la primera con tus propias palabras.</p>
+      <article class="panel tarjeta" *ngFor="let tarjeta of tarjetas; let i = index">
+        <p class="recordatorio">{{ tarjeta.texto }}</p>
+        <div class="acciones">
+          <ion-button fill="outline" (click)="editar(tarjeta)" [attr.aria-label]="'Editar tarjeta ' + (i + 1)">Editar</ion-button>
+          <ion-button fill="clear" (click)="confirmarEliminar(tarjeta)" [attr.aria-label]="'Eliminar tarjeta ' + (i + 1)">Eliminar</ion-button>
+        </div>
+      </article>
+    </ng-container>
+  </main>
+  <ion-toast [isOpen]="mostrarToast" [message]="mensaje" [duration]="3500" (didDismiss)="mostrarToast = false"></ion-toast>
+</ion-content>

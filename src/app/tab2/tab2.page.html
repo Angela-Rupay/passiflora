@@ -1,44 +1,15 @@
-<ion-content class="ion-padding">
-  <!-- Logo único de Passiflora -->
-  <div class="brand-logo-container">
-    <ion-icon name="flower-outline" class="brand-logo-icon"></ion-icon>
-  </div>
-
-  <!-- Encabezado de la pestaña -->
-  <div class="header-section">
-    <p class="subtitle">TU ESPACIO DE BIENESTAR</p>
-    <h1>Conecta contigo</h1>
-    <p class="description">
-      Elige una actividad para regalarte un momento de calma. No tienes que hacer nada a la perfección.
-    </p>
+<ion-content>
+  <main class="page-shell">
+    <app-tab-header></app-tab-header>
+    <header class="page-heading">
+      <p class="eyebrow">TU ESPACIO DE BIENESTAR</p>
+      <h1>Conecta contigo</h1>
+      <p>Elige una actividad para regalarte un momento de calma. No tienes que hacer nada a la perfección.</p>
+    </header>
     <h2>¿Qué necesitas hoy?</h2>
-  </div>
-
-  <!-- Tarjeta 1: Respiración guiada -->
-  <ion-card class="exercise-card" (click)="irARespiracion()">
-    <ion-card-header>
-      <ion-card-subtitle>RESPIRA Y RELÁJATE</ion-card-subtitle>
-      <ion-card-title>Respiración guiada</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Explora diferentes técnicas de respiración a tu propio ritmo.</p>
-      <ion-button fill="clear" (click)="irARespiracion(); $event.stopPropagation()">
-        Comenzar ejercicio &rarr;
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Tarjeta 2: Técnica 5-4-3-2-1 -->
-  <ion-card class="exercise-card" (click)="irAAnclaje()">
-    <ion-card-header>
-      <ion-card-subtitle>CONECTA CON EL PRESENTE</ion-card-subtitle>
-      <ion-card-title>Técnica 5-4-3-2-1</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Descubre lo que te rodea utilizando tus cinco sentidos.</p>
-      <ion-button fill="clear" (click)="irAAnclaje(); $event.stopPropagation()">
-        Comenzar ejercicio &rarr;
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
+    <nav class="card-list" aria-label="Ejercicios de bienestar">
+      <app-action-card ruta="/respiracion" icono="leaf-outline" etiqueta="RESPIRA Y RELÁJATE" titulo="Respiración guiada" descripcion="Explora diferentes técnicas de respiración a tu propio ritmo."></app-action-card>
+      <app-action-card ruta="/ambientacion" icono="musical-notes-outline" etiqueta="MÚSICA PARA TU ESPACIO" titulo="Sonidos de ambientación" descripcion="Escucha música instrumental en línea para acompañar un momento de calma."></app-action-card>
+    </nav>
+  </main>
 </ion-content>

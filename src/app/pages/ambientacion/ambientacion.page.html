@@ -1,0 +1,88 @@
+<ion-content>
+  <main class="page-shell">
+    <a class="volver" routerLink="/tabs/tab2"
+      ><ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon>Volver a ejercicios</a
+    >
+    <header class="page-heading">
+      <p class="eyebrow">UN AMBIENTE PARA TI</p>
+      <h1>Sonidos de ambientación</h1>
+      <p>Música instrumental para acompañar un momento de calma. Elige una pista y escucha a un volumen cómodo.</p>
+    </header>
+    <p class="nota">
+      Requiere conexión a internet. Música de
+      <a href="https://www.jamendo.com" target="_blank" rel="noopener noreferrer">Jamendo</a>.
+    </p>
+    <p *ngIf="cargando" role="status">Buscando música para tu espacio…</p>
+    <section class="panel" *ngIf="error" role="alert">
+      <p>{{ error }}</p>
+      <ion-button (click)="cargar()">Volver a intentar</ion-button>
+    </section>
+    <section class="panel" *ngIf="!cargando && !error && !pistas.length">
+      <p>No hay pistas disponibles en este momento.</p>
+      <ion-button (click)="cargar()">Volver a consultar</ion-button>
+    </section>
+
+    <section *ngIf="activa" class="panel reproductor" aria-label="Reproducción actual">
+      <p class="eyebrow">{{ preparando ? 'CARGANDO AUDIO…' : reproduciendo ? 'ESCUCHANDO' : 'EN PAUSA' }}</p>
+      <h2>{{ activa.titulo }}</h2>
+      <p>{{ activa.artista }}</p>
+      <progress [value]="tiempo" [max]="duracion || 1" aria-label="Progreso de la pista"></progress>
+      <div class="tiempos"><span>{{ formatoTiempo(tiempo) }}</span><span>{{ formatoTiempo(duracion) }}</span></div>
+      <p *ngIf="errorAudio" class="error" role="alert">{{ errorAudio }}</p>
+      <ion-button (click)="alternar(activa)"
+        ><ion-icon
+          slot="start"
+          [name]="preparando ? 'close-outline' : reproduciendo ? 'pause-outline' : 'play-outline'"
+          aria-hidden="true"
+        ></ion-icon
+        >{{ preparando ? 'Cancelar carga' : reproduciendo ? 'Pausar' : errorAudio ? 'Reintentar' : 'Reproducir'
+        }}</ion-button
+      >
+    </section>
+
+    <div class="lista">
+      <article class="panel pista" *ngFor="let pista of pistas" [class.seleccionada]="activa?.id === pista.id">
+        <div class="fila">
+          <div class="icono"><ion-icon name="musical-notes-outline" aria-hidden="true"></ion-icon></div>
+          <div class="info">
+            <h2>{{ pista.titulo }}</h2>
+            <p>{{ pista.artista }} · {{ formatoTiempo(pista.duracion) }}</p>
+          </div>
+          <ion-button
+            class="play"
+            fill="clear"
+            (click)="alternar(pista)"
+            [attr.aria-label]="(activa?.id === pista.id && (reproduciendo || preparando) ? 'Pausar ' : 'Reproducir ') + pista.titulo"
+          >
+            <ion-icon
+              slot="icon-only"
+              [name]="activa?.id === pista.id && (reproduciendo || preparando) ? 'pause-outline' : 'play-outline'"
+              aria-hidden="true"
+            ></ion-icon>
+          </ion-button>
+        </div>
+        <div class="creditos">
+          <a [href]="pista.fuenteUrl" target="_blank" rel="noopener noreferrer">Ver en Jamendo</a
+          ><a
+            [href]="pista.licenciaUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'Licencia de ' + pista.titulo"
+            >Licencia</a
+          >
+        </div>
+      </article>
+    </div>
+    <audio
+      #audio
+      preload="none"
+      (loadedmetadata)="actualizarTiempo()"
+      (timeupdate)="actualizarTiempo()"
+      (playing)="alReproducir()"
+      (pause)="alPausar()"
+      (waiting)="alEsperar()"
+      (ended)="alTerminar()"
+      (error)="errorReproduccion()"
+    ></audio>
+  </main>
+</ion-content>

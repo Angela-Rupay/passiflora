@@ -14,6 +14,8 @@
       <p>Tu espacio de calma y regulación emocional</p>
     </div>
 
+    <p class="aviso">Este resultado es orientativo y no sustituye un diagnóstico profesional.</p>
+
     <div *ngIf="!resultadoVisible">
 
       <div class="saludo">
@@ -65,6 +67,8 @@
       <div class="progreso">
       {{ cantidadRespondidas }} de 7 preguntas respondidas
       </div>
+
+      <p *ngIf="cantidadRespondidas > 0 && !todasRespondidas" role="status" style="color: var(--ion-color-danger)">Completa todo el cuestionario, por favor.</p>
 
       <ion-button
         expand="block"

@@ -1,18 +1,36 @@
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { 
-  IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton,
-  IonButton, IonIcon, IonInput, IonSelect, IonSelectOption,
-  IonProgressBar, IonToast, NavController
+import {
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonButtons,
+  IonBackButton,
+  IonButton,
+  IonIcon,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonProgressBar,
+  IonToast,
+  NavController,
+  AlertController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { 
-  cameraOutline, handLeftOutline, volumeHighOutline, 
-  restaurantOutline, roseOutline, checkmarkCircleOutline,
-  micOutline, trashOutline
+import {
+  cameraOutline,
+  handLeftOutline,
+  volumeHighOutline,
+  restaurantOutline,
+  roseOutline,
+  checkmarkCircleOutline,
+  micOutline,
+  trashOutline,
 } from 'ionicons/icons';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { GrabacionService } from '../../services/grabacion.service';
+import { CamaraService } from '../../services/camara.service';
 
 @Component({
   selector: 'app-anclaje',
@@ -20,39 +38,57 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
   styleUrls: ['./anclaje.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, FormsModule, IonContent, IonHeader, IonToolbar, IonTitle, 
-    IonButtons, IonBackButton, IonButton, IonIcon, IonInput, 
-    IonSelect, IonSelectOption, IonProgressBar, IonToast
-  ]
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonBackButton,
+    IonButton,
+    IonIcon,
+    IonInput,
+    IonSelect,
+    IonSelectOption,
+    IonProgressBar,
+    IonToast,
+  ],
 })
 export class AnclajePage implements OnDestroy {
-
   pasoActual: number = 5;
   fotosVista: string[] = [];
+  abriendoCamara = false;
+  private versionFoto = 0;
+  private avisoCamaraAceptado = false;
+  private avisoMicrofonoAceptado = false;
+  private versionAudio = 0;
+  solicitandoMicrofono = false;
+  indiceGrabando: number | null = null;
+  readonly opcionesSelector = { cssClass: 'selector-anclaje' };
 
   // 4 - TACTO
   objetosTacto = [
     { nombre: '', textura: '', temperatura: '' },
     { nombre: '', textura: '', temperatura: '' },
     { nombre: '', textura: '', temperatura: '' },
-    { nombre: '', textura: '', temperatura: '' }
+    { nombre: '', textura: '', temperatura: '' },
   ];
 
   // 3 - OÍDO
   sonidosOido = [
     { nombre: '', audioUrl: '', grabando: false },
     { nombre: '', audioUrl: '', grabando: false },
-    { nombre: '', audioUrl: '', grabando: false }
+    { nombre: '', audioUrl: '', grabando: false },
   ];
-  mediaRecorder: any;
-  audioChunks: any[] = [];
+  private abortarAudio?: AbortController;
+  private flujoAudio?: MediaStream;
   tiempoRestanteGrabacion: number = 5;
-  intervaloTimer: any;
 
   // 2 - GUSTO
   saboresGusto = [
     { objeto: '', sabor: '' },
-    { objeto: '', sabor: '' }
+    { objeto: '', sabor: '' },
   ];
   opcionesSabores = ['Dulce', 'Salado', 'Amargo', 'Ácido', 'Umami'];
 
@@ -62,11 +98,22 @@ export class AnclajePage implements OnDestroy {
   mostrarToast: boolean = false;
   mensajeToast: string = '';
 
-  constructor(private navCtrl: NavController) {
-    addIcons({ 
-      cameraOutline, handLeftOutline, volumeHighOutline, 
-      restaurantOutline, roseOutline, checkmarkCircleOutline,
-      micOutline, trashOutline
+  constructor(
+    private navCtrl: NavController,
+    private camara: CamaraService,
+    private grabacion: GrabacionService,
+    private alertas: AlertController,
+    private cambios: ChangeDetectorRef,
+  ) {
+    addIcons({
+      cameraOutline,
+      handLeftOutline,
+      volumeHighOutline,
+      restaurantOutline,
+      roseOutline,
+      checkmarkCircleOutline,
+      micOutline,
+      trashOutline,
     });
   }
 
@@ -74,102 +121,176 @@ export class AnclajePage implements OnDestroy {
     this.limpiarRecursosTemporales();
   }
 
-  // --- CAPTURA DE CÁMARA NATIVA O WEB ---
   async capturarFotoNativa() {
-    if (this.fotosVista.length >= 5) return;
-
+    if (this.abriendoCamara || this.fotosVista.length >= 5) return;
+    this.abriendoCamara = true;
+    const version = this.versionFoto;
     try {
-      // Intenta abrir la cámara nativa del dispositivo
-      const image = await Camera.getPhoto({
-        quality: 85,
-        allowEditing: false,
-        resultType: CameraResultType.Uri,
-        source: CameraSource.Camera
-      });
-
-      if (image.webPath) {
-        this.fotosVista.push(image.webPath);
+      if (!this.avisoCamaraAceptado) {
+        const aviso = await this.alertas.create({
+          header: 'Permiso para usar la cámara',
+          message:
+            'Para fotografiar los objetos necesitamos tu autorización. Las fotos se usan solo durante este ejercicio y no se suben a tu cuenta.',
+          cssClass: 'alerta-passiflora',
+          buttons: [
+            { text: 'Ahora no', role: 'cancel' },
+            { text: 'Aceptar', role: 'confirm' },
+          ],
+        });
+        await aviso.present();
+        const resultado = await aviso.onDidDismiss();
+        if (resultado.role !== 'confirm' || version !== this.versionFoto) return;
+      }
+      const foto = await this.camara.capturar();
+      if (version === this.versionFoto && foto && this.fotosVista.length < 5) {
+        this.fotosVista.push(foto);
+        this.avisoCamaraAceptado = true;
       }
     } catch (error) {
-      // Si se cancela o se prueba en web sin plugin nativo disponible, solicita archivo
-      console.log('Cámara nativa no disponible o cancelada por el usuario.', error);
+      if (version === this.versionFoto)
+        this.notificar(
+          error instanceof Error
+            ? error.message
+            : 'No pudimos abrir la cámara. Revisa sus permisos e inténtalo de nuevo.',
+        );
+    } finally {
+      if (version === this.versionFoto) {
+        this.abriendoCamara = false;
+        this.cambios.markForCheck();
+      }
     }
   }
 
-  capturarFotoWeb(event: any) {
-    const archivo = event.target.files[0];
-    if (archivo && this.fotosVista.length < 5) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.fotosVista.push(e.target.result);
-      };
-      reader.readAsDataURL(archivo);
-    }
+  ionViewWillLeave() {
+    this.versionFoto++;
+    this.abriendoCamara = false;
+    this.avisoCamaraAceptado = false;
+    this.avisoMicrofonoAceptado = false;
+    this.cancelarGrabacion();
+  }
+
+  @HostListener('document:visibilitychange') alOcultar() {
+    if (document.hidden) this.cancelarGrabacion();
   }
 
   eliminarFoto(index: number) {
     this.fotosVista.splice(index, 1);
   }
 
-  // --- PASO 3: OÍDO ---
   async iniciarGrabacion(index: number) {
+    if (this.solicitandoMicrofono || this.indiceGrabando !== null || !this.sonidosOido[index]) return;
+    this.solicitandoMicrofono = true;
+    const version = this.versionAudio;
+    let flujo: MediaStream | undefined;
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      this.mediaRecorder = new MediaRecorder(stream);
-      this.audioChunks = [];
+      if (!this.avisoMicrofonoAceptado) {
+        const aviso = await this.alertas.create({
+          header: 'Permiso para usar el micrófono',
+          message:
+            'Para grabar los sonidos necesitamos tu autorización. Las grabaciones se usan solo en este ejercicio y no se suben a tu cuenta.',
+          cssClass: 'alerta-passiflora',
+          buttons: [
+            { text: 'Ahora no', role: 'cancel' },
+            { text: 'Aceptar', role: 'confirm' },
+          ],
+        });
+        await aviso.present();
+        const respuesta = await aviso.onDidDismiss();
+        if (respuesta.role !== 'confirm' || version !== this.versionAudio) return;
+      }
+      if (!navigator.mediaDevices?.getUserMedia || typeof AudioContext === 'undefined') {
+        throw new Error(
+          'La grabación no está disponible aquí. Prueba la app instalada o un navegador actualizado con HTTPS.',
+        );
+      }
+      flujo = await navigator.mediaDevices.getUserMedia({ audio: true });
+      if (version !== this.versionAudio) {
+        flujo.getTracks().forEach((pista) => pista.stop());
+        return;
+      }
+      this.flujoAudio = flujo;
+      this.abortarAudio = new AbortController();
+      this.indiceGrabando = index;
       this.sonidosOido[index].grabando = true;
       this.tiempoRestanteGrabacion = 5;
-
-      this.mediaRecorder.ondataavailable = (event: any) => {
-        this.audioChunks.push(event.data);
-      };
-
-      this.mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(this.audioChunks, { type: 'audio/mp3' });
-        this.sonidosOido[index].audioUrl = URL.createObjectURL(audioBlob);
-        this.sonidosOido[index].grabando = false;
-        stream.getTracks().forEach(track => track.stop());
-      };
-
-      this.mediaRecorder.start();
-
-      this.intervaloTimer = setInterval(() => {
-        this.tiempoRestanteGrabacion--;
-        if (this.tiempoRestanteGrabacion <= 0) {
-          clearInterval(this.intervaloTimer);
-          if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-            this.mediaRecorder.stop();
+      await this.grabacion.iniciar(
+        flujo,
+        this.abortarAudio.signal,
+        (segundos) => {
+          if (version !== this.versionAudio) return;
+          this.tiempoRestanteGrabacion = Math.max(0, Math.ceil(5 - segundos));
+          this.cambios.markForCheck();
+        },
+        (audio) => {
+          if (version !== this.versionAudio) return;
+          if (this.sonidosOido[index].audioUrl) URL.revokeObjectURL(this.sonidosOido[index].audioUrl);
+          this.sonidosOido[index].audioUrl = URL.createObjectURL(audio);
+          this.cancelarGrabacion();
+          this.cambios.markForCheck();
+        },
+        () => {
+          if (version === this.versionAudio) {
+            this.cancelarGrabacion();
+            this.notificar('No pudimos completar la grabación. Inténtalo de nuevo.');
           }
-        }
-      }, 1000);
-
-    } catch (err) {
-      this.notificar('No se pudo acceder al micrófono del dispositivo.');
+        },
+      );
+      if (version === this.versionAudio) this.avisoMicrofonoAceptado = true;
+    } catch (error) {
+      flujo?.getTracks().forEach((pista) => pista.stop());
+      if (version !== this.versionAudio) return;
+      this.cancelarGrabacion();
+      const nombre = typeof error === 'object' && error !== null && 'name' in error ? String(error.name) : '';
+      this.notificar(
+        nombre === 'NotAllowedError' || nombre === 'SecurityError'
+          ? 'No se autorizó el micrófono. Puedes habilitarlo en Ajustes → Aplicaciones → Passiflora → Permisos → Micrófono.'
+          : error instanceof Error
+            ? error.message
+            : 'No pudimos acceder al micrófono.',
+      );
+    } finally {
+      if (version === this.versionAudio) this.solicitandoMicrofono = false;
+      this.cambios.markForCheck();
     }
+  }
+
+  cancelarGrabacion() {
+    this.versionAudio++;
+    this.abortarAudio?.abort();
+    this.abortarAudio = undefined;
+    this.flujoAudio?.getTracks().forEach((pista) => pista.stop());
+    this.flujoAudio = undefined;
+    this.sonidosOido.forEach((sonido) => (sonido.grabando = false));
+    this.solicitandoMicrofono = false;
+    this.indiceGrabando = null;
   }
 
   // --- NAVEGACIÓN ---
   siguientePaso() {
+    if (this.solicitandoMicrofono || this.indiceGrabando !== null) {
+      this.notificar('Espera a que termine la grabación o cancélala.');
+      return;
+    }
     if (this.pasoActual === 5 && this.fotosVista.length < 5) {
       this.notificar('Captura 5 fotos de objetos que veas a tu alrededor.');
       return;
     }
     if (this.pasoActual === 4) {
-      const incomp = this.objetosTacto.some(o => !o.nombre || !o.textura || !o.temperatura);
+      const incomp = this.objetosTacto.some((o) => !o.nombre || !o.textura || !o.temperatura);
       if (incomp) {
         this.notificar('Completa los detalles de los 4 objetos.');
         return;
       }
     }
     if (this.pasoActual === 3) {
-      const incomp = this.sonidosOido.some(s => !s.nombre);
+      const incomp = this.sonidosOido.some((s) => !s.nombre);
       if (incomp) {
         this.notificar('Asigna un nombre a los 3 sonidos.');
         return;
       }
     }
     if (this.pasoActual === 2) {
-      const incomp = this.saboresGusto.some(s => !s.objeto || !s.sabor);
+      const incomp = this.saboresGusto.some((s) => !s.objeto || !s.sabor);
       if (incomp) {
         this.notificar('Selecciona el sabor de los 2 elementos.');
         return;
@@ -188,6 +309,7 @@ export class AnclajePage implements OnDestroy {
   }
 
   anteriorPaso() {
+    this.cancelarGrabacion();
     if (this.pasoActual < 5 && this.pasoActual > 0) {
       this.pasoActual++;
     }
@@ -195,18 +317,25 @@ export class AnclajePage implements OnDestroy {
 
   finalizarEjercicio() {
     this.limpiarRecursosTemporales();
-    this.navCtrl.navigateBack('/tabs/tab2');
+    this.navCtrl.navigateBack('/panico');
   }
 
   limpiarRecursosTemporales() {
+    this.versionFoto++;
+    this.abriendoCamara = false;
     this.fotosVista = [];
-    this.sonidosOido.forEach(s => {
+    this.avisoCamaraAceptado = false;
+    this.avisoMicrofonoAceptado = false;
+    this.cancelarGrabacion();
+    this.sonidosOido.forEach((s) => {
       if (s.audioUrl) URL.revokeObjectURL(s.audioUrl);
+      s.audioUrl = '';
     });
   }
 
   notificar(msj: string) {
     this.mensajeToast = msj;
     this.mostrarToast = true;
+    this.cambios.markForCheck();
   }
 }

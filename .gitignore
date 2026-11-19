@@ -74,3 +74,6 @@ Thumbs.db
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Notas manuales de pruebas (no forman parte de la entrega)
+/docs/prueba-*.md

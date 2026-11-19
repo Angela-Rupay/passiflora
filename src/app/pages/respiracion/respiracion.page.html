@@ -1,174 +1,101 @@
-<ion-content [fullscreen]="true">
-
-  <div class="respiracion-container">
-
+<ion-content>
+  <main class="page-shell">
     <button class="volver" (click)="volver()">
-      <ion-icon name="arrow-back-outline"></ion-icon>
-      Volver a ejercicios
+      <ion-icon name="arrow-back-outline" aria-hidden="true"></ion-icon> Volver
     </button>
-
-    <header class="encabezado">
-      <div class="icono-encabezado">
-        <ion-icon name="leaf-outline"></ion-icon>
-      </div>
-
-      <span class="etiqueta">PASSIFLORA · BIENESTAR</span>
+    <header class="page-heading">
+      <p class="eyebrow">PASSIFLORA · BIENESTAR</p>
       <h1>Respira a tu ritmo</h1>
-
-      <p>
-        Regálate unos minutos. No hay prisa,
-        encuentra el ritmo que te resulte cómodo.
-      </p>
+      <p>Regálate unos minutos. Elige un ritmo cómodo y respira sin forzarte.</p>
     </header>
 
-    <!-- SELECTOR DE EJERCICIOS -->
-
     <section *ngIf="!ejercicioSeleccionado" class="selector">
-
       <h2>Elige tu ejercicio</h2>
-
-      <button
-        class="ejercicio-card"
-        *ngFor="let ejercicio of ejercicios"
-        (click)="seleccionarEjercicio(ejercicio)"
-      >
-        <div class="card-icono">
-          <ion-icon name="leaf-outline"></ion-icon>
-        </div>
-
-        <div class="card-contenido">
-          <h3>{{ ejercicio.nombre }}</h3>
-          <p>{{ ejercicio.descripcion }}</p>
-        </div>
-
-        <span class="flecha">›</span>
-      </button>
-
+      <div class="lista-ejercicios">
+        <button class="ejercicio-card" *ngFor="let ejercicio of ejercicios" (click)="seleccionarEjercicio(ejercicio)">
+          <svg class="ilustracion" viewBox="0 0 80 80" aria-hidden="true" [ngSwitch]="ejercicio.id">
+            <g *ngSwitchCase="'caja'">
+              <rect x="15" y="15" width="50" height="50" rx="5" />
+              <circle cx="40" cy="15" r="5" class="relleno" />
+            </g>
+            <g *ngSwitchCase="'478'">
+              <circle cx="40" cy="40" r="28" />
+              <text x="40" y="45">4·7·8</text>
+            </g>
+            <g *ngSwitchCase="'suspiro'">
+              <path d="M10 45 Q20 10 30 40 Q38 16 45 38 Q58 65 70 45" />
+              <path d="M12 60 H67" />
+            </g>
+            <g *ngSwitchCase="'diafragmatica'">
+              <path d="M25 12 Q40 20 55 12 L64 62 Q40 76 16 62 Z" />
+              <ellipse cx="40" cy="49" rx="17" ry="13" />
+            </g>
+          </svg>
+          <span class="contenido"><strong>{{ ejercicio.nombre }}</strong><span>{{ ejercicio.descripcion }}</span></span>
+          <span class="flecha" aria-hidden="true">›</span>
+        </button>
+      </div>
     </section>
-
-    <!-- SESIÓN DE RESPIRACIÓN -->
 
     <section *ngIf="ejercicioSeleccionado" class="sesion">
-
-      <button
-        class="cambiar"
-        (click)="elegirOtroEjercicio()"
-      >
-        ← Cambiar ejercicio
-      </button>
-
+      <ion-button class="elegir" fill="outline" (click)="elegirOtroEjercicio()">Elegir otro ejercicio</ion-button>
       <h2>{{ ejercicioSeleccionado.nombre }}</h2>
-
-      <p class="descripcion">
-        {{ ejercicioSeleccionado.descripcion }}
-      </p>
-
-      <!-- CÍRCULO ANIMADO -->
-
-        <div class="zona-animacion">
-
-          <div
-            class="circulo"
-            [ngClass]="[
-              ejecutando || pausado ? claseAnimacion : 'reposo',
-              pausado ? 'pausado' : ''
-            ]"
-            [style.--phase-duration]="duracionFase + 's'"
-          >
-
-            <div class="circulo-interior">
-
-              <ng-container *ngIf="ejecutando || pausado">
-                <span class="fase">{{ faseNombre }}</span>
-                <strong>{{ tiempoRestante }}</strong>
-              </ng-container>
-
-              <span *ngIf="!ejecutando && !finalizado">
-                {{ pausado ? 'En pausa' : 'Preparada' }}
-              </span>
-
-              <span *ngIf="finalizado" class="completado">
-                ¡Muy bien! 💜
-              </span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      <p class="indicacion" *ngIf="!ejecutando && !finalizado">
-        {{ pausado
-          ? 'Puedes continuar cuando quieras.'
-          : 'Cuando estés preparada, comienza.'
-        }}
-      </p>
-
-      <p class="indicacion" *ngIf="ejecutando">
-        Sigue el movimiento del círculo.
-      </p>
-
-      <p class="indicacion" *ngIf="finalizado">
-        Has terminado este ejercicio. Gracias por regalarte este momento.
-      </p>
-
-      <div class="progreso">
-        <span>Ciclos completados</span>
-        <strong>{{ ciclos }} / {{ totalCiclos }}</strong>
+      <p class="instrucciones">{{ ejercicioSeleccionado.instrucciones }}</p>
+      <div class="fase-ejercicio">
+        <span *ngIf="!ejecutando && !pausado && !finalizado">A tu ritmo</span>
+        <span *ngIf="ejecutando || pausado">{{ faseNombre }}{{ pausado ? ' · En pausa' : '' }}</span>
+        <span *ngIf="finalizado">{{ terminadoAntes ? 'Gracias por cuidarte' : 'Ejercicio completado' }}</span>
       </div>
-
-      <div class="barra-progreso">
-        <div
-          class="barra-progreso-valor"
-          [style.width]="(ciclos / totalCiclos * 100) + '%'"
-        ></div>
+      <div class="zona-animacion" [class.en-pausa]="pausado">
+        <svg
+          *ngIf="ejercicioSeleccionado.id === 'caja'; else animacionRedonda"
+          viewBox="0 0 200 200"
+          class="guia"
+          aria-hidden="true"
+        >
+          <rect class="contorno" x="20" y="20" width="160" height="160" pathLength="100" />
+          <path
+            class="trazo"
+            d="M20 20 H180 V180 H20 Z"
+            pathLength="100"
+            stroke-dasharray="100"
+            [attr.stroke-dashoffset]="100 * (1 - progresoCuadrado)"
+          />
+          <circle class="marcador" [attr.cx]="puntoCuadrado.x" [attr.cy]="puntoCuadrado.y" r="7" />
+        </svg>
+        <ng-template #animacionRedonda>
+          <svg class="guia" viewBox="0 0 200 200" aria-hidden="true">
+            <g *ngIf="ejercicioSeleccionado.id === 'diafragmatica'; else circulo" class="abdomen">
+              <path class="contorno" d="M65 20 Q100 35 135 20 L160 165 Q100 185 40 165 Z" />
+              <ellipse class="pulso" cx="100" cy="110" [attr.rx]="60 * escala" [attr.ry]="49 * escala" />
+            </g>
+            <ng-template #circulo><circle class="pulso" cx="100" cy="100" [attr.r]="86 * escala" /></ng-template>
+          </svg>
+        </ng-template>
+        <div class="contador"><strong *ngIf="ejecutando || pausado">{{ tiempoRestante }}</strong></div>
       </div>
-
-      <!-- CONTROLES -->
-
+      <p class="estado" role="status">
+        {{ finalizado ? (terminadoAntes ? 'Terminaste cuando lo necesitabas. Está bien.' : 'Has completado la práctica.
+        Regresa a tu respiración natural.') : pausado ? 'Puedes continuar cuando quieras.' : ejecutando ? 'Acompaña la
+        guía sin forzar la respiración.' : 'Cuando te sientas listo, puedes comenzar.' }}
+      </p>
+      <div class="progreso-info">
+        <span>{{ ciclos }} / {{ totalCiclos }} ciclos</span><span>{{ segundosRestantes }} s restantes</span>
+      </div>
+      <progress [value]="progreso" max="1" aria-label="Progreso del ejercicio"></progress>
       <div class="controles">
-
-        <ion-button
-          *ngIf="!ejecutando"
-          expand="block"
-          (click)="iniciar()"
+        <ion-button expand="block" *ngIf="!ejecutando" (click)="iniciar()"
+          ><ion-icon slot="start" [name]="finalizado ? 'refresh-outline' : 'play-outline'" aria-hidden="true"></ion-icon
+          >{{ finalizado ? 'Repetir ejercicio' : pausado ? 'Continuar' : 'Comenzar' }}</ion-button
         >
-          <ion-icon
-            slot="start"
-            [name]="finalizado ? 'refresh-outline' : 'play-outline'"
-          ></ion-icon>
-
-          {{ finalizado ? 'Repetir ejercicio' :
-             pausado ? 'Continuar' : 'Comenzar' }}
-        </ion-button>
-
-        <ion-button
-          *ngIf="ejecutando"
-          expand="block"
-          (click)="pausar()"
+        <ion-button expand="block" *ngIf="ejecutando" (click)="pausar()"
+          ><ion-icon slot="start" name="pause-outline" aria-hidden="true"></ion-icon>Pausar</ion-button
         >
-          <ion-icon name="pause-outline" slot="start"></ion-icon>
-          Pausar
-        </ion-button>
-
-        <ion-button
-          *ngIf="ejecutando || pausado"
-          expand="block"
-          fill="outline"
-          (click)="finalizar()"
+        <ion-button expand="block" fill="outline" *ngIf="ejecutando || pausado" (click)="finalizar()"
+          >Terminar por ahora</ion-button
         >
-          Finalizar
-        </ion-button>
-
       </div>
-
-      <p class="nota">
-        No fuerces la respiración. Si sientes incomodidad,
-        detente y respira con normalidad.
-      </p>
-
+      <p class="nota">No fuerces la respiración. Si sientes incomodidad o mareo, detente y respira con normalidad.</p>
     </section>
-
-  </div>
-
+  </main>
 </ion-content>

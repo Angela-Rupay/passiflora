@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:width="48dp" android:height="48dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/ic_launcher_background" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
+    <item android:width="44dp" android:height="44dp" android:gravity="center">
+        <bitmap android:src="@drawable/flor_passiflora" android:gravity="fill" android:filter="true" />
+    </item>
+</layer-list>

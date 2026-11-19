@@ -1,110 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { 
-  IonContent, IonItem, IonInput, IonButton, 
-  IonIcon, IonSegment, IonSegmentButton, IonLabel,
-  ToastController, LoadingController 
-} from '@ionic/angular';
+import { Router, RouterLink } from '@angular/router';
+import { IonContent, IonInput, IonButton, IonIcon, ToastController } from '@ionic/angular';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
-import { AuthService } from '../../../services/auth.service';
 import { addIcons } from 'ionicons';
-import { flowerOutline } from 'ionicons/icons';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { AuthService } from '../../../services/auth.service';
+import { codigoAuth, mensajeAuth, PATRON_CORREO } from '../../../shared/auth-validation';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, IonContent, IonItem, 
-    IonInput, IonButton, IonIcon, IonSegment, IonSegmentButton, IonLabel
-  ]
+  selector: 'app-login', templateUrl: './login.page.html', styleUrls: ['./login.page.scss'],
+  standalone: true, imports: [CommonModule, FormsModule, RouterLink, IonContent, IonInput, IonButton, IonIcon]
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
+  correoIngreso = '';
+  claveIngreso = '';
+  mostrarClave = false;
+  ingresando = false;
+  errorCorreo = '';
+  errorClave = '';
+  errorGeneral = '';
+  private cancelarSesion?: () => void;
 
-  seccionActual: string = 'ingreso';
-  correoIngreso: string = '';
-  claveIngreso: string = '';
-  nombreRegistro: string = '';
-  correoRegistro: string = '';
-  claveRegistro: string = '';
-  confirmarClaveRegistro: string = '';
+  constructor(private auth: Auth, private authService: AuthService, private router: Router,
+    private toastController: ToastController, private cambios: ChangeDetectorRef, private injector: Injector) { addIcons({ eyeOutline, eyeOffOutline }); }
 
-  constructor(
-    private auth: Auth,
-    private authService: AuthService,
-    private router: Router,
-    private toastController: ToastController,
-    private loadingController: LoadingController
-  ) {
-    addIcons({ flowerOutline });
-  }
+  get correoValido(): boolean { return PATRON_CORREO.test(this.correoIngreso.trim()); }
 
   ngOnInit() {
-    // Mantiene la sesión persistente: si ya hay sesión iniciada, entra directo a la app
-    onAuthStateChanged(this.auth, (usuario) => {
-      if (usuario) {
-        this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+    this.cancelarSesion = runInInjectionContext(this.injector, () => onAuthStateChanged(this.auth, usuario => {
+      if (usuario && !this.ingresando && this.router.url.split(/[?#]/)[0] === '/login') {
+        void this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
       }
-    });
+    }));
   }
+
+  ionViewDidLeave() { this.mostrarClave = false; }
+
+  ngOnDestroy() { this.cancelarSesion?.(); }
+
+  limpiarErrores() { this.errorCorreo = ''; this.errorClave = ''; this.errorGeneral = ''; }
 
   async alIniciarSesion() {
-    if (!this.correoIngreso || !this.claveIngreso) {
-      this.mostrarMensaje('Por favor, completa todos los campos.');
-      return;
-    }
-
-    const cargando = await this.loadingController.create({ message: 'Ingresando...' });
-    await cargando.present();
-
+    if (this.ingresando || !this.correoValido || !this.claveIngreso) return;
+    this.limpiarErrores();
+    this.ingresando = true;
     try {
-      await this.authService.iniciarSesion(this.correoIngreso, this.claveIngreso);
-      await cargando.dismiss();
-      this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
+      await this.authService.iniciarSesion(this.correoIngreso.trim(), this.claveIngreso);
+      this.claveIngreso = '';
+      await this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
     } catch (error) {
-      await cargando.dismiss();
-      this.mostrarMensaje('Error al ingresar: Verifique sus credenciales.');
+      const codigo = codigoAuth(error);
+      if (codigo === 'auth/user-not-found' || codigo === 'auth/invalid-email') {
+        this.errorCorreo = mensajeAuth(error);
+      } else if (codigo === 'auth/wrong-password') {
+        this.errorClave = mensajeAuth(error);
+        const toast = await this.toastController.create({ message: this.errorClave, duration: 3500, cssClass: 'toast-passiflora' });
+        await toast.present();
+      } else {
+        this.errorGeneral = mensajeAuth(error);
+      }
+    } finally {
+      this.ingresando = false;
+      this.cambios.markForCheck();
     }
-  }
-
-  async alRegistrar() {
-    if (!this.nombreRegistro || !this.correoRegistro || !this.claveRegistro) {
-      this.mostrarMensaje('Por favor, completa todos los campos requeridos.');
-      return;
-    }
-
-    if (this.claveRegistro !== this.confirmarClaveRegistro) {
-      this.mostrarMensaje('Las contraseñas no coinciden.');
-      return;
-    }
-
-    const cargando = await this.loadingController.create({ message: 'Creando cuenta...' });
-    await cargando.present();
-
-    try {
-      await this.authService.registrar(
-        this.nombreRegistro,
-        this.correoRegistro,
-        this.claveRegistro
-      );
-      await cargando.dismiss();
-      this.mostrarMensaje('¡Cuenta creada con éxito!');
-      this.router.navigateByUrl('/tabs/tab1', { replaceUrl: true });
-    } catch (error) {
-      await cargando.dismiss();
-      this.mostrarMensaje('Error al registrar cuenta.');
-    }
-  }
-
-  async mostrarMensaje(mensaje: string) {
-    const toast = await this.toastController.create({
-      message: mensaje,
-      duration: 3000,
-      position: 'bottom'
-    });
-    toast.present();
   }
 }

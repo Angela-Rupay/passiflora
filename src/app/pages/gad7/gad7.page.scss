@@ -180,3 +180,6 @@ ion-button[disabled] {
   text-align: center;
   margin: 20px 8px;
 }
+
+.salida-gad { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+.salida-gad ion-button { --color: var(--color-primario); min-height: 44px; }

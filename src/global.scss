@@ -171,3 +171,18 @@ ion-action-sheet.selector-anclaje {
   button.action-sheet-selected { color: var(--color-primario); font-weight: 800; background: var(--bg-icono); }
   .action-sheet-cancel { color: var(--color-primario); font-weight: 800; }
 }
+
+/* Capacitor 8 proporciona estos insets también en WebViews de Android antiguos.
+   El marco reserva las barras del sistema una sola vez, para todas las rutas. */
+ion-app {
+  top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+  width: auto;
+  height: auto;
+  --ion-safe-area-top: 0px;
+  --ion-safe-area-right: 0px;
+  --ion-safe-area-bottom: 0px;
+  --ion-safe-area-left: 0px;
+}

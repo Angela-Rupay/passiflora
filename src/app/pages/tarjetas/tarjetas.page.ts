@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonButton, IonTextarea, IonToast, AlertController } from '@ionic/angular';
+import { IonContent, IonButton, IonTextarea, IonToast, AlertController } from '@ionic/angular';
 import { TarjetaRealidad, TarjetasService } from '../../services/tarjetas.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { TarjetaRealidad, TarjetasService } from '../../services/tarjetas.servic
   standalone: true,
   templateUrl: './tarjetas.page.html',
   styleUrls: ['./tarjetas.page.scss'],
-  imports: [CommonModule, FormsModule, RouterLink, IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonButton, IonTextarea, IonToast]
+  imports: [CommonModule, FormsModule, RouterLink, IonContent, IonButton, IonTextarea, IonToast]
 })
 export class TarjetasPage implements OnInit, OnDestroy {
   tarjetas: TarjetaRealidad[] = [];

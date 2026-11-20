@@ -12,3 +12,11 @@ ion-textarea { --color: var(--texto-principal); --placeholder-color: var(--texto
 .acciones { display: flex; flex-wrap: wrap; gap: 8px; }
 ion-button { --background: var(--color-primario); --background-hover: var(--color-primario); --background-focused: var(--color-primario); --background-activated: var(--color-primario); --color: var(--texto-sobre-primario); --border-radius: 16px; min-height: 46px; font-weight: 700; text-transform: none; }
 ion-button[fill="clear"], ion-button[fill="outline"] { --background: transparent; --background-hover: var(--bg-icono); --background-focused: var(--bg-icono); --background-activated: var(--bg-icono); --color: var(--color-primario); --border-color: var(--color-primario); }
+
+.volver-passiflora {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px;
+  margin-bottom: 24px; color: var(--color-primario); font-size: 1rem;
+  font-weight: 800; text-decoration: none; border-radius: 12px;
+}
+.volver-passiflora svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.volver-passiflora:focus-visible { outline: 3px solid var(--color-primario); outline-offset: 4px; }

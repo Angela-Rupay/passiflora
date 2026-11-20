@@ -205,3 +205,5 @@
 ion-select { --highlight-color-valid: var(--color-primario); --highlight-color-focused: var(--color-primario); --placeholder-color: var(--texto-secundario); }
 ion-select::part(label) { color: var(--texto-principal); }
 .box-grabacion { flex-wrap: wrap; gap: 8px; }
+
+.omitir-paso { --color: var(--color-primario); min-height: 44px; text-transform: none; }

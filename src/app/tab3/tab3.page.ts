@@ -165,11 +165,13 @@ export class Tab3Page implements OnInit, OnDestroy {
   }
 
   seleccionarEmocion(emocion: EmocionBase) {
+    if (!this.enLinea) return;
     this.emocionSeleccionada = emocion;
     this.subemocionSeleccionada = '';
   }
 
   seleccionarSubemocion(sub: string) {
+    if (!this.enLinea) return;
     this.subemocionSeleccionada = sub;
   }
 
@@ -187,7 +189,7 @@ export class Tab3Page implements OnInit, OnDestroy {
       return;
     }
     if (!this.enLinea) {
-      this.mostrarNotificacion('Sin conexión. Conservamos tu selección para guardarla cuando vuelvas a conectarte.');
+      this.mostrarNotificacion('En el momento no tienes conexión a internet, no podemos guardar tu registro.');
       return;
     }
     if (!this.emocionSeleccionada || !this.emocionSeleccionada.subemociones.includes(this.subemocionSeleccionada)) {
@@ -250,6 +252,30 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.cambios.markForCheck();
       },
     });
+  }
+
+  private origenSemanas?: RegistroEmocional[];
+  private semanas: { etiqueta: string; registros: RegistroEmocional[] }[] = [];
+
+  get historialPorSemanas() {
+    if (this.origenSemanas === this.historialRegistros) return this.semanas;
+    this.origenSemanas = this.historialRegistros;
+    const grupos = new Map<string, { etiqueta: string; registros: RegistroEmocional[] }>();
+    const formato = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
+    for (const registro of [...this.historialRegistros].sort((a, b) => b.fecha.localeCompare(a.fecha))) {
+      const [anio, mes, dia] = registro.fecha.split('-').map(Number);
+      const lunes = new Date(anio, mes - 1, dia, 12);
+      lunes.setDate(lunes.getDate() - (lunes.getDay() + 6) % 7);
+      const clave = `${lunes.getFullYear()}-${lunes.getMonth()}-${lunes.getDate()}`;
+      if (!grupos.has(clave)) {
+        const domingo = new Date(lunes);
+        domingo.setDate(domingo.getDate() + 6);
+        grupos.set(clave, { etiqueta: `${formato.format(lunes)} – ${formato.format(domingo)}`, registros: [] });
+      }
+      grupos.get(clave)!.registros.push(registro);
+    }
+    this.semanas = [...grupos.values()];
+    return this.semanas;
   }
 
   limpiarFormulario() {

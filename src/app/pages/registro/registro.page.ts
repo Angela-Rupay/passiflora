@@ -1,3 +1,4 @@
+import { ThemeToggleComponent } from '../../shared/components/theme-toggle.component';
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -14,7 +15,7 @@ import { codigoAuth, mensajeAuth, nombreValido, PATRON_CLAVE, PATRON_CORREO } fr
   templateUrl: './registro.page.html',
   styleUrls: ['./registro.page.scss'],
   standalone: true,
-  imports: [
+  imports: [ThemeToggleComponent,
     CommonModule,
     ReactiveFormsModule,
     RouterLink,

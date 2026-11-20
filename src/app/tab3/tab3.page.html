@@ -9,7 +9,7 @@
     </header>
 
     <p *ngIf="!enLinea" class="estado-sincronizacion" role="status">
-      Sin conexión. Espera a reconectarte para guardar; el historial puede no estar actualizado.
+      😔 En el momento no tienes conexión a internet, no podemos guardar tu registro.
     </p>
     <p *ngIf="!cargando && !uid" class="estado-sincronizacion" role="status">
       Inicia sesión para ver y guardar tu diario.
@@ -28,6 +28,7 @@
         </ion-datetime>
       </div>
 
+      <ng-container *ngIf="enLinea">
       <!-- Paso 1: Seleccionar Emoción Principal con Caritas -->
       <div class="tarjeta-contenedor ion-margin-top">
         <h3 class="subtitulo-seccion">1. ¿Cómo te sientes hoy?</h3>
@@ -102,6 +103,7 @@
           {{ guardando ? 'Guardando…' : 'Guardar en mi diario ✨' }}
         </ion-button>
       </div>
+      </ng-container>
     </fieldset>
     <p *ngIf="guardando" class="estado-sincronizacion" role="status">
       Guardando tu registro… Si la conexión se interrumpe, espera a que se restablezca.
@@ -125,7 +127,9 @@
         <p>Aún no has registrado emociones. ¡Empieza hoy! 💜</p>
       </div>
 
-      <div *ngFor="let registro of historialRegistros" class="tarjeta-registro-historial">
+      <details *ngFor="let semana of historialPorSemanas; let primera = first" [open]="primera" class="semana-historial">
+        <summary>{{ semana.etiqueta }} · {{ semana.registros.length }} registro(s)</summary>
+      <div *ngFor="let registro of semana.registros" class="tarjeta-registro-historial">
         <div class="badge-emoji-historial" [style.background-color]="registro.color + '22'">
           <span>{{ registro.emoji || '🌸' }}</span>
         </div>
@@ -136,6 +140,7 @@
         </div>
         <div class="barra-intensidad" [style.background-color]="registro.color"></div>
       </div>
+      </details>
     </div>
   </main>
   <ion-toast

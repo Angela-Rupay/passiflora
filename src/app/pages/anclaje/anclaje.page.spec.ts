@@ -23,6 +23,24 @@ describe('Anclaje: flujo de fotos', () => {
       ],
     }).compileComponents();
   });
+  it('omite un paso sin exigir fotos y cancela audio pendiente', () => {
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    pagina.solicitandoMicrofono = true;
+    pagina.omitirPaso();
+    expect(pagina.pasoActual).toBe(4);
+    expect(pagina.solicitandoMicrofono).toBe(false);
+    expect(pagina.indiceGrabando).toBeNull();
+  });
+  it('solo sale al inicio al confirmar', async () => {
+    const navegar = vi.fn();
+    TestBed.overrideProvider(NavController, { useValue: { navigateRoot: navegar } });
+    const pagina = TestBed.createComponent(AnclajePage).componentInstance;
+    crear.mockResolvedValueOnce({ present: vi.fn(), onDidDismiss: vi.fn().mockResolvedValue({ role: 'cancel' }) });
+    await pagina.confirmarSalida();
+    expect(navegar).not.toHaveBeenCalled();
+    await pagina.confirmarSalida();
+    expect(navegar).toHaveBeenCalledWith('/tabs/tab1');
+  });
   it('no abre cámara hasta que el usuario pulse Tomar foto y acepte', async () => {
     const fixture = TestBed.createComponent(AnclajePage);
     fixture.detectChanges();

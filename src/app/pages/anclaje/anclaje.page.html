@@ -1,7 +1,9 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/panico"></ion-back-button>
+      <ion-button (click)="confirmarSalida()" aria-label="Salir del ejercicio">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
     <ion-title>Técnica 5-4-3-2-1</ion-title>
   </ion-toolbar>
@@ -218,6 +220,10 @@
       {{ pasoActual === 1 ? 'Finalizar' : 'Siguiente paso' }}
     </ion-button>
   </div>
+
+  <ion-button *ngIf="pasoActual > 0" fill="clear" expand="block" class="omitir-paso" (click)="omitirPaso()">
+    Omitir este paso
+  </ion-button>
 
   <ion-toast
     [isOpen]="mostrarToast"

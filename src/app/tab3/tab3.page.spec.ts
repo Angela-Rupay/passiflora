@@ -63,6 +63,28 @@ describe('Diario sincronizado con la sesión y Firestore', () => {
     pagina.seleccionarSubemocion('Pacífico');
   }
 
+  it('oculta los controles de emociones sin conexión y los recupera al conectar', () => {
+    const fixture = TestBed.createComponent(Tab3Page);
+    fixture.detectChanges();
+    fixture.componentInstance.alDesconectar();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.rueda-grid')).toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('no podemos guardar tu registro');
+    fixture.componentInstance.alConectar();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.rueda-grid')).not.toBeNull();
+  });
+  it('agrupa lunes a domingo incluso entre años y conserva estable el desplegable', () => {
+    const pagina = TestBed.createComponent(Tab3Page).componentInstance;
+    pagina.historialRegistros = [
+      { ...registro, fecha: '2027-01-03' },
+      { ...registro, fecha: '2026-12-28' },
+      { ...registro, fecha: '2026-12-27' },
+    ];
+    const semanas = pagina.historialPorSemanas;
+    expect(semanas.map(s => s.registros.length)).toEqual([2, 1]);
+    expect(pagina.historialPorSemanas).toBe(semanas);
+  });
   it('espera la sesión y actualiza el historial asíncrono sin otro clic', async () => {
     const fixture = TestBed.createComponent(Tab3Page);
     fixture.detectChanges();

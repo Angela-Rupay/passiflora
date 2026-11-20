@@ -7,7 +7,6 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
-  IonBackButton,
   IonButton,
   IonIcon,
   IonInput,
@@ -28,6 +27,7 @@ import {
   checkmarkCircleOutline,
   micOutline,
   trashOutline,
+  closeOutline,
 } from 'ionicons/icons';
 import { GrabacionService } from '../../services/grabacion.service';
 import { CamaraService } from '../../services/camara.service';
@@ -45,8 +45,7 @@ import { CamaraService } from '../../services/camara.service';
     IonToolbar,
     IonTitle,
     IonButtons,
-    IonBackButton,
-    IonButton,
+      IonButton,
     IonIcon,
     IonInput,
     IonSelect,
@@ -114,6 +113,7 @@ export class AnclajePage implements OnDestroy {
       checkmarkCircleOutline,
       micOutline,
       trashOutline,
+      closeOutline,
     });
   }
 
@@ -263,6 +263,31 @@ export class AnclajePage implements OnDestroy {
     this.sonidosOido.forEach((sonido) => (sonido.grabando = false));
     this.solicitandoMicrofono = false;
     this.indiceGrabando = null;
+  }
+
+  omitirPaso() {
+    this.cancelarGrabacion();
+    this.versionFoto++;
+    this.abriendoCamara = false;
+    if (this.pasoActual > 0) this.pasoActual--;
+  }
+
+  async confirmarSalida() {
+    const aviso = await this.alertas.create({
+      header: '¿Salir del ejercicio?',
+      message: 'Puedes volver cuando lo necesites. Lo realizado en este ejercicio no se guardará.',
+      cssClass: 'alerta-passiflora',
+      buttons: [
+        { text: 'Seguir con el ejercicio', role: 'cancel' },
+        { text: 'Salir al inicio', role: 'confirm' },
+      ],
+    });
+    await aviso.present();
+    const respuesta = await aviso.onDidDismiss();
+    if (respuesta.role === 'confirm') {
+      this.limpiarRecursosTemporales();
+      void this.navCtrl.navigateRoot('/tabs/tab1');
+    }
   }
 
   // --- NAVEGACIÓN ---

@@ -13,6 +13,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- Fondo fijo Passiflora para las zonas reservadas del sistema. -->
+        <item name="android:windowBackground">#221C38</item>
+        <item name="android:statusBarColor">#221C38</item>
+        <item name="android:navigationBarColor">#221C38</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
 

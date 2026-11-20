@@ -30,6 +30,8 @@ export class Tab1Page implements OnInit, OnDestroy {
     this.obtenerNombreUsuario();
   }
 
+  ionViewWillEnter() { this.obtenerNombreUsuario(); }
+
   ngOnDestroy() { this.cancelarSesion?.(); }
 
   obtenerNombreUsuario() {

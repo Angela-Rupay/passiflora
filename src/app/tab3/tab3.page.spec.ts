@@ -1,3 +1,4 @@
+import { CamaraService } from '../services/camara.service';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
@@ -44,7 +45,8 @@ describe('Diario sincronizado con la sesión y Firestore', () => {
             },
           },
         },
-        { provide: AuthService, useValue: { cerrarSesion: vi.fn() } },
+        { provide: AuthService, useValue: { cerrarSesion: vi.fn(), obtenerPerfil: vi.fn().mockResolvedValue(null) } },
+        { provide: CamaraService, useValue: { capturar: vi.fn(), elegirAvatar: vi.fn() } },
         { provide: DiarioService, useValue: { observar, guardar } },
       ],
     }).compileComponents();

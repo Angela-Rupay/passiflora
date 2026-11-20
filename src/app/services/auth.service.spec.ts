@@ -9,6 +9,13 @@ describe('Validación previa al registro en Firebase', () => {
     { provide: Auth, useValue: {} }, { provide: Firestore, useValue: {} }
   ] }));
 
+  it('valida nombre, apellido y sesión antes de actualizar Firestore', async () => {
+    const servicio = TestBed.inject(AuthService);
+    await expect(servicio.actualizarPerfil('ana', 'Ana', 'Rupay')).rejects.toThrow('mínimo 4 letras');
+    await expect(servicio.actualizarPerfil('ana', 'Ángela', 'Rupay3')).rejects.toThrow('mínimo 4 letras');
+    await expect(servicio.actualizarPerfil('otra', 'Ángela', 'Rupay')).rejects.toThrow('iniciar sesión');
+  });
+
   it('rechaza nombres numéricos antes de invocar Firebase aunque se omita el formulario', async () => {
     const servicio = TestBed.inject(AuthService);
     await expect(servicio.registrar('Ana 123', 'ana@example.com', 'Segura123')).rejects.toMatchObject({ code: 'app/invalid-name' });

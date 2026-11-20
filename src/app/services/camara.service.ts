@@ -15,6 +15,19 @@ export class CamaraService {
     @Inject(CAMARA_NATIVA) private nativa: boolean,
   ) {}
 
+  async elegirAvatar(): Promise<string | null> {
+    try {
+      const foto = await this.camara.getPhoto({ source: CameraSource.Photos,
+        resultType: CameraResultType.DataUrl, quality: 70, width: 512, height: 512,
+        allowEditing: false, saveToGallery: false, webUseInput: true });
+      if (!foto.dataUrl?.startsWith('data:image/')) throw new Error('No pudimos cargar la foto.');
+      return foto.dataUrl;
+    } catch (error) {
+      if (/cancel/i.test(error instanceof Error ? error.message : String(error))) return null;
+      throw error;
+    }
+  }
+
   async capturar(): Promise<string | null> {
     if (this.nativa) {
       let permiso = await this.camara.checkPermissions();

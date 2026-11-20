@@ -1,14 +1,16 @@
 import { VERSION_TERMINOS } from '../shared/terminos';
-import { validarDatosRegistro } from '../shared/auth-validation';
+import { PATRON_NOMBRE, validarDatosRegistro } from '../shared/auth-validation';
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, setDoc, getDoc, updateDoc } from '@angular/fire/firestore';
 
 // Estructura de datos del usuario en la base de datos
 export interface Usuario {
   uid?: string;
   nombre: string;
   correo: string;
+  nombres?: string;
+  apellido?: string;
   fechaRegistro: Date;
   terminos?: { aceptados: true; version: string; fecha: Date };
 }
@@ -55,6 +57,15 @@ export class AuthService {
       return snapshot.data() as Usuario;
     }
     return null;
+  }
+
+  async actualizarPerfil(uid: string, nombres: string, apellido: string) {
+    const valido = (valor: string) => PATRON_NOMBRE.test(valor.trim()) && (valor.match(/\p{L}/gu)?.length ?? 0) >= 4;
+    if (!valido(nombres) || !valido(apellido)) throw new Error('Nombre y apellido: mínimo 4 letras, sin números.');
+    if (this.auth.currentUser?.uid !== uid) throw new Error('Vuelve a iniciar sesión.');
+    await updateDoc(doc(this.firestore, `usuarios/${uid}`), {
+      nombres: nombres.trim(), apellido: apellido.trim(), nombre: `${nombres.trim()} ${apellido.trim()}`,
+    });
   }
 
   // Cerrar sesión

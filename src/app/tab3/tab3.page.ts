@@ -1,3 +1,4 @@
+import { PerfilComponent } from '../shared/components/perfil.component';
 import {
   ChangeDetectorRef,
   Component,
@@ -30,6 +31,7 @@ interface EmocionBase {
   standalone: true,
   imports: [
     TabHeaderComponent,
+    PerfilComponent,
     CommonModule,
     FormsModule,
     IonContent,

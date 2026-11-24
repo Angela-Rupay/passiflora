@@ -1,3 +1,4 @@
+import { ResumenEmocionalComponent } from '../shared/components/resumen-emocional.component';
 import { PerfilComponent } from '../shared/components/perfil.component';
 import {
   ChangeDetectorRef,
@@ -32,6 +33,7 @@ interface EmocionBase {
   imports: [
     TabHeaderComponent,
     PerfilComponent,
+    ResumenEmocionalComponent,
     CommonModule,
     FormsModule,
     IonContent,

@@ -110,6 +110,8 @@
     <p *ngIf="guardando" class="estado-sincronizacion" role="status">
       Guardando tu registro… Si la conexión se interrumpe, espera a que se restablezca.
     </p>
+    <app-resumen-emocional *ngIf="uid && !cargando && !errorHistorial"
+      [registros]="historialRegistros" [desdeCache]="desdeCache"></app-resumen-emocional>
     <!-- Historial Reciente de Emociones -->
     <div class="tarjeta-contenedor ion-margin-top">
       <h3 class="subtitulo-seccion">🌿 Tu Historial Emocional</h3>

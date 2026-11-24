@@ -14,39 +14,53 @@ import { ContactoApoyo, ContactoApoyoService, MENSAJE_APOYO, contactoValido, enl
       <p *ngIf="error" role="alert">{{ error }}</p>
       <ng-container *ngIf="!editando">
         <ng-container *ngIf="contacto">
-          <p><strong>{{ contacto.nombre }}</strong> · {{ contacto.numero }}</p>
+          <div class="persona"><span class="avatar-contacto" aria-hidden="true">{{ contacto.nombre.charAt(0).toUpperCase() }}</span><div><strong>{{ contacto.nombre }}</strong><span class="telefono">{{ contacto.numero }}</span></div></div>
+          <p class="etiqueta-mensaje">TU MENSAJE DE APOYO</p>
           <p class="mensaje">{{ contacto.mensaje }}</p>
           <a class="whatsapp" [href]="enlace" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>
-          <p class="nota">Se abrirá el chat con este mensaje preparado. Tú decides si lo envías. Necesitas conexión y una cuenta de WhatsApp.</p>
+          <p class="nota">Tú decides cuándo enviar el mensaje en WhatsApp.</p>
         </ng-container>
         <p *ngIf="!contacto">Elige a alguien de confianza y prepara un mensaje para pedir compañía cuando lo necesites.</p>
-        <ion-button *ngIf="!panico" fill="clear" (click)="editar()">{{ contacto ? 'Editar contacto' : 'Configurar contacto' }}</ion-button>
+        <div class="acciones-contacto">
+        <ion-button *ngIf="!panico" fill="outline" (click)="editar()">{{ contacto ? 'Editar contacto' : 'Configurar contacto' }}</ion-button>
         <ion-button *ngIf="!panico && contacto" fill="clear" (click)="eliminar()">Eliminar contacto</ion-button>
         <a *ngIf="panico" class="configurar" routerLink="/tabs/tab3">{{ contacto ? 'Editar en Mi espacio' : 'Configurar en Mi espacio' }}</a>
+        </div>
       </ng-container>
       <form *ngIf="editando && !panico" (ngSubmit)="guardar()">
-        <ion-input label="Nombre del contacto" labelPlacement="stacked" name="nombreContacto" [(ngModel)]="nombre" [maxlength]="80"></ion-input>
-        <ion-input label="Celular colombiano" labelPlacement="stacked" name="numeroContacto" type="tel" inputmode="numeric" [(ngModel)]="numero" [maxlength]="10" placeholder="3001234567"></ion-input>
-        <p class="nota">10 dígitos, comenzando por 3. Escribe el número sin +57 ni espacios.</p>
-        <ion-textarea label="Tu mensaje" labelPlacement="stacked" name="mensajeContacto" [(ngModel)]="mensaje" [maxlength]="500" [autoGrow]="true" rows="3"></ion-textarea>
+        <ion-input label="Nombre del contacto" labelPlacement="stacked" fill="outline" name="nombreContacto" [(ngModel)]="nombre" [maxlength]="80"></ion-input>
+        <ion-input label="Celular colombiano" labelPlacement="stacked" fill="outline" name="numeroContacto" type="tel" inputmode="numeric" [ngModel]="numero" (ngModelChange)="cambiarNumero($event)" (ionBlur)="telefonoTocado = true" [attr.aria-invalid]="telefonoTocado && !numeroValido" aria-describedby="ayuda-telefono error-telefono" placeholder="3001234567"></ion-input>
+        <p id="ayuda-telefono" class="nota">10 dígitos, comenzando por 3. Escribe el número sin +57 ni espacios.</p>
+        <p id="error-telefono" *ngIf="telefonoTocado && !numeroValido" class="error-campo" role="alert">{{ errorNumero }}</p>
+        <ion-textarea label="Tu mensaje" labelPlacement="stacked" fill="outline" name="mensajeContacto" [(ngModel)]="mensaje" [maxlength]="500" [autoGrow]="true" rows="3"></ion-textarea>
+        <div class="acciones-contacto">
         <ion-button type="submit" [disabled]="!valido">Guardar contacto</ion-button>
         <ion-button fill="clear" (click)="editando = false">Cancelar</ion-button>
+        </div>
       </form>
-      <p *ngIf="!panico" class="nota">El contacto y el mensaje se guardan solo en este dispositivo y para esta cuenta. No se accede a tu agenda ni se envían mensajes automáticamente.</p>
       <p *ngIf="aviso" role="status">{{ aviso }}</p>
     </section>`,
   styles: [`
     .contacto { padding: 20px; margin: 24px 0; border-radius: 24px; background: var(--bg-tarjeta); color: var(--texto-principal); }
     h2 { font-size: 1.2rem; margin-top: 0; } p { line-height: 1.6; overflow-wrap: anywhere; }
     .nota { font-size: .85rem; color: var(--texto-secundario); }
-    .mensaje { white-space: pre-wrap; }
-    ion-input, ion-textarea { margin: 16px 0; --color: var(--texto-principal); }
+    .persona { display: flex; align-items: center; gap: 14px; margin: 20px 0; }
+    .avatar-contacto { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 16px; background: var(--bg-icono); color: var(--color-primario); font-weight: 800; flex-shrink: 0; }
+    .telefono { display: block; color: var(--texto-secundario); font-size: .9rem; margin-top: 4px; }
+    .etiqueta-mensaje { font-size: .75rem; font-weight: 800; color: var(--color-primario); letter-spacing: .04em; margin: 24px 0 8px; }
+    .mensaje { white-space: pre-wrap; background: var(--bg-icono); border-radius: 16px; padding: 16px; margin-top: 0; }
+    .acciones-contacto { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .error-campo { color: var(--ion-color-danger); font-size: .85rem; }
+    [role=status] { font-size: .85rem; color: var(--color-primario); }
+    .whatsapp { width: 100%; justify-content: center; }
+    ion-button { --border-radius: 14px; --border-color: var(--color-primario); text-transform: none; font-weight: 800; }
+    ion-input, ion-textarea { margin: 20px 0 8px; --color: var(--texto-principal); --border-color: var(--texto-secundario); --border-radius: 14px; --highlight-color-focused: var(--color-primario); --padding-start: 14px; --padding-end: 14px; }
     ion-button { --color: var(--color-primario); min-height: 44px; }
     ion-button[type=submit] { --background: var(--color-primario); --color: var(--texto-sobre-primario); }
     .whatsapp { display: inline-flex; padding: 12px 20px; border-radius: 16px; background: var(--color-primario); color: var(--texto-sobre-primario); font-weight: 800; text-decoration: none; min-height: 44px; align-items: center; }
     .configurar { display: inline-block; color: var(--color-primario); min-height: 44px; padding-block: 10px; font-weight: 800; }
     a:focus-visible { outline: 3px solid var(--color-primario); outline-offset: 4px; }
-    .calma { --bg-tarjeta: #221c38; --texto-principal: #fff; --texto-secundario: #b4a7d6; --color-primario: #a594f9; --texto-sobre-primario: #121020; }
+    .calma { --bg-tarjeta: #221c38; --bg-icono: #332952; --texto-principal: #fff; --texto-secundario: #b4a7d6; --color-primario: #a594f9; --texto-sobre-primario: #121020; }
   `],
 })
 export class ContactoApoyoComponent implements OnChanges, OnDestroy {
@@ -56,10 +70,20 @@ export class ContactoApoyoComponent implements OnChanges, OnDestroy {
   contacto: ContactoApoyo | null = null;
   nombre = ''; numero = ''; mensaje = MENSAJE_APOYO;
   error = ''; aviso = ''; editando = false;
+  telefonoTocado = false;
+  get numeroValido() { return /^3\d{9}$/.test(this.numero); }
+  get errorNumero() {
+    if (!this.numero) return 'Escribe el celular de tu contacto.';
+    if (!/^\d+$/.test(this.numero)) return 'Usa solo números, sin espacios ni +57.';
+    if (this.numero.length !== 10) return 'El celular debe tener exactamente 10 dígitos.';
+    return 'El celular colombiano debe comenzar por 3.';
+  }
+  cambiarNumero(valor: string) { this.numero = valor; this.telefonoTocado = true; }
   private version = 0;
   constructor(private servicio: ContactoApoyoService, private alertas: AlertController, private cambios: ChangeDetectorRef) {}
   ngOnDestroy() { this.version++; }
   ngOnChanges() {
+    this.telefonoTocado = false;
     this.version++; this.contacto = null; this.editando = false; this.error = ''; this.aviso = '';
     this.nombre = ''; this.numero = ''; this.mensaje = MENSAJE_APOYO;
     if (!this.uid) return;
@@ -71,13 +95,14 @@ export class ContactoApoyoComponent implements OnChanges, OnDestroy {
   editar() {
     this.nombre = this.contacto?.nombre ?? ''; this.numero = this.contacto?.numero ?? '';
     this.mensaje = this.contacto?.mensaje ?? MENSAJE_APOYO;
+    this.telefonoTocado = false;
     this.editando = true; this.error = ''; this.aviso = '';
   }
   guardar() {
     if (!this.uid || !this.valido) return;
     try {
       this.contacto = this.servicio.guardar(this.uid, { nombre: this.nombre, numero: this.numero, mensaje: this.mensaje });
-      this.editando = false; this.error = ''; this.aviso = 'Contacto guardado en este dispositivo.';
+      this.editando = false; this.error = ''; this.aviso = 'Contacto guardado.';
     } catch { this.error = 'No pudimos guardar el contacto. Revisa los datos y el almacenamiento disponible.'; }
     this.cambios.markForCheck();
   }

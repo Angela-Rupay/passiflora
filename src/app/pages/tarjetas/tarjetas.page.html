@@ -8,7 +8,6 @@
     <h1>Un mensaje de calma para ti</h1>
     <p>Escribe cuando te sientas en calma: un recordatorio amable, algo que te ayuda o una persona a quien puedes acudir. Podrás leerlo cuando necesites volver al presente.</p>
     <p class="ejemplo">Por ejemplo: «Puedo ir paso a paso. Puedo pedir compañía cuando la necesite».</p>
-    <p class="nota">Tus tarjetas se guardan solo en este dispositivo y para tu cuenta. No se sincronizan con otros dispositivos. Si borras los datos de la app o la desinstalas, puedes perderlas.</p>
 
     <p *ngIf="cargando" role="status">Cargando tus tarjetas…</p>
     <section *ngIf="!cargando && !uid" class="panel">

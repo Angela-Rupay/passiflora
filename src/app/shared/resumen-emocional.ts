@@ -10,8 +10,13 @@ export function lunesDeSemana(fecha: string): string {
 export function etiquetaSemana(lunes: string): string {
   const fin = new Date(`${lunes}T12:00:00Z`);
   fin.setUTCDate(fin.getUTCDate() + 6);
-  const formato = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-  return `${formato.format(new Date(`${lunes}T12:00:00Z`))} – ${formato.format(fin)}`;
+  const inicio = new Date(`${lunes}T12:00:00Z`);
+  const mes = new Intl.DateTimeFormat('es-CO', { month: 'short', timeZone: 'UTC' });
+  if (inicio.getUTCFullYear() === fin.getUTCFullYear()) {
+    if (inicio.getUTCMonth() === fin.getUTCMonth()) return `${inicio.getUTCDate()}–${fin.getUTCDate()} ${mes.format(fin)} ${fin.getUTCFullYear()}`;
+    return `${inicio.getUTCDate()} ${mes.format(inicio)} – ${fin.getUTCDate()} ${mes.format(fin)} ${fin.getUTCFullYear()}`;
+  }
+  return `${inicio.getUTCDate()} ${mes.format(inicio)} ${inicio.getUTCFullYear()} – ${fin.getUTCDate()} ${mes.format(fin)} ${fin.getUTCFullYear()}`;
 }
 
 export function resumirSemana(registros: RegistroEmocional[], semana: string) {

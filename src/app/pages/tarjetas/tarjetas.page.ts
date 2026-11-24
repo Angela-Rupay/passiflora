@@ -62,7 +62,7 @@ export class TarjetasPage implements OnInit, OnDestroy {
       const eraEdicion = !!this.editandoId;
       this.tarjetas = this.servicio.guardar(this.uid, this.texto, this.editandoId);
       this.cancelarEdicion();
-      this.notificar(eraEdicion ? 'Tarjeta actualizada.' : 'Tarjeta guardada en este dispositivo.');
+      this.notificar(eraEdicion ? 'Tarjeta actualizada.' : 'Tarjeta guardada.');
     } catch {
       this.notificar('No pudimos guardar la tarjeta. Tu texto sigue aquí para que lo intentes de nuevo.');
     }

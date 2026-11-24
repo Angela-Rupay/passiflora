@@ -123,7 +123,7 @@
         <ion-button fill="outline" (click)="cargarHistorial()" [disabled]="!uid">Volver a intentar</ion-button>
       </div>
       <p *ngIf="desdeCache && !errorHistorial" class="estado-sincronizacion" role="status">
-        {{ enLinea ? 'Sincronizando con tu cuenta…' : 'Mostrando el historial disponible en este dispositivo.' }}
+        {{ enLinea ? 'Sincronizando con tu cuenta…' : 'Mostrando el historial disponible sin conexión.' }}
       </p>
       <div
         *ngIf="!cargando && !errorHistorial && !desdeCache && uid && historialRegistros.length === 0"

@@ -1,7 +1,9 @@
+import { addIcons } from 'ionicons';
+import { cameraOutline, imageOutline } from 'ionicons/icons';
 import { Component, Input, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonInput, AlertController } from '@ionic/angular';
+import { IonButton, IonInput, AlertController, ActionSheetController } from '@ionic/angular';
 import { AuthService, Usuario } from '../../services/auth.service';
 import { CamaraService } from '../../services/camara.service';
 import { SoloLetrasDirective } from '../solo-letras.directive';
@@ -22,20 +24,17 @@ import { PATRON_NOMBRE } from '../auth-validation';
       <ion-button *ngIf="!perfil && !cargando" fill="clear" (click)="cargar()">Volver a cargar</ion-button>
       <ion-button *ngIf="perfil && !editando" fill="outline" (click)="editar()">Editar perfil</ion-button>
       <form *ngIf="editando" (ngSubmit)="guardar()">
-        <ion-input label="Nombre" labelPlacement="stacked" name="nombrePerfil" [(ngModel)]="nombres" soloLetras [disabled]="guardando" autocomplete="given-name"></ion-input>
-        <ion-input label="Apellido" labelPlacement="stacked" name="apellidoPerfil" [(ngModel)]="apellido" soloLetras [disabled]="guardando" autocomplete="family-name"></ion-input>
+        <ion-input label="Nombre" labelPlacement="stacked" fill="outline" name="nombrePerfil" [(ngModel)]="nombres" soloLetras [disabled]="guardando" autocomplete="given-name"></ion-input>
+        <ion-input label="Apellido" labelPlacement="stacked" fill="outline" name="apellidoPerfil" [(ngModel)]="apellido" soloLetras [disabled]="guardando" autocomplete="family-name"></ion-input>
         <p class="nota">Nombre y apellido deben tener al menos 4 letras, sin números. Revisa ambos campos si tu cuenta es anterior.</p>
         <div class="acciones">
           <ion-button type="submit" [disabled]="!valido || guardando">{{ guardando ? 'Guardando…' : 'Guardar cambios' }}</ion-button>
           <ion-button fill="clear" (click)="editando = false" [disabled]="guardando">Cancelar</ion-button>
         </div>
       </form>
-      <div class="acciones">
-        <ion-button fill="clear" (click)="cambiarFoto(true)" [disabled]="ocupada">Tomar foto</ion-button>
-        <ion-button fill="clear" (click)="cambiarFoto(false)" [disabled]="ocupada">Elegir foto</ion-button>
-        <ion-button *ngIf="avatar" fill="clear" (click)="quitarFoto()" [disabled]="ocupada">Quitar foto</ion-button>
-      </div>
-      <p class="nota">Tu foto se guarda solo en este dispositivo y para esta cuenta. Puedes perderla si borras los datos de la app o la desinstalas.</p>
+      <ion-button class="cambiar-foto" fill="outline" (click)="opcionesFoto()" [disabled]="ocupada">
+        {{ ocupada ? 'Cargando foto…' : (avatar ? 'Cambiar foto' : 'Añadir foto') }}
+      </ion-button>
       <p *ngIf="mensaje" role="status">{{ mensaje }}</p>
     </section>`,
   styles: [`
@@ -50,7 +49,13 @@ import { PATRON_NOMBRE } from '../auth-validation';
     .acciones { display: flex; flex-wrap: wrap; gap: 4px; }
     ion-button { --color: var(--color-primario); --border-color: var(--color-primario); min-height: 44px; }
     ion-button[type=submit] { --background: var(--color-primario); --color: var(--texto-sobre-primario); }
-    ion-input { margin-top: 16px; --color: var(--texto-principal); }
+    ion-input { margin: 18px 0; --color: var(--texto-principal); --border-color: var(--texto-secundario); --border-radius: 14px; --highlight-color-focused: var(--color-primario); }
+    ion-button { --border-radius: 14px; font-weight: 800; text-transform: none; }
+    .cambiar-foto { margin-left: 8px; }
+    [role=status] { font-size: .85rem; color: var(--color-primario); }
+    .correo { margin: 4px 0; font-size: .9rem; }
+    .cabecera { margin-bottom: 20px; }
+    @media(max-width: 360px) { .cabecera { flex-direction: column; text-align: center; } .cambiar-foto { margin-left: 0; } }
   `],
 })
 export class PerfilComponent implements OnChanges, OnDestroy {
@@ -60,7 +65,7 @@ export class PerfilComponent implements OnChanges, OnDestroy {
   cargando = false; editando = false; guardando = false; ocupada = false;
   private version = 0;
   constructor(private auth: AuthService, private camara: CamaraService,
-    private alertas: AlertController, private cambios: ChangeDetectorRef) {}
+    private alertas: AlertController, private opciones: ActionSheetController, private cambios: ChangeDetectorRef) { addIcons({ cameraOutline, imageOutline }); }
   ngOnChanges() { void this.cargar(); }
   ngOnDestroy() { this.version++; }
   private clave(uid: string) { return `passiflora:avatar:v1:${uid}`; }
@@ -103,6 +108,19 @@ export class PerfilComponent implements OnChanges, OnDestroy {
     } catch { if (version === this.version) this.error = 'No pudimos guardar los cambios. Revisa tu conexión e inténtalo de nuevo.'; }
     finally { if (version === this.version) { this.guardando = false; this.cambios.markForCheck(); } }
   }
+  async opcionesFoto() {
+    const version = this.version;
+    const hoja = await this.opciones.create({
+      header: 'Tu foto de perfil', cssClass: 'selector-anclaje',
+      buttons: [
+        { text: 'Tomar foto', icon: 'camera-outline', handler: () => { if (version === this.version) void this.cambiarFoto(true); } },
+        { text: 'Elegir de la galería', icon: 'image-outline', handler: () => { if (version === this.version) void this.cambiarFoto(false); } },
+        ...(this.avatar ? [{ text: 'Quitar foto', role: 'destructive', handler: () => { if (version === this.version) this.quitarFoto(); } }] : []),
+        { text: 'Cancelar', role: 'cancel' },
+      ],
+    });
+    await hoja.present();
+  }
   async cambiarFoto(tomar: boolean) {
     if (!this.uid || this.ocupada) return;
     const uid = this.uid, version = this.version;
@@ -110,7 +128,7 @@ export class PerfilComponent implements OnChanges, OnDestroy {
     try {
       if (tomar) {
         const aviso = await this.alertas.create({ header: 'Tu foto de perfil',
-          message: 'Para tomar tu foto necesitamos tu autorización para usar la cámara. Se guardará solo en este dispositivo.',
+          message: 'Para tomar tu foto necesitamos tu autorización para usar la cámara. ',
           cssClass: 'alerta-passiflora', buttons: [{ text: 'Ahora no', role: 'cancel' }, { text: 'Aceptar', role: 'confirm' }] });
         await aviso.present();
         if ((await aviso.onDidDismiss()).role !== 'confirm' || version !== this.version) return;
@@ -119,13 +137,13 @@ export class PerfilComponent implements OnChanges, OnDestroy {
       if (!foto || version !== this.version) return;
       if (foto.length > 2500000) throw new Error('La foto es demasiado grande. Elige otra imagen.');
       localStorage.setItem(this.clave(uid), foto);
-      this.avatar = foto; this.mensaje = 'Foto guardada en este dispositivo.';
+      this.avatar = foto; this.mensaje = 'Foto actualizada.';
     } catch (error) { if (version === this.version) this.error = error instanceof Error ? error.message : 'No pudimos guardar la foto.'; }
     finally { if (version === this.version) { this.ocupada = false; this.cambios.markForCheck(); } }
   }
   quitarFoto() {
     if (!this.uid) return;
-    try { localStorage.removeItem(this.clave(this.uid)); this.avatar = ''; this.mensaje = 'Foto eliminada de este dispositivo.'; }
+    try { localStorage.removeItem(this.clave(this.uid)); this.avatar = ''; this.mensaje = 'Foto eliminada.'; }
     catch { this.error = 'No pudimos quitar la foto. Inténtalo de nuevo.'; }
   }
 }

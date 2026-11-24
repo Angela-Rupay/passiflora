@@ -12,6 +12,16 @@ describe('Configurar contacto y abrir WhatsApp', () => {
     create.mockReset().mockResolvedValue({ present: vi.fn(), onDidDismiss: vi.fn().mockResolvedValue({ role: 'cancel' }) });
     TestBed.configureTestingModule({ imports: [ContactoApoyoComponent], providers: [provideRouter([]), { provide: AlertController, useValue: { create } }] });
   });
+  it('explica si el celular tiene letras, longitud incorrecta o no comienza por 3', () => {
+    const fixture = TestBed.createComponent(ContactoApoyoComponent);
+    fixture.componentRef.setInput('uid', 'angela'); fixture.detectChanges();
+    const p = fixture.componentInstance;
+    p.editar(); p.cambiarNumero('abc');
+    expect(p.errorNumero).toContain('solo números'); expect(p.valido).toBe(false);
+    p.cambiarNumero('300123'); expect(p.errorNumero).toContain('10 dígitos');
+    p.cambiarNumero('2001234567'); expect(p.errorNumero).toContain('comenzar por 3');
+    p.cambiarNumero('3001234567'); expect(p.numeroValido).toBe(true);
+  });
   it('ofrece configurar si falta contacto y genera un enlace solo después de guardar', () => {
     const fixture = TestBed.createComponent(ContactoApoyoComponent);
     fixture.componentRef.setInput('uid', 'angela'); fixture.detectChanges();

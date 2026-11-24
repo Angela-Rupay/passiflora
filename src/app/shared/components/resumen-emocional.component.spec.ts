@@ -10,12 +10,12 @@ describe('Panel de emociones', () => {
     const registro: RegistroEmocional = { id: '1', fecha: '2026-11-17', emocionPrincipal: 'Felicidad',
       intensidad: 6, color: '#5E4B8B', emoji: '😊', subemocion: 'Optimista', pendiente: false, creadoEnMs: 0 };
     fixture.componentRef.setInput('registros', [registro]); fixture.detectChanges();
-    const selector = fixture.nativeElement.querySelector('select') as HTMLSelectElement;
-    selector.value = '2026-11-16'; selector.dispatchEvent(new Event('change')); fixture.detectChanges();
+    const selector = fixture.nativeElement.querySelector('ion-select') as HTMLElement;
+    selector.dispatchEvent(new CustomEvent('ionChange', { detail: { value: '2026-11-16' } })); fixture.detectChanges();
     expect(fixture.componentInstance.resumen.total).toBe(1);
     expect(fixture.nativeElement.textContent).toContain('Felicidad');
     fixture.componentRef.setInput('desdeCache', true); fixture.detectChanges();
-    expect(fixture.nativeElement.textContent).toContain('Puede cambiar al sincronizar');
+    expect(fixture.nativeElement.textContent).toContain('Sincronizando tu resumen');
     fixture.componentRef.setInput('registros', []); fixture.detectChanges();
     expect(fixture.componentInstance.resumen.total).toBe(0);
     expect(fixture.nativeElement.textContent).not.toContain('Felicidad');

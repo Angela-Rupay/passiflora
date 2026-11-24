@@ -1,19 +1,21 @@
+import { IonSelect, IonSelectOption } from '@ionic/angular';
 import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegistroEmocional } from '../../services/diario.service';
 import { etiquetaSemana, lunesDeSemana, resumirSemana } from '../resumen-emocional';
 
 @Component({
-  selector: 'app-resumen-emocional', standalone: true, imports: [CommonModule],
+  selector: 'app-resumen-emocional', standalone: true, imports: [CommonModule, IonSelect, IonSelectOption],
   template: `
     <section aria-labelledby="titulo-resumen" class="resumen">
       <p class="eyebrow">UN MOMENTO PARA CONOCERTE</p>
       <h2 id="titulo-resumen">Tu semana en emociones</h2>
-      <label for="semana-resumen">Semana que quieres consultar</label>
-      <select id="semana-resumen" [value]="seleccionada" (change)="elegir($event)">
-        <option *ngFor="let semana of semanas" [value]="semana.clave">{{ semana.etiqueta }}</option>
-      </select>
-      <p *ngIf="desdeCache" class="nota">Resumen de los registros disponibles en este dispositivo. Puede cambiar al sincronizar.</p>
+      <ion-select label="Semana que quieres consultar" labelPlacement="stacked" fill="outline"
+        interface="action-sheet" [interfaceOptions]="opcionesSemana" cancelText="Cancelar"
+        [value]="seleccionada" (ionChange)="elegir($event)">
+        <ion-select-option *ngFor="let semana of semanas" [value]="semana.clave">{{ semana.etiqueta }}</ion-select-option>
+      </ion-select>
+      <p *ngIf="desdeCache" class="nota">Sincronizando tu resumen…</p>
       <div aria-live="polite">
         <p *ngIf="!resumen.total" class="vacio">Todavía no hay registros en esta semana. Cuando registres cómo te sientes, verás aquí tu resumen. 💜</p>
         <ng-container *ngIf="resumen.total">
@@ -38,9 +40,7 @@ import { etiquetaSemana, lunesDeSemana, resumirSemana } from '../resumen-emocion
     .resumen { background: var(--bg-tarjeta); color: var(--texto-principal); border-radius: 24px; padding: 20px; margin-top: 24px; }
     .eyebrow { color: var(--color-primario); font-size: .8rem; font-weight: 800; }
     h2 { margin: 8px 0 20px; } h3 { font-size: 1rem; margin-top: 24px; }
-    label { display: block; font-weight: 700; margin-bottom: 8px; }
-    select { width: 100%; max-width: 100%; min-height: 48px; border: 1px solid var(--color-primario); border-radius: 14px; padding: 12px; background: var(--bg-icono); color: var(--texto-principal); font-size: .9rem; }
-    select:focus-visible { outline: 3px solid var(--color-primario); outline-offset: 3px; }
+    ion-select { width: 100%; min-height: 64px; --border-color: var(--color-primario); --border-radius: 16px; --color: var(--texto-principal); --highlight-color-focused: var(--color-primario); --padding-start: 16px; --padding-end: 16px; }
     .cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 20px 0; }
     .cifras div { background: var(--bg-icono); padding: 16px; border-radius: 16px; }
     dt { font-size: .85rem; } dd { margin: 8px 0 0; color: var(--color-primario); font-weight: 800; font-size: 1.3rem; }
@@ -56,6 +56,7 @@ export class ResumenEmocionalComponent implements OnChanges {
   @Input() desdeCache = false;
   semanas: { clave: string; etiqueta: string }[] = [];
   seleccionada = '';
+  readonly opcionesSemana = { header: 'Elige una semana', cssClass: 'selector-anclaje' };
   resumen = resumirSemana([], '');
   ngOnChanges() {
     const hoy = new Date();
@@ -66,8 +67,8 @@ export class ResumenEmocionalComponent implements OnChanges {
     if (!claves.includes(this.seleccionada)) this.seleccionada = actual;
     this.actualizar();
   }
-  elegir(evento: Event) {
-    const clave = (evento.target as HTMLSelectElement).value;
+  elegir(evento: CustomEvent<{ value: string }>) {
+    const clave = evento.detail.value;
     if (!this.semanas.some(s => s.clave === clave)) return;
     this.seleccionada = clave;
     this.actualizar();

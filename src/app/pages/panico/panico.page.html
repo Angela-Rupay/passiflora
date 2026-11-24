@@ -19,6 +19,7 @@
         ><ion-icon name="home-outline" aria-hidden="true"></ion-icon><span>Volver a mi espacio</span></a
       >
     </nav>
+    <app-contacto-apoyo [uid]="uidContacto" [panico]="true" [revision]="revisionContacto"></app-contacto-apoyo>
     <ion-modal
       [isOpen]="tarjetaAbierta"
       (didDismiss)="cerrarTarjeta()"

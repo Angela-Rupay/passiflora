@@ -1,3 +1,4 @@
+import { ContactoApoyoComponent } from '../../shared/components/contacto-apoyo.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -12,9 +13,12 @@ import { TarjetasService } from '../../services/tarjetas.service';
   standalone: true,
   templateUrl: './panico.page.html',
   styleUrls: ['./panico.page.scss'],
-  imports: [CommonModule, RouterLink, IonContent, IonIcon, IonModal, IonButton],
+  imports: [ContactoApoyoComponent, CommonModule, RouterLink, IonContent, IonIcon, IonModal, IonButton],
 })
 export class PanicoPage {
+  revisionContacto = 0;
+  get uidContacto() { return this.auth.currentUser?.uid ?? null; }
+  ionViewWillEnter() { this.revisionContacto++; }
   tarjetaAbierta = false;
   textoTarjeta = '';
   tarjetaPersonal = false;

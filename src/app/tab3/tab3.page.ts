@@ -1,3 +1,4 @@
+import { ContactoApoyoComponent } from '../shared/components/contacto-apoyo.component';
 import { ResumenEmocionalComponent } from '../shared/components/resumen-emocional.component';
 import { PerfilComponent } from '../shared/components/perfil.component';
 import {
@@ -33,6 +34,7 @@ interface EmocionBase {
   imports: [
     TabHeaderComponent,
     PerfilComponent,
+    ContactoApoyoComponent,
     ResumenEmocionalComponent,
     CommonModule,
     FormsModule,

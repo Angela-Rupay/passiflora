@@ -182,4 +182,18 @@ ion-button[disabled] {
 }
 
 .salida-gad { display: flex; justify-content: flex-end; margin-bottom: 12px; }
-.salida-gad ion-button { --color: var(--color-primario); min-height: 44px; }
+.salida-gad ion-button {
+  --background: transparent;
+  --background-hover: var(--bg-icono);
+  --background-focused: var(--bg-icono);
+  --background-activated: var(--bg-icono);
+  --color: var(--color-primario);
+  --border-color: var(--color-primario);
+  --border-style: solid;
+  --border-width: 2px;
+  --border-radius: 14px;
+  min-height: 44px;
+  height: auto;
+  margin: 0;
+  text-transform: none;
+}
